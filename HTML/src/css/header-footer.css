@@ -1,0 +1,83 @@
+*{
+    margin:0;
+    padding:0;
+    --color-primario:#6B0504;
+    --color-secundario:#e68f19;
+}
+
+.header {
+    position: fixed;
+    background: var(--color-primario);
+    padding: 1%;
+    width: 99%;
+    display: flex;
+}
+
+.header a {
+    min-width: 225;
+    font-size:18;
+    text-decoration: none;
+    text-align: center;
+    border: 0.15em solid var(--color-secundario);
+    padding : 0.5%;
+    bottom: 0;
+    top: 0;
+    color: white;
+    width: 15%;
+    margin-right: 1%;
+}
+
+.header a:hover {
+    top: 0;
+    border: 0.15em solid var(--color-secundario);
+    background: white; 
+    color: var(--color-primario);
+    margin-right: 1%;
+    padding: 0.5%;
+}
+
+.footer {
+    position: fixed;
+    bottom:0;
+    background-color: black;
+    width: 100%;
+    display: flex;
+    padding: 0.75%;
+}
+
+.footer div{
+    padding: 1%;
+}
+.footer div a {
+    color: white;
+    text-decoration: none;
+}
+
+.footer div a:hover {
+    color: var(--color-secundario);
+    text-decoration: underline;
+}
+
+.footer .footer_central {
+    margin-top: auto;
+    margin-bottom:auto;
+    margin-left:auto;
+    margin-right: 10%;
+}
+
+.footer .footer_central img {
+    width:20%;
+}
+
+.footer .footer_enlaces {
+    margin-right: auto;
+    color: white;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.footer .footer_github {
+    margin-right: 1%;
+    margin-top:auto;
+    margin-bottom:auto;
+}
