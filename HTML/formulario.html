@@ -1,0 +1,86 @@
+<html lang="en">
+<head>
+<script src="src/js/form.js"></script>
+   
+    <title>Formulario </title>
+    <style>
+        /* Estilos para el formulario */
+      
+        
+        lable{
+        
+        }
+
+        #a1{
+           margin-right: 58px;
+        }
+        #a2{
+           margin-right: 55px;
+        }
+        #a3{
+           margin-right: 67px;
+        }
+        #a4{
+           margin-right: 55px;
+        }
+
+        #a5{
+           margin-right: 50px;
+        }
+        #a6{
+           margin-right: 4  px;
+        }
+        
+        input {
+         
+        }
+       
+    </style>
+    
+</head>
+<body>
+    <!-- ya que no hay datos sensibles utilizamos el metodo get aunque se vean los datos en la url-->
+    <form onsubmit="validaciones()" method="get">
+        <fieldset>    
+            <legend>Formulario de registro</legend>
+            <div>
+                <lable ID="a1">Nomrbe</lable> <input type="text" id="nombre" name="Datos" maxlength="50" autofocus></input>
+            </div>
+
+            <div>  
+                <lable ID="a2">Apellido</lable> <input type="text" id="apellido" name="Datos" maxlength="50"></input>
+            </div>
+
+            <div>
+                <lable ID="a3">Correo</lable> <input type="email" id="email" name="Datos" maxlength="50"></input>
+            </div>
+
+            <div>
+                <lable ID="a4">Telefono</lable> <input type="text" id="telefono" name="Datos" maxlength="9"></input>
+            </div>
+
+            <div>
+                <lable ID="a5">Matricula</lable> <input type="text" id="matricula" name="Datos" maxlength="7"></input>
+            </div>
+    
+
+        <div>
+            <lable id="a6">Tipo de vehiculo</lable>
+                <select id="veihiculo" name="vehiculo">
+                    <option value="Turismo">Turismo</option>
+                    <option value="Furgoneta">Furgoneta</option>
+                    <option value="Caminion">Camion</option>
+                    <option value="Motocicleta">Motocicleta</option>
+            <!--    <option value="Otros">Otros</option>       -->
+                </select>
+        </div>
+    <br>
+    <br>
+
+    <input type="submit" Value="Enviar">
+
+       
+            </fieldset>
+        </form>
+</body>
+</html>
