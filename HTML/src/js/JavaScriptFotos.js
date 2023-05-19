@@ -1,7 +1,7 @@
 var imagenes = [
-    "Imagenes/Imagen-Uno.jpg",
-    "Imagenes/Imagen-Dos.jpg",
-    "Imagenes/Imagen-Tres.jpg"
+    "src/Imagenes/Imagen-Uno.jpg",
+    "src/Imagenes/Imagen-Dos.jpg",
+    "src/Imagenes/Imagen-Tres.jpg"
   ];
   
   document.getElementById("Imagen").src = imagenes[0];
