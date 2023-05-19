@@ -1,0 +1,85 @@
+<html lang="en">
+<head>
+<script src="src/js/form.js"></script>
+   
+    <title>Formulario </title>
+    <style>
+        /* Estilos para el formulario */
+    
+        form{
+        font-size:  20px;
+    
+        }
+
+        #a1{
+           margin-right: 73px;
+        }
+        #a2{
+           margin-right: 69px;
+        }
+        #a3{
+           margin-right: 84px;
+        }
+        #a4{
+           margin-right: 69px;
+        }
+
+        #a5{
+           margin-right: 62px;
+        }
+        #a6{
+           margin-right: 5px;
+        }
+        
+        #boton{
+            margin-top: 15px;
+        }
+       
+    </style>
+    
+</head>
+<body>
+    <!-- Validacion a traves de JS-->
+    <form onsubmit="validaciones()" method="get">
+        <fieldset>    
+            <legend>Formulario de registro</legend>
+            <div>
+                <lable ID="a1">Nombre</lable> <input type="text" id="nombre" name="Datos" maxlength="50" autofocus></input>
+            </div>
+
+            <div>  
+                <lable ID="a2">Apellido</lable> <input type="text" id="apellido" name="Datos" maxlength="50"></input>
+            </div>
+
+            <div>
+                <lable ID="a3">Correo</lable> <input type="email" id="email" name="Datos" maxlength="50"></input>
+            </div>
+
+            <div>
+                <lable ID="a4">Telefono</lable> <input type="text" id="telefono" name="Datos" maxlength="9"></input>
+            </div>
+
+            <div>
+                <lable ID="a5">Matricula</lable> <input type="text" id="matricula" name="Datos" maxlength="7"></input>
+            </div>
+    
+
+        <div>
+            <lable id="a6">Tipo de vehiculo</lable>
+                <select id="veihiculo" name="vehiculo">
+                    <option value="Turismo">Turismo</option>
+                    <option value="Furgoneta">Furgoneta</option>
+                    <option value="Caminion">Camion</option>
+                    <option value="Motocicleta">Motocicleta</option>
+            <!--    <option value="Otros">Otros</option>       -->
+                </select>
+        </div>
+   
+    <div>   
+    <input id="boton" type="submit" Value="Enviar">
+    </div>
+       
+            </fieldset>
+        </form>
+</body>
+</html>
