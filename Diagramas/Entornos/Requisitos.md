@@ -1,12 +1,12 @@
 ## Requisitos Funcionales ITV
 
 1. Almacenar la información de los trabajadores de una ITV.
-2. Gestionar Citas o Inspecciones.
+2. Gestionar Inspecciones.
 3. Emitir informes sobre las citas.
 4. Recoger datos sobre los vehículos.
 5. Recoger datos sobre los propietarios.
 6. Exportar información sobre trabajadores y citas.
-7. Enviar información de un formulario web por Correo con la información de un propietario.
+7. Enviar información de un formulario web por Correo con la información de un propietario y su vehículo.
 
 ## Requisitos no funcionales
 
@@ -30,9 +30,9 @@
         - Motor: 1700.0
         - Mecánica: 1600.0
         - Interior: 1750.0
-    - Además, habrá un campo para indicar si este trabajador es Responsable de la ITV (solo puede haber uno).
+    - Además, habrá un campo para indicar si este trabajador es Responsable de la ITV (solo puede haber uno) y tiene un plus de 1000 Euros.
 
-2. Las citas se deben gestionar en intervalos de 30 minutos por trabajador, siempre y cuando estén libres. Cada trabajador no puede atender más de 4 citas por intervalo, y no puede haber más de 8 citas en el mismo intervalo.
+2. Las citas se deben gestionar en intervalos de 30 minutos por trabajador, siempre y cuando este esté libre. Cada trabajador no puede atender más de 4 citas por intervalo, y no puede haber más de 8 citas en el mismo intervalo.
     - Para atender las citas se necesitarán los datos del vehículo y del propietario.
 
 3. La información a incluir en el informe será:
@@ -83,13 +83,19 @@
     - `Apellidos`
     - `CorreoElectronico`
     - `Telefono`
+    - `DNI`
     - `Matricula del vehiculo`
+    - `Marca`
+    - `Modelo`
+    - `Fecha Matriculación`
+    - `Fecha ultima revisión`
     - `Tipo de Vehiculos`
+    - `Tipo de Motor`
     - Botón para enviar datos
 
 8. Toda la información debe guardarse en una BD de MariaDB con procedimientos, funciones, triggers y eventos para gestionarla.
     - Es necesario un procedimiento que se ocupe de listar los trabajadores que recibe como parámetro, de forma que se pueda leer de 1 en 1 con control de que no se ha llegado al final.
-    - Debemos lanzar el procedimiento anterior para saber si el inspector de la cita pertenece a esta inspección. Si es así, se cargarán los datos en la tabla "inspección".
+    - Debemos lanzar el procedimiento anterior para saber si el trabajador de la cita pertenece a esta inspección. Si es así, se cargarán los datos en la tabla "Informes".
     - Mediante un trigger se controlará si se actualiza alguna inspección, guardando la información previa y la información que se ha modificado.
     - Las citas deben borrarse de forma bimestral.
 
@@ -107,3 +113,4 @@
 4. Los datos del propietario son: Dni, nombre, apellidos, teléfono y correo electrónico.
 5. Los tipos de motor son: Gasolina, diesel, electrico e hibrido.
 6. Los tipos de vehículo son: Turismo, Furgoneta, Camión y Motocicleta.
+7. Los datos del formulario son: Nombre, apellidos, correo electrónico, teléfono, matrícula del vehículo y Tipo de Vehículo.
