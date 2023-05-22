@@ -33,7 +33,7 @@ header p {
 
 .ubicacion{
   position: absolute;
-  right: 270px;
+  right: 240px;
   margin-top: 30px;
   font-family: "Terminus Bold";
   font-size: 250%;
@@ -49,36 +49,26 @@ header p {
   color: #000000;
 }
 
-.contacto {
-  font-size: 150%;
+.repositorio {
+  font-size: 250%;
   position: absolute;
   right: 20px;
   margin-top: 30px;
   font-family: "Terminus Bold";
 }
 
-.contacto ul li {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-}
-
-.contacto ul li img {
-  height: 20px;
-  width: 20px;
-}
-
-.contacto ul li a{
-  margin-left: 10px;
-  text-decoration: none;
+.repositorio a{
   color: #000000;
-  display: block;
+  text-decoration: none;
+  padding-top: 20px;
 }
 
-.contacto ul li a:hover {
+.repositorio a:hover {
   text-decoration: underline;
 }
+
+
+
 
 .logo img {
   margin-top: 50px;
@@ -229,7 +219,7 @@ nav ul li a:hover {
   height: 150px;
 }
 
-.footer-left a,
+.footer-left ul li a,
 .footer-right a {
   list-style: none;
   padding: 0;
@@ -246,6 +236,30 @@ nav ul li a:hover {
 }
 
 .footer-left a:hover, .footer-right a:hover{
+  text-decoration: underline;
+}
+
+.contacto ul li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+.contacto ul li img {
+  height: 20px;
+  width: 20px;
+  margin-left: 20%;
+}
+
+.contacto ul li a{
+  margin-left: 20px;
+  text-decoration: none;
+  color: #000000;
+  display: block;
+}
+
+.contacto ul li a:hover {
   text-decoration: underline;
 }
 
