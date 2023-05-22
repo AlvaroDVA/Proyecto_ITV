@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
   <title>DAMller</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="stylesheet" href="src/css/style.css">
 </head>
 <body>
@@ -11,23 +12,36 @@
         <img src="src/Imagenes/DAMller simplificado.png" alt="Logo de la empresa">
       </a>
     </div>
-    <nav>
+    <nav class="texto-header">
       <ul>
         <li><a href="index.html">Inicio</a></li>
         <li><a onclick="toggleServices()">Servicios</a></li>
       </ul>
     </nav>
-    <div id="servicesBar">
-      <p>Revisión----Tunning----Reparación</p>
+    <p id="servicesBar">Revisión----Tunning----Reparación</p>
+    <div class="ubicacion">
+      <a href="https://www.google.com/maps/dir//IES+Luis+Vives,+P.%C2%BA+de+la+Ermita,+15,+28918+Legan%C3%A9s,+Madrid/@40.3368297,-3.7653012,15.55z/data=!4m9!4m8!1m0!1m5!1m1!1s0xd4189ed4da72b6d:0x7701fdc55d462e17!2m2!1d-3.7656543!2d40.3395137!3e0">Ubicación</a>
+    </div>
+    <div class="contacto">
+      <ul>
+        <li><img src="src/Imagenes/Iconos/github.png" alt=""><a href="https://github.com/AlvaroDVA">Álvaro Del Val</a></li>
+        <li><img src="src/Imagenes/Iconos/github.png" alt=""><a href="https://github.com/Maarioo25">Mario Bueno</a></li>
+        <li><img src="src/Imagenes/Iconos/github.png" alt=""><a href="#">Mohamad Elsayed</a></li>
+      </ul>
     </div>
   </header>
+
+
+
+
+
   <div class="content">
     <div class="contenedor-slider slider-container">
       <div class="slider-izquierdo">
         <img src="src/Imagenes/Izquierda.png" alt="">
       </div>
       <div class="slider-screen">
-        <img id="Imagen" src="" alt="">
+        <img id="Imagen" src="">
       </div>
       <div class="slider-derecho">
         <img src="src/Imagenes/Derecha.png" alt="">
@@ -67,13 +81,13 @@
     <div class="centro-icono">
       <div class="icono">
         <div class="icono-formulario">
-          <a href="form.html"><img src="src/Imagenes/Iconos/receipt-outline.svg" alt="Formulario"></a>
+          <a href="form.html"><img src="src/Imagenes/Iconos/receipt-outline.svg"></a>
           <p>Formulario</p>
         </div>
       </div>
     </div>
   </div>
-  <footer class="footer-index">
+  <footer class="footer">
       <div class="footer-left">
         <a href="https://github.com/AlvaroDVA/Proyecto_ITV">Repositorio</a>
       </div>
@@ -81,11 +95,7 @@
         <a href="index.html"><img src="src/Imagenes/DAMller.png" alt="Logo de la marca"></a>
       </div>
       <div class="footer-right">
-        <ul>
-          <li><a href="https://github.com/AlvaroDVA">GitHub Álvaro Del Val</a></li>
-          <li><a href="https://github.com/Maarioo25">GitHub Mario Bueno</a></li>
-          <li><a href="#">GitHub Mohamad Elsayed</a></li>
-        </ul>
+        <a href="">Políticas de Privacidad</a>
       </div>
     </footer>
   <script src="src/js/JavaScriptFotos.js"></script>
