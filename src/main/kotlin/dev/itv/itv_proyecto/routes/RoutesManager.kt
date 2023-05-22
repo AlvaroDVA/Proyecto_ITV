@@ -1,5 +1,6 @@
 package dev.itv.itv_proyecto.routes
 
+import dev.itv.itv_proyecto.config.AppConfig
 import dev.itv.itv_proyecto.enums.Icons
 import dev.itv.itv_proyecto.enums.Views
 import javafx.application.Application
@@ -9,11 +10,12 @@ import javafx.scene.image.Image
 import javafx.scene.layout.Pane
 import javafx.stage.Stage
 import mu.KotlinLogging
+import org.koin.core.component.KoinComponent
 import java.io.InputStream
 import java.net.URL
 
 private val logger = KotlinLogging.logger {  }
-object RoutesManager {
+object RoutesManager : KoinComponent {
 
     lateinit var mainApp : Application
     private val mainWidht = 884.0
@@ -24,7 +26,12 @@ object RoutesManager {
     private lateinit var _actualStage : Stage
     val actualStage : Stage get() = _actualStage
 
+    val appConfig = AppConfig()
+
     fun iniciarEscenario(stage : Stage) {
+
+        appConfig.dataPath
+
         logger.debug { " Iniciando Escenario " }
         val fxmlLoader = FXMLLoader(getResource(Views.MAIN.url))
         val loadParent = fxmlLoader.load<Pane>()
