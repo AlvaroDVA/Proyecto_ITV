@@ -1,4 +1,6 @@
 
+var servicesBar = document.getElementById("servicesBar");
+
 function validaciones() {
     if (validarNombre("nombre") == false) {
         return
@@ -101,4 +103,8 @@ function enviarCorreo() {
     const mailtoLink = `mailto:mohamad.elsayed@alumno.iesluisvives.org?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
     window.location.href = mailtoLink;
+}
+
+function toggleServices() {
+    servicesBar.classList.toggle("visible");
 }

@@ -1,7 +1,7 @@
 var imagenes = [
-    "src/Imagenes/Imagen-Uno.jpg",
-    "src/Imagenes/Imagen-Dos.jpg",
-    "src/Imagenes/Imagen-Tres.jpg"
+    "src/Imagenes/foto3.png",
+    "src/Imagenes/foto1.png",
+    "src/Imagenes/foto2.png"
   ];
   
   document.getElementById("Imagen").src = imagenes[0];
@@ -44,5 +44,17 @@ var imagenes = [
   function toggleServices() {
     servicesBar.classList.toggle("visible");
   }
+
+
+const iconoFormulario = document.querySelector('.icono-formulario img');
+const nuevaImagen = 'src/Imagenes/Iconos/receipt-outline.png';
+
+iconoFormulario.addEventListener('mouseover', function() {
+  iconoFormulario.src = nuevaImagen;
+});
+
+iconoFormulario.addEventListener('mouseout', function() {
+  iconoFormulario.src = 'src/Imagenes/Iconos/receipt-outline.svg';
+});
   
   
