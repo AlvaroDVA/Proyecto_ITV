@@ -5,7 +5,7 @@ import java.time.LocalDate
 import java.util.*
 
 data class Trabajador (
-    val idTrabajador: UUID = UUID.randomUUID(),
+    val idTrabajador: Long = -1L,
     val nombreTrabajador: String,
     val telefonoTrabajador: Int,
     val email : String,
