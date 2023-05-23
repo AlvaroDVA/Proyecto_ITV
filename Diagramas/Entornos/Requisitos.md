@@ -11,7 +11,7 @@
 ## Requisitos no funcionales
 
 1. La información de los trabajadores a almacenar debe ser:
-    - `idTrabajador`: UUID
+    - `idTrabajador`: Long // PK
     - `Nombre`: String
     - `Usuario`: String (Campo Único)
     - `Contraseña`: String (Cifrada)
@@ -49,10 +49,9 @@
     - Datos del propietario
 
 4. Los datos de los vehículos a almacenar deben ser:
-    - `idVehiculo`: Long - Id proporcionada por la BD
+    - `Matricula` : String (Campo Único , PK)
     - `Marca`: String
     - `Modelo`: String
-    - `Matricula`: String (Campo único)
     - `Fecha de matriculación`: LocalDate
     - `Fecha de última revisión`: LocalDateTime - Debe actualizarse al pasar la cita
     - `TipoMotor`: TipoMotor (El motor solo puede ser de uno de los siguientes tipos):
