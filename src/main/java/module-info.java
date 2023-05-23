@@ -6,6 +6,7 @@ module dev.itv.itv_proyecto {
     requires kotlin.logging.jvm;
     requires org.slf4j;
     requires kotlin.result.jvm;
+    requires java.sql;
 
 
     opens dev.itv.itv_proyecto.controllers to javafx.fxml;
