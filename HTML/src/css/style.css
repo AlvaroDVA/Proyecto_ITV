@@ -16,12 +16,11 @@ header {
 
 header p {
   margin-top: 36px;
-  font-size: 200%;
   font-family: "Terminus-Bold";
 }
 
 .texto-header {
-  font-size: 250%;
+  font-size: 200%;
   margin-top: 30px;
   font-family: "Terminus Bold";
 }
@@ -33,10 +32,10 @@ header p {
 
 .ubicacion{
   position: absolute;
-  right: 240px;
+  right: 200px;
   margin-top: 30px;
   font-family: "Terminus Bold";
-  font-size: 250%;
+  font-size: 200%;
 }
 
 .ubicacion a {
@@ -50,7 +49,7 @@ header p {
 }
 
 .repositorio {
-  font-size: 250%;
+  font-size: 200%;
   position: absolute;
   right: 20px;
   margin-top: 30px;
@@ -231,7 +230,7 @@ nav ul li a:hover {
   color: #000000;
   text-decoration: none;
   font-family: "Terminus Bold";
-  font-size: 25px;
+  font-size: 20px;
   padding-top: 20px;
 }
 
