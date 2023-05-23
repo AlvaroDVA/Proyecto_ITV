@@ -6,10 +6,9 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 
 data class Vehiculo (
-    val idVehiculo: Long = -1L,
+    val matricula : String,
     val marca : String,
     val modelo : String,
-    val matricula : String,
     val fechaMatricula: LocalDate,
     val fechaUltimaRevision : LocalDateTime,
     val tipoMotor : TipoMotor,

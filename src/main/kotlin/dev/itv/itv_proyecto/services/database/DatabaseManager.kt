@@ -10,12 +10,8 @@ object DatabaseManager {
         DriverManager.getConnection("jdbc:sqlite:${RoutesManager.appConfig.bdPath}")
     }
 
-    init {
-        iniciarBaseDatos()
-    }
 
-    private fun iniciarBaseDatos() {
 
-    }
+
 
 }

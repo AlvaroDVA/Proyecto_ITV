@@ -1,10 +1,9 @@
 package dev.itv.itv_proyecto.models
 
 import java.time.LocalDate
-import java.util.UUID
 
 data class Informe (
-    val idInforme : UUID = UUID.randomUUID(),
+    val idInforme : Long = -1L,
     val apto : Boolean?,
     val frenado : Double?,
     val contaminacion : Double?,
