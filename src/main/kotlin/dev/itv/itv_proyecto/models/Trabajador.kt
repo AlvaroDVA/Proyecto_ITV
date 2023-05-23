@@ -27,10 +27,10 @@ data class Trabajador (
 
     val salario : Double get() =
         when (especialidad) {
-            Especialidad.ADMINISTRACIÓN ->  1650.0 + salarioExtra
+            Especialidad.ADMINISTRACION ->  1650.0 + salarioExtra
             Especialidad.ELECTRICIDAD -> 1800.0 + salarioExtra
             Especialidad.MOTOR -> 1700.0 + salarioExtra
-            Especialidad.MECÁNICA -> 1600.0 + salarioExtra
+            Especialidad.MECANICA -> 1600.0 + salarioExtra
             Especialidad.INTERIOR -> 1750.0 + salarioExtra
         }
 }

@@ -109,12 +109,11 @@ function validarMarca() {
 function validarMatricula() {
     let matricula = document.getElementById("matricula")
     
-    let regex = /^[0-9]{4}[A-Z]{3}$/;
-    if (regex.test(matricula.value)) {
-        return true
-    } else {
+    if (matricula.length >= 11) {
         alert("No has introducido una matricula valida")
         return false
+    } else {
+        return true
     }
 }
 
