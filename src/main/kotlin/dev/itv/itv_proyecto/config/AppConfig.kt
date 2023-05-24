@@ -10,6 +10,7 @@ import java.util.*
 class AppConfig {
     lateinit var dataPath : String
     lateinit var bdPath : String
+    lateinit var bdName : String
 
     private val logger = KotlinLogging.logger {}
 
@@ -35,6 +36,8 @@ class AppConfig {
         dataPath = properties.getProperty("data.path") ?: "data"
 
         dataPath = localPath + dataPath
+
+        bdName = properties.getProperty("bd.name") ?: "bbitv"
 
     }
 
