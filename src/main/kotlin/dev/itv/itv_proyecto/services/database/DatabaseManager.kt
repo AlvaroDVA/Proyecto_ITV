@@ -87,7 +87,7 @@ class DatabaseManager : KoinComponent{
         logger.debug { "Creando tabla tInformes" }
 
         val sql = """
-            CREATE TABLE IF NOT EXISTS tInforme (   #esto deberia ser tabla citas
+            CREATE TABLE IF NOT EXISTS tInforme (  
                 nId_informe INT AUTO_INCREMENT PRIMARY KEY ,
                 bFavorable BOOLEAN ,  # CAMPO CALCULADO SI CUMPLE TODOS LOS REQUISITOS
                 cFrenado DECIMAL (4,2) CHECK( cFrenado >=1.0 AND cFrenado <=10.0),
