@@ -13,7 +13,6 @@ import javafx.stage.Stage
 import mu.KotlinLogging
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import org.koin.java.KoinJavaComponent.inject
 import java.io.InputStream
 import java.net.URL
 
