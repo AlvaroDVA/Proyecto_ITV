@@ -7,6 +7,7 @@ module dev.itv.itv_proyecto {
     requires org.slf4j;
     requires kotlin.result.jvm;
     requires java.sql;
+    requires koin.test.jvm;
 
     // Para los test se necesita un módulo propio en la carpeta test
 

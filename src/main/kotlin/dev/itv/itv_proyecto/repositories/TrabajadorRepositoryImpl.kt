@@ -7,6 +7,7 @@ import dev.itv.itv_proyecto.services.database.DatabaseManager
 import dev.itv.itv_proyecto.utils.Utils
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import org.koin.test.KoinTest
 import java.sql.Connection
 
 class TrabajadorRepositoryImpl : ModelsRepository<Trabajador, Long, TrabajadorErrors> , KoinComponent {
@@ -27,18 +28,11 @@ class TrabajadorRepositoryImpl : ModelsRepository<Trabajador, Long, TrabajadorEr
         return selectAllTrabajadores(database)
     }
 
-    override fun deleteAll(): Boolean {
-        return Utils.deleteFromTable(database, "tTrabajador")
-    }
-
-
     private fun selectAllTrabajadores(database: Connection): Result<List<Trabajador>, TrabajadorErrors> {
         Utils.logger.debug { " Utils : selectAllTrabajadores () " }
         val trabajadores = mutableListOf<Trabajador>()
         val statement = database.createStatement()
-        Utils.selectAllFromTable(database, "tTrabajador").onFailure {
-            return Err(TrabajadorErrors.TrabajadorQueryError(it.message!!))
-        }.onSuccess { resultSet ->
+        Utils.selectAllFromTable(database, "tTrabajador").let { resultSet ->
             while (resultSet.next()) {
                 trabajadores.add(
                     Trabajador(

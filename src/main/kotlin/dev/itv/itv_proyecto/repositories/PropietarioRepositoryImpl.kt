@@ -27,17 +27,11 @@ class PropietarioRepositoryImpl : ModelsRepository<Propietario, String, Propieta
         return selectAllPropietarios(database)
     }
 
-    override fun deleteAll(): Boolean {
-        return Utils.deleteFromTable(database, "tPropietario")
-    }
-
     private fun selectAllPropietarios(database: Connection): Result<List<Propietario>, PropietarioErrors.PropietarioQueryErrors> {
         Utils.logger.debug { " Utils : selectAllPropietarios () " }
         val propietarios = mutableListOf<Propietario>()
         val statement = database.createStatement()
-        Utils.selectAllFromTable(database, "tPropietario").onFailure {
-            return Err(PropietarioErrors.PropietarioQueryErrors(it.message!!))
-        }.onSuccess { resultSet ->
+        Utils.selectAllFromTable(database, "tPropietario").let{ resultSet ->
             while (resultSet.next()) {
                 propietarios.add(
                     Propietario(

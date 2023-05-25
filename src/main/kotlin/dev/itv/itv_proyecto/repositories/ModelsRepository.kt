@@ -8,6 +8,4 @@ interface ModelsRepository <T, ID, ERROR> {
 
     fun loadAll() : Result<List<T>, ERROR>
 
-    fun deleteAll() : Boolean
-
 }

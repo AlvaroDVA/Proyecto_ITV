@@ -80,7 +80,7 @@ class InformeRepositoryImpl : InformeRepository, KoinComponent {
         }.component1()
 
         val sql = """
-            UPDATE tInforme
+            UPDATE tInforme 
              SET bFavorable = ?,
              cFrenado = ?,
              cContaminacion = ?,
@@ -89,7 +89,7 @@ class InformeRepositoryImpl : InformeRepository, KoinComponent {
              nId_Trabajador = ?,
              cMatricula = ?,
              cHora = ?,
-             dFecha_Cita = ?,
+             dFecha_Cita = ?
              WHERE nId_informe = ?
         """.trimIndent()
         database.prepareStatement(sql).use { statement ->
@@ -139,9 +139,7 @@ class InformeRepositoryImpl : InformeRepository, KoinComponent {
             return Err(InformeErrors.InformeQueryErrors(it.message!!))
         }.component1()!!
         val statement = database.createStatement()
-        Utils.selectAllFromTable(database, "tInforme").onFailure {
-            return Err(InformeErrors.InformeQueryErrors(it.message!!))
-        }.onSuccess { resultSet ->
+        Utils.selectAllFromTable(database, "tInforme").let { resultSet ->
             while (resultSet.next()) {
                 informes.add(
                     Informe(
@@ -165,18 +163,11 @@ class InformeRepositoryImpl : InformeRepository, KoinComponent {
         return Ok(informes)
     }
 
-    override fun deleteAll(): Boolean {
-        logger.debug { " InformesRepositoryImpl -- deleteAll() " }
-        return Utils.deleteFromTable(database, "tCita")
-    }
-
     private fun selectAllTrabajadores(database: Connection): Result<List<Trabajador>, TrabajadorErrors> {
         Utils.logger.debug { " Utils : selectAllTrabajadores () " }
         val trabajadores = mutableListOf<Trabajador>()
         val statement = database.createStatement()
-        Utils.selectAllFromTable(database, "tTrabajador").onFailure {
-            return Err(TrabajadorErrors.TrabajadorQueryError(it.message!!))
-        }.onSuccess { resultSet ->
+        Utils.selectAllFromTable(database, "tTrabajador").let { resultSet ->
             while (resultSet.next()) {
                 trabajadores.add(
                     Trabajador(
@@ -203,9 +194,7 @@ class InformeRepositoryImpl : InformeRepository, KoinComponent {
         Utils.logger.debug { " Utils : selectAllVehiculos () " }
         val vehiculos = mutableListOf<Vehiculo>()
         val statement = database.createStatement()
-        Utils.selectAllFromTable(database, "tVehiculo").onFailure {
-            return Err(VehiculosErrors.VehiculoConsultaError(it.message!!))
-        }.onSuccess { resultSet ->
+        Utils.selectAllFromTable(database, "tVehiculo").let { resultSet ->
             while (resultSet.next()) {
                 val propietario = Utils.findPropietarioByDni(database, resultSet.getString(8)).onFailure {
                     return Err(VehiculosErrors.VehiculoNotFoundError(it.message!!))

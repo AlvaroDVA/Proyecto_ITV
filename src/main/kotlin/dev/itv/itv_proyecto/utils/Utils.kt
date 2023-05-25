@@ -18,16 +18,13 @@ import java.sql.Statement
 object Utils {
     val logger = KotlinLogging.logger {  }
 
-    fun selectAllFromTable (conexion : Connection, nombreTabla : String) : Result<ResultSet, DatabaseErrors>{
+    fun selectAllFromTable (conexion : Connection, nombreTabla : String) : ResultSet{
         logger.debug { " Utils : Select * FROM $nombreTabla " }
         val statement : Statement = conexion.createStatement()
         val query = "SELECT * FROM $nombreTabla"
-        statement.executeQuery(query)?.let {
+        statement.executeQuery(query).run {
             statement.close()
-            return Ok(it)
-        }?:let {
-            statement.close()
-            return Err(DatabaseErrors.ConsultaDbError("Select All From $nombreTabla ha fallado"))
+            return this
         }
     }
 
@@ -89,19 +86,6 @@ object Utils {
             statement.close()
         }
         return Err(PropietarioErrors.PropietarioNotFoundError("No se ha encontrado un propietario en la BD con el dni $dni"))
-    }
-
-    fun deleteFromTable(database: Connection, tabla: String) : Boolean{
-        logger.debug { " Utils : DeleteFromTable ($tabla) " }
-        val sql = """
-            DELETE FROM ?;
-        """.trimIndent()
-        database.prepareStatement(sql).use {
-            it.setString(1, tabla)
-            it.executeUpdate()
-            it.close()
-            return true
-        }
     }
 
     fun sacarEspecialidad(especialidad: String?): Especialidad = when (especialidad) {
