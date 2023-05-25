@@ -165,6 +165,7 @@ class DatabaseManager : KoinComponent{
             dropTablaTrabajador()
             dropTablaVehiculo()
             dropTablePropietario()
+            dropTablaEstacion()
         }
     }
 
@@ -195,6 +196,14 @@ class DatabaseManager : KoinComponent{
     private fun dropTablePropietario() {
         logger.debug { " Eliminando datos tPropietario " }
         val sql = "DROP TABLE IF EXISTS tPropietario;"
+        bd.createStatement().use {
+            it.executeUpdate(sql)
+        }
+    }
+
+    private fun dropTablaEstacion() {
+        logger.debug { " Eliminando datos tEstacion " }
+        val sql = "DROP TABLE IF EXISTS tEstacion;"
         bd.createStatement().use {
             it.executeUpdate(sql)
         }

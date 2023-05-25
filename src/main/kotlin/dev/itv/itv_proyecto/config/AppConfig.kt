@@ -14,28 +14,20 @@ class AppConfig {
 
     private val logger = KotlinLogging.logger {}
 
-    private val localPath = "${System.getProperty("user.dir")}${File.separator}"
-
     init {
         loadProperties()
         initDataFolder()
     }
 
-    private fun loadProperties() {
+    fun loadProperties() {
         logger.debug { " AppConfig -- LoadProperties() " }
         val properties = Properties()
-
-        val configFile = "config.properties"
-
-        logger.debug { configFile }
 
         val fileInputStream = FileInputStream("src/main/resources/config.properties")
         properties.load(fileInputStream)
 
         bdPath = properties.getProperty("bd.path") ?: "127.0.0.1"
         dataPath = properties.getProperty("data.path") ?: "data"
-
-        dataPath = localPath + dataPath
 
         bdName = properties.getProperty("bd.name") ?: "bbitv"
 
