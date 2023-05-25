@@ -27,7 +27,7 @@ tasks.withType(JavaCompile) {
 
 application {
   mainModule = 'dev.itv.itv_proyecto'
-  mainClass = 'dev.itv.itv_proyecto.HelloApplication'
+  mainClass = 'dev.itv.itv_proyecto.ITVApplication'
 }
 
 [compileKotlin, compileTestKotlin].forEach {
@@ -44,6 +44,31 @@ dependencies {
 
   testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+
+  testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
+  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+
+  implementation("com.michael-bull.kotlin-result:kotlin-result:1.1.17")
+
+  implementation ("io.github.microutils:kotlin-logging-jvm:2.0.11")
+  implementation("ch.qos.logback:logback-classic:1.4.7")
+
+  implementation("io.insert-koin:koin-core:3.4.0")
+
+  // Open Brwoser
+  implementation("com.vaadin:open:8.5.0")
+  // MocKito
+  // https://mvnrepository.com/artifact/org.mockito/mockito-junit-jupiter
+  testImplementation("org.mockito:mockito-junit-jupiter:5.3.1")
+  // https://mvnrepository.com/artifact/org.mockito.kotlin/mockito-kotlin
+  testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")
+  // https://mvnrepository.com/artifact/org.mockito/mockito-core
+  testImplementation("org.mockito:mockito-core:5.3.1")
+
+  // Conexion BD
+  // https://mvnrepository.com/artifact/org.mariadb.jdbc/mariadb-java-client
+  implementation 'org.mariadb.jdbc:mariadb-java-client:3.1.4'
+  implementation 'mysql:mysql-connector-java:8.0.28'
 }
 
 test {
