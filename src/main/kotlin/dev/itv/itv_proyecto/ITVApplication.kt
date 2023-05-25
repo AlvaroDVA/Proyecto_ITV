@@ -5,10 +5,12 @@ import dev.itv.itv_proyecto.routes.RoutesManager
 import javafx.application.Application
 import javafx.stage.Stage
 import mu.KotlinLogging
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import org.koin.core.context.startKoin
 
 private val logger = KotlinLogging.logger {  }
-class ITVApplication : Application() {
+class ITVApplication : Application() , KoinComponent{
     override fun start(stage: Stage) {
         logger.debug { "Iniciando Programa ITV" }
         startKoin {
@@ -16,10 +18,13 @@ class ITVApplication : Application() {
             modules(Modulo)
         }
 
-        RoutesManager.apply {
+        val routesManager : RoutesManager by inject()
+
+        routesManager.apply {
             mainApp = this@ITVApplication
         }
-        RoutesManager.iniciarEscenario(stage)
+        probar()
+        routesManager.iniciarEscenario(stage)
     }
 }
 

@@ -10,6 +10,10 @@ interface CRUDRepository <T, ID, ERROR> {
 
     fun findById(id : ID) : Result<T, ERROR>
 
-    fun updateById(id : ID) : Result<T, ERROR>
+    fun updateById(id : ID , item : T) : Result<T, ERROR>
+
+    fun loadAll() : Result<List<T>, ERROR>
+
+    fun deleteAll() : Boolean
 
 }

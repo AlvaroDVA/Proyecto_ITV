@@ -10,7 +10,7 @@ data class Vehiculo (
     val marca : String,
     val modelo : String,
     val fechaMatricula: LocalDate,
-    val fechaUltimaRevision : LocalDateTime,
+    val fechaUltimaRevision : LocalDate,
     val tipoMotor : TipoMotor,
     val tipoVehiculo: TipoVehiculo,
     val propietario: Propietario

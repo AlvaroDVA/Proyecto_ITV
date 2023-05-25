@@ -18,7 +18,7 @@ import java.io.InputStream
 import java.net.URL
 
 private val logger = KotlinLogging.logger {  }
-object RoutesManager : KoinComponent {
+class RoutesManager : KoinComponent {
 
     lateinit var mainApp : Application
     private val mainWidht = 884.0
