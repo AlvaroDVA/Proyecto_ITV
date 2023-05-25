@@ -3,6 +3,7 @@ package dev.itv.itv_proyecto.utils
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.Result
+import dev.itv.itv_proyecto.enums.Especialidad
 import dev.itv.itv_proyecto.enums.TipoMotor
 import dev.itv.itv_proyecto.enums.TipoVehiculo
 import dev.itv.itv_proyecto.errors.DatabaseErrors
@@ -26,7 +27,7 @@ object Utils {
             return Ok(it)
         }?:let {
             statement.close()
-            return Err(DatabaseErrors.consultaDatabaseError("Select All From $nombreTabla ha fallado"))
+            return Err(DatabaseErrors.ConsultaDbError("Select All From $nombreTabla ha fallado"))
         }
     }
 
@@ -45,6 +46,7 @@ object Utils {
     }
 
     private fun generarMotor(resultSet: ResultSet): TipoMotor {
+        logger.debug { " Utils : GenerarMotor() " }
         return when (resultSet.getString(6)) {
             TipoMotor.DIESEL.toString() -> TipoMotor.DIESEL
             TipoMotor.ELECTRICO.toString() -> TipoMotor.ELECTRICO
@@ -54,6 +56,7 @@ object Utils {
     }
 
     private fun generarTipoVehiculo(resultSet: ResultSet) : TipoVehiculo {
+        logger.debug { " Utils : GenerarTipoVehiculo() " }
         return when (resultSet.getString(7)) {
             TipoVehiculo.CAMION.toString() -> TipoVehiculo.CAMION
             TipoVehiculo.FORGONETA.toString() -> TipoVehiculo.FORGONETA
@@ -63,6 +66,7 @@ object Utils {
     }
 
     fun findPropietarioByDni (conexion: Connection, dni : String) : Result<Propietario, PropietarioErrors> {
+        logger.debug { " Utils : FindPropietarioByDni() " }
         val propietario : Propietario
         val sql = "SELECT * FROM tPropietario WHERE cDni = ?"
         conexion.prepareStatement(sql).use { statement ->
@@ -86,5 +90,32 @@ object Utils {
         }
         return Err(PropietarioErrors.PropietarioNotFoundError("No se ha encontrado un propietario en la BD con el dni $dni"))
     }
+
+    fun deleteFromTable(database: Connection, tabla: String) : Boolean{
+        logger.debug { " Utils : DeleteFromTable ($tabla) " }
+        val sql = """
+            DELETE FROM ?;
+        """.trimIndent()
+        database.prepareStatement(sql).use {
+            it.setString(1, tabla)
+            it.executeUpdate()
+            it.close()
+            return true
+        }
+    }
+
+    fun sacarEspecialidad(especialidad: String?): Especialidad = when (especialidad) {
+        Especialidad.MOTOR.toString() -> Especialidad.MOTOR
+        Especialidad.ELECTRICIDAD.toString() -> Especialidad.ELECTRICIDAD
+        Especialidad.INTERIOR.toString() -> Especialidad.INTERIOR
+        Especialidad.ADMINISTRACION.toString() -> Especialidad.ADMINISTRACION
+        else -> Especialidad.MECANICA
+    }.also {
+        logger.debug { " Utils : SacarEspecialidad ($especialidad) " }
+    }
+
+
+
+
 
 }
