@@ -23,7 +23,6 @@ class ITVApplication : Application() , KoinComponent{
         routesManager.apply {
             mainApp = this@ITVApplication
         }
-        probar()
         routesManager.iniciarEscenario(stage)
     }
 }

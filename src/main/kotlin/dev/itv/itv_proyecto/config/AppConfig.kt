@@ -1,7 +1,6 @@
 package dev.itv.itv_proyecto.config
 
 import mu.KotlinLogging
-import java.io.File
 import java.io.FileInputStream
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -34,7 +33,7 @@ class AppConfig {
     }
 
 
-    private fun initDataFolder() {
+    fun initDataFolder() {
         logger.debug { " Creando $dataPath si no existe " }
         Files.createDirectories(Paths.get(dataPath))
     }
