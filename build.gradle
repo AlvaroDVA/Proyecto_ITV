@@ -5,6 +5,7 @@ plugins {
   id 'org.javamodularity.moduleplugin' version '1.8.12'
   id 'org.openjfx.javafxplugin' version '0.0.13'
   id 'org.beryx.jlink' version '2.25.0'
+  id 'org.jetbrains.kotlin.plugin.serialization' version '1.5.0'
 }
 
 group 'dev.itv'
@@ -77,6 +78,9 @@ dependencies {
   // https://mvnrepository.com/artifact/org.mariadb.jdbc/mariadb-java-client
   implementation 'org.mariadb.jdbc:mariadb-java-client:3.1.4'
   implementation 'mysql:mysql-connector-java:8.0.28'
+
+  implementation 'com.google.code.gson:gson:2.8.9'
+
 }
 
 test {

@@ -8,14 +8,21 @@ module dev.itv.itv_proyecto {
     requires kotlin.result.jvm;
     requires java.sql;
     requires koin.test.jvm;
+    requires com.google.gson;
 
-    // Para los test se necesita un módulo propio en la carpeta test
+    opens dev.itv.itv_proyecto.models.dto to com.google.gson;
+
+    opens dev.itv.itv_proyecto.services.storages to javafx.fxml;
+    exports dev.itv.itv_proyecto.services.storages;
 
     opens dev.itv.itv_proyecto.controllers to javafx.fxml;
     exports dev.itv.itv_proyecto;
 
     opens dev.itv.itv_proyecto.repositories to javafx.fxml;
     exports dev.itv.itv_proyecto.repositories;
+
+    opens dev.itv.itv_proyecto.models to javafx.fxml;
+    exports dev.itv.itv_proyecto.models;
 
 
 }
