@@ -1,6 +1,9 @@
 package dev.itv.itv_proyecto.repositories
 
-import com.github.michaelbull.result.*
+import com.github.michaelbull.result.Err
+import com.github.michaelbull.result.Ok
+import com.github.michaelbull.result.Result
+import com.github.michaelbull.result.onFailure
 import dev.itv.itv_proyecto.errors.PropietarioErrors
 import dev.itv.itv_proyecto.models.Propietario
 import dev.itv.itv_proyecto.services.database.DatabaseManager
@@ -12,7 +15,7 @@ import java.sql.Connection
 class PropietarioRepositoryImpl : ModelsRepository<Propietario, String, PropietarioErrors>, KoinComponent {
 
     val manager : DatabaseManager by inject()
-    val database = manager.bd
+    var database = manager.bd
 
     override fun findById(id: String): Result<Propietario, PropietarioErrors> {
         loadAll().onFailure {

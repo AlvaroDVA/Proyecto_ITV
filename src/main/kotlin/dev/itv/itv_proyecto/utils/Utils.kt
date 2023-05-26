@@ -8,14 +8,11 @@ import dev.itv.itv_proyecto.enums.TipoMotor
 import dev.itv.itv_proyecto.enums.TipoVehiculo
 import dev.itv.itv_proyecto.errors.PropietarioErrors
 import dev.itv.itv_proyecto.models.Propietario
-import dev.itv.itv_proyecto.models.Trabajador
 import dev.itv.itv_proyecto.models.Vehiculo
-import javafx.scene.chart.PieChart.Data
 import mu.KotlinLogging
 import java.sql.Connection
 import java.sql.ResultSet
 import java.sql.Statement
-import java.time.LocalDate
 
 object Utils {
     val logger = KotlinLogging.logger {  }
@@ -100,35 +97,7 @@ object Utils {
         logger.debug { " Utils : SacarEspecialidad ($especialidad) " }
     }
 
-    fun trabajadorByEmail(conexion: Connection, email: String) : Trabajador? {
 
-        val sql = """
-            SELECT * FROM tTrabajador WHERE cEmail = ?;
-        """.trimIndent()
-        var trabajador : Trabajador?
-
-        conexion.prepareStatement(sql).use { preparedStatement ->
-            preparedStatement.setString(1, email)
-            preparedStatement.executeQuery()?.let { resultSet ->
-                if (resultSet.next()) {
-                    return Trabajador(
-                        idTrabajador = resultSet.getLong("nId_Trabajador"),
-                        nombreTrabajador = resultSet.getString("cNombre"),
-                        telefonoTrabajador = resultSet.getInt("nTelefono"),
-                        email = resultSet.getString("cEmail"),
-                        username = resultSet.getString("cUsuario"),
-                        password = resultSet.getString("cContrasena"),
-                        fechaContratacion = resultSet.getDate("dFecha_contratacion").toLocalDate(),
-                        especialidad = sacarEspecialidad(resultSet.getString("cEspecialidad")),
-                        isResponsable = resultSet.getInt("nEs_Jefe") == 1
-                    )
-                }
-            }?:let {
-                return null
-            }
-        }
-        return null
-    }
 
 
 

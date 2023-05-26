@@ -1,7 +1,6 @@
 package dev.itv.itv_proyecto.repositories
 
 import com.github.michaelbull.result.*
-import dev.itv.itv_proyecto.enums.TipoVehiculo
 import dev.itv.itv_proyecto.errors.VehiculosErrors
 import dev.itv.itv_proyecto.models.Vehiculo
 import dev.itv.itv_proyecto.services.database.DatabaseManager
@@ -9,13 +8,12 @@ import dev.itv.itv_proyecto.utils.Utils
 import mu.KotlinLogging
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import java.sql.Connection
 
 class VehiculoRepositoryImpl : ModelsRepository<Vehiculo, String, VehiculosErrors>, KoinComponent{
 
     private val logger = KotlinLogging.logger {  }
-    private val databaseManager : DatabaseManager by inject()
-    private val database = databaseManager.bd
+    val manager : DatabaseManager by inject()
+    var database = manager.bd
 
     /**
      * Función que devuelve el resultado de un select en la base de datos buscando una matrícula de un vehículo
