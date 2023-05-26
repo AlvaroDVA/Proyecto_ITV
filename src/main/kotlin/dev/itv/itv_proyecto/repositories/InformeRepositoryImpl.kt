@@ -1,6 +1,9 @@
 package dev.itv.itv_proyecto.repositories
 
-import com.github.michaelbull.result.*
+import com.github.michaelbull.result.Err
+import com.github.michaelbull.result.Ok
+import com.github.michaelbull.result.Result
+import com.github.michaelbull.result.onFailure
 import dev.itv.itv_proyecto.errors.InformeErrors
 import dev.itv.itv_proyecto.errors.TrabajadorErrors
 import dev.itv.itv_proyecto.errors.VehiculosErrors
@@ -18,7 +21,7 @@ import java.sql.Date
 class InformeRepositoryImpl : InformeRepository, KoinComponent {
     private val logger = KotlinLogging.logger {  }
     val manager : DatabaseManager by inject()
-    val database = manager.bd
+    var database = manager.bd
 
     override fun saveInforme(informe: Informe): Result<Informe, InformeErrors> {
 
@@ -67,9 +70,6 @@ class InformeRepositoryImpl : InformeRepository, KoinComponent {
             preparedStatement.close()
         }
 
-        findById(id).onSuccess {
-            return Err(InformeErrors.InformeQueryErrors("El informe con id $id no se ha borrado"))
-        }
         return Ok(old)
     }
 
@@ -82,8 +82,8 @@ class InformeRepositoryImpl : InformeRepository, KoinComponent {
         val sql = """
             UPDATE tInforme 
              SET bFavorable = ?,
-             cFrenado = ?,
-             cContaminacion = ?,
+             nFrenado = ?,
+             nContaminacion = ?,
              bInterior = ?,
              bLuces = ?,
              nId_Trabajador = ?,
@@ -112,9 +112,6 @@ class InformeRepositoryImpl : InformeRepository, KoinComponent {
         findById(id).onFailure {
             return Err(it)
         }.run {
-            if (old == this.component1()) {
-                return Err(component2()!!)
-            }
             return Ok(this.component1()!!)
         }
     }
@@ -145,8 +142,8 @@ class InformeRepositoryImpl : InformeRepository, KoinComponent {
                     Informe(
                         idInforme = resultSet.getLong("nId_informe"),
                         apto = resultSet.getInt("bFavorable") == 1,
-                        frenado = resultSet.getDouble("cFrenado"),
-                        contaminacion = resultSet.getDouble("cContaminacion"),
+                        frenado = resultSet.getDouble("nFrenado"),
+                        contaminacion = resultSet.getDouble("nContaminacion"),
                         interior = resultSet.getInt("bInterior") == 1,
                         luces = resultSet.getInt("bLuces") == 1,
                         trabajador = trabajadores.find { it.idTrabajador == resultSet.getLong("nId_trabajador") }!!,

@@ -1,69 +1,58 @@
 package dev.itv.itv_proyecto.repositories
 
-import dev.itv.itv_proyecto.config.AppConfig
-import dev.itv.itv_proyecto.di.Modulo
+import dev.itv.itv_proyecto.di.moduloTest
 import dev.itv.itv_proyecto.enums.Especialidad
 import dev.itv.itv_proyecto.enums.TipoMotor
 import dev.itv.itv_proyecto.enums.TipoVehiculo
 import dev.itv.itv_proyecto.errors.InformeErrors
-import dev.itv.itv_proyecto.errors.VehiculosErrors
 import dev.itv.itv_proyecto.models.Informe
 import dev.itv.itv_proyecto.models.Propietario
 import dev.itv.itv_proyecto.models.Trabajador
 import dev.itv.itv_proyecto.models.Vehiculo
-import dev.itv.itv_proyecto.services.database.DatabaseManager
 import dev.itv.itv_proyecto.utils.UtilsForTest
 import mu.KotlinLogging
 import org.junit.jupiter.api.*
-
-import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.Assertions.assertThrows
-import org.junit.jupiter.api.extension.ExtendWith
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
-import java.io.FileInputStream
 import java.sql.Connection
+import java.sql.DriverManager
 import java.time.LocalDate
-import java.util.*
 class InformeRepositoryImplTest : KoinComponent {
 
     private val logger = KotlinLogging.logger {  }
 
-    val appConfig: AppConfig by inject()
-    val databaseManager: DatabaseManager by inject()
-    lateinit var database: Connection
+    lateinit var database : Connection
     val utilsForTest = UtilsForTest()
+
+    lateinit var informesRepository : InformeRepositoryImpl
+
+    val informes = mutableListOf<Informe>()
 
     @BeforeEach
     fun iniciarTest() {
+        database = DriverManager.getConnection("jdbc:mariadb://127.0.0.1:3306/TestbbITV", "root", "")
 
-        cambiarValores()
+        utilsForTest.dropAllTables(database, true)
+        utilsForTest.createTables(database)
 
-        databaseManager.dropAllTables(true)
-        databaseManager.createTables()
-        database = databaseManager.bd
-        utilsForTest.initValoresBd(database)
+        utilsForTest.initValoresBd(database
+        )
+        informesRepository = InformeRepositoryImpl().apply {
+            database = DriverManager.getConnection("jdbc:mariadb://127.0.0.1:3306/TestbbITV", "root", "")
+        }
+
+        informes.addAll(informesRepository.loadAll().component1()!!)
 
     }
 
-    val informesRepository = InformeRepositoryImpl()
-
-    val informes = informesRepository.loadAll().component1()!!
-
-    private fun cambiarValores() {
-        val properties = Properties()
-
-        val fileInputStream = FileInputStream("src/test/resources/config.properties")
-        properties.load(fileInputStream)
-
-        appConfig.bdPath = properties.getProperty("bd.path") ?: "127.0.0.1"
-        appConfig.dataPath = properties.getProperty("data.path") ?: "data"
-
-        appConfig.bdName = properties.getProperty("bd.name") ?: "bbitv"
+    @AfterEach
+    fun closeBaseDatos () {
+        database.close()
     }
-    @Order(0)
+
+
     @Test
     fun loadAllTest() {
 
@@ -144,6 +133,12 @@ class InformeRepositoryImplTest : KoinComponent {
     }
 
     @Test
+    fun deleteInformeByIdNotFoundTest() {
+        val res = informesRepository.findById(12)
+        assertTrue(res.component2() is InformeErrors.InformeNotFoundError)
+    }
+
+    @Test
     fun updateInformeByIdTest() {
 
         val informeNuevo = Informe(
@@ -213,7 +208,7 @@ class InformeRepositoryImplTest : KoinComponent {
         @BeforeAll
         fun startup() {
             startKoin {
-                this.modules(Modulo)
+                this.modules(moduloTest)
             }
         }
 

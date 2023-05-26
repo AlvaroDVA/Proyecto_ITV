@@ -1,19 +1,20 @@
 package dev.itv.itv_proyecto.repositories
 
-import com.github.michaelbull.result.*
+import com.github.michaelbull.result.Err
+import com.github.michaelbull.result.Ok
+import com.github.michaelbull.result.Result
+import com.github.michaelbull.result.onFailure
 import dev.itv.itv_proyecto.errors.TrabajadorErrors
 import dev.itv.itv_proyecto.models.Trabajador
 import dev.itv.itv_proyecto.services.database.DatabaseManager
 import dev.itv.itv_proyecto.utils.Utils
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import org.koin.test.KoinTest
-import java.sql.Connection
 
 class TrabajadorRepositoryImpl : ModelsRepository<Trabajador, Long, TrabajadorErrors> , KoinComponent {
 
     val manager : DatabaseManager by inject()
-    val database = manager.bd
+    var database = manager.bd
 
     override fun findById(id: Long): Result<Trabajador, TrabajadorErrors> {
         loadAll().onFailure {
@@ -25,10 +26,10 @@ class TrabajadorRepositoryImpl : ModelsRepository<Trabajador, Long, TrabajadorEr
     }
 
     override fun loadAll(): Result<List<Trabajador>, TrabajadorErrors> {
-        return selectAllTrabajadores(database)
+        return selectAllTrabajadores()
     }
 
-    private fun selectAllTrabajadores(database: Connection): Result<List<Trabajador>, TrabajadorErrors> {
+    private fun selectAllTrabajadores(): Result<List<Trabajador>, TrabajadorErrors> {
         Utils.logger.debug { " Utils : selectAllTrabajadores () " }
         val trabajadores = mutableListOf<Trabajador>()
         val statement = database.createStatement()

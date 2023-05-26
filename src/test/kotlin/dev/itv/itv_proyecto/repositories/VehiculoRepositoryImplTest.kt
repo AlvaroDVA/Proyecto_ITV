@@ -1,61 +1,47 @@
 package dev.itv.itv_proyecto.repositories
 
-import dev.itv.itv_proyecto.config.AppConfig
-import dev.itv.itv_proyecto.di.Modulo
+import dev.itv.itv_proyecto.di.moduloTest
 import dev.itv.itv_proyecto.errors.VehiculosErrors
-import dev.itv.itv_proyecto.services.database.DatabaseManager
+import dev.itv.itv_proyecto.models.Vehiculo
 import dev.itv.itv_proyecto.utils.UtilsForTest
-import mu.KotlinLogging
-import org.junit.jupiter.api.AfterAll
-import org.junit.jupiter.api.Test
-
-import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.*
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
-import org.koin.test.KoinTest
-import java.io.FileInputStream
 import java.sql.Connection
-import java.util.*
+import java.sql.DriverManager
 
 class VehiculoRepositoryImplTest : KoinComponent {
 
-    private val logger = KotlinLogging.logger {  }
-
-    val appConfig : AppConfig by inject()
-    val databaseManager : DatabaseManager by inject()
     lateinit var database : Connection
     val utilsForTest = UtilsForTest()
 
+    lateinit var repositorioVehiculos : VehiculoRepositoryImpl
+
+    val vehiculos = mutableListOf<Vehiculo>()
+
     @BeforeEach
     fun iniciarTest() {
-        cambiarValores()
+        database = DriverManager.getConnection("jdbc:mariadb://127.0.0.1:3306/TestbbITV", "root", "")
 
-        databaseManager.dropAllTables(true)
-        databaseManager.createTables()
-        database = databaseManager.bd
+        utilsForTest.dropAllTables(database, true)
+        utilsForTest.createTables(database)
+
         utilsForTest.initValoresBd(database)
 
+        repositorioVehiculos = VehiculoRepositoryImpl().apply {
+            database = DriverManager.getConnection("jdbc:mariadb://127.0.0.1:3306/TestbbITV", "root", "")
+        }
+
+        vehiculos.addAll(repositorioVehiculos.loadAll().component1()!!)
+
     }
 
-    private fun cambiarValores() {
-        val properties = Properties()
-
-        val fileInputStream = FileInputStream("src/test/resources/config.properties")
-        properties.load(fileInputStream)
-
-        appConfig.bdPath = properties.getProperty("bd.path") ?: "127.0.0.1"
-        appConfig.dataPath = properties.getProperty("data.path") ?: "data"
-
-        appConfig.bdName = properties.getProperty("bd.name") ?: "bbitv"
+    @AfterEach
+    fun closeBaseDatos () {
+        database.close()
     }
-
-    val repositorioVehiculos = VehiculoRepositoryImpl()
-
-    private val vehiculos = repositorioVehiculos.loadAll().component1()!!
 
     @Test
     fun loadAllTest() {
@@ -84,7 +70,7 @@ class VehiculoRepositoryImplTest : KoinComponent {
         @BeforeAll
         fun startup() {
             startKoin {
-                this.modules(Modulo)
+                this.modules(moduloTest)
             }
         }
 

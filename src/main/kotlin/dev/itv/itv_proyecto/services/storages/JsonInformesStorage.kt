@@ -13,6 +13,7 @@ import dev.itv.itv_proyecto.models.dto.InformeDto
 import mu.KotlinLogging
 import java.io.File
 import java.io.FileReader
+import java.sql.Connection
 
 
 class JsonInformesStorage() : Storage<Informe> {
@@ -37,7 +38,7 @@ class JsonInformesStorage() : Storage<Informe> {
         }
     }
 
-    override fun loadFile(url: String): Result<List<Informe>, StorageErrors> {
+    override fun loadFile(url: String, conexion : Connection): Result<List<Informe>, StorageErrors> {
         val logger = KotlinLogging.logger {  }
         logger.warn { " StorageInformeJson ---- LoadFile() " }
         val file = File(url)
@@ -55,8 +56,8 @@ class JsonInformesStorage() : Storage<Informe> {
 
             val listType = object : TypeToken<List<InformeDto>>() {}.type
             val lista = gson.fromJson<List<InformeDto>>(reader, listType)
-            Ok(lista.map { mapper.InformeDtoToInforme(it)?: return Err(StorageErrors.JsonStorageError("No se puede cargar los informes .")) })
-        } catch (e : Exception) {
+            Ok(lista.map { mapper.informeDtoToInforme(conexion ,it)?: return Err(StorageErrors.JsonStorageError("No se puede cargar los informes .")) })
+        } catch (e : IndexOutOfBoundsException) {
             // Error al leer el archivo
             Err(StorageErrors.JsonStorageError("No se puede leer los informes $e"))
         }
