@@ -64,6 +64,7 @@ class UtilsForTest {
         crearTablaPropietario(bd)
         crearTablaVehiculo(bd)
         crearTablaInformes(bd)
+        crearTablaInformesActualizaciones(bd)
     }
 
     private fun crearTablaPropietario(bd : Connection) {
@@ -231,6 +232,32 @@ class UtilsForTest {
     private fun dropTablaEstacion(bd : Connection) {
         logger.debug { " Eliminando datos tEstacion " }
         val sql = "DROP TABLE IF EXISTS tEstacion;"
+        bd.createStatement().use {
+            it.executeUpdate(sql)
+        }
+    }
+
+    private fun crearTablaInformesActualizaciones(bd : Connection) {
+        logger.debug { "Creando tabla tInforme_actualizaciones" }
+        val sql = """
+            CREATE TABLE IF NOT EXISTS tInforme_actualizaciones (
+                nId_informe INT,
+                favorable_old BOOLEAN,
+                frenado_old DECIMAL (4,2),
+                contaminacion_old DECIMAL (4,2),
+                interior_old BOOLEAN,
+                luces_old BOOLEAN,
+                hora_old VARCHAR (5),
+                fecha_cita_old DATE,
+                favorable_new BOOLEAN,
+                frenado_new DECIMAL (4,2),
+                contaminacion_new DECIMAL (4,2),
+                interior_new BOOLEAN,
+                luces_new BOOLEAN,
+                hora_new VARCHAR (5),
+                fecha_cita_new DATE
+              );
+        """.trimIndent()
         bd.createStatement().use {
             it.executeUpdate(sql)
         }

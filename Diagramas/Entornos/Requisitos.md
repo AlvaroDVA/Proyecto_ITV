@@ -12,6 +12,7 @@
 
 1. Las citas se deben gestionar en intervalos de 30 minutos por trabajador, siempre y cuando este esté libre. Cada trabajador no puede atender más de 4 citas por intervalo, y no puede haber más de 8 citas en el mismo intervalo.
     - Para atender las citas se necesitarán los datos del vehículo y del propietario.
+    - Un vehículo no puede pasar dos veces la misma cita
 
 2. Se debe poder exportar la siguiente información:
     - Información de trabajadores: CSV

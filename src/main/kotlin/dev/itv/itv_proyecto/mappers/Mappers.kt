@@ -7,11 +7,9 @@ import dev.itv.itv_proyecto.models.Informe
 import dev.itv.itv_proyecto.models.Trabajador
 import dev.itv.itv_proyecto.models.Vehiculo
 import dev.itv.itv_proyecto.models.dto.InformeDto
-import dev.itv.itv_proyecto.services.database.DatabaseManager
 import dev.itv.itv_proyecto.utils.Utils
 import mu.KotlinLogging
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import java.sql.Connection
 import java.time.LocalDate
 
@@ -50,7 +48,6 @@ class Mappers : KoinComponent{
 
     fun informeDtoToInforme (conexion : Connection, informe : InformeDto) : Informe? {
         logger.info { " Mapeado DtoInforme a Informe " }
-        val databaseManager : DatabaseManager by inject()
         return Informe(
             idInforme = informe.idInforme.toLong(),
             apto = informe.apto == "1",
@@ -102,7 +99,6 @@ class Mappers : KoinComponent{
         val sql = """
             SELECT * FROM tTrabajador WHERE cEmail = ?;
         """.trimIndent()
-        var trabajador : Trabajador?
 
         conexion.prepareStatement(sql).use { preparedStatement ->
             preparedStatement.setString(1, email)

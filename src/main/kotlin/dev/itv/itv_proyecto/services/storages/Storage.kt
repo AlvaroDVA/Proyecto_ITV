@@ -9,6 +9,6 @@ interface Storage <T> {
 
     fun saveFile(list: List<T>, url: String): Result<File, StorageErrors>
 
-    fun loadFile (url : String, conexion : Connection) : Result<List<T>, StorageErrors>
+    fun loadFile (url : String, conexion : Connection? = null) : Result<List<T>, StorageErrors>
 
 }

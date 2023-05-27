@@ -75,7 +75,7 @@ class InformeRepositoryImpl : InformeRepository, KoinComponent {
 
     override fun updateInformeById(id: Long, informe: Informe): Result<Informe, InformeErrors> {
         logger.debug { " InformeRepositoryImpl -- updateInformeById ($id , $informe)" }
-        val old = findById(id).onFailure {
+        findById(id).onFailure {
             return Err(it)
         }.component1()
 
