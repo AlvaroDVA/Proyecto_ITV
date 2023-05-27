@@ -35,7 +35,7 @@ class DatabaseManager : KoinComponent{
         crearTablaPropietario()
         crearTablaVehiculo()
         crearTablaInformes()
-        crearTablaInformesActualizacciones()
+        crearTablaInformesActualizaciones()
     }
 
     private fun crearTablaPropietario() {
@@ -157,7 +157,7 @@ class DatabaseManager : KoinComponent{
         }
     }
 
-    private fun crearTablaInformesActualizacciones() {
+    private fun crearTablaInformesActualizaciones() {
         logger.debug { "Creando tabla tInforme_actualizaciones" }
         val sql = """
             CREATE TABLE IF NOT EXISTS tInforme_actualizaciones (

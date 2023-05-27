@@ -53,7 +53,7 @@ class TrabajadorRepositoryImpl : ModelsRepository<Trabajador, Long, TrabajadorEr
             statement.close()
 
         }
-        return Ok(trabajadores)
+        return Ok(trabajadores.toList())
     }
 
 }
