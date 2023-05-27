@@ -42,7 +42,7 @@ class JsonInformesStorage() : Storage<Informe> , KoinComponent {
         }
     }
 
-    override fun loadFile(url: String, conexion : Connection?): Result<List<Informe>, StorageErrors> {
+    fun loadFile(url: String, conexion : Connection?): Result<List<Informe>, StorageErrors> {
         val logger = KotlinLogging.logger {  }
         val database = conexion ?: manager.bd
         logger.warn { " StorageInformeJson ---- LoadFile() " }
@@ -62,7 +62,7 @@ class JsonInformesStorage() : Storage<Informe> , KoinComponent {
             val listType = object : TypeToken<List<InformeDto>>() {}.type
             val lista = gson.fromJson<List<InformeDto>>(reader, listType)
             Ok(lista.map { mapper.informeDtoToInforme(database ,it)?: return Err(StorageErrors.JsonStorageError("No se puede cargar los informes .")) })
-        } catch (e : IndexOutOfBoundsException) {
+        } catch (e : Exception) {
             // Error al leer el archivo
             Err(StorageErrors.JsonStorageError("No se puede leer los informes $e"))
         }
