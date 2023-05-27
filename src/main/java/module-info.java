@@ -9,6 +9,7 @@ module dev.itv.itv_proyecto {
     requires java.sql;
     requires koin.test.jvm;
     requires com.google.gson;
+    requires kotlin.test;
 
     opens dev.itv.itv_proyecto.models.dto to com.google.gson;
 

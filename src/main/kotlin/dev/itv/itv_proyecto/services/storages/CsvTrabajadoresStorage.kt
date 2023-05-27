@@ -7,7 +7,6 @@ import dev.itv.itv_proyecto.errors.StorageErrors
 import dev.itv.itv_proyecto.models.Trabajador
 import dev.itv.itv_proyecto.utils.Utils
 import java.io.File
-import java.sql.Connection
 import java.time.LocalDate
 
 class CsvTrabajadoresStorage : Storage<Trabajador> {
@@ -38,7 +37,7 @@ class CsvTrabajadoresStorage : Storage<Trabajador> {
         return Ok(csvFile)
     }
 
-    override fun loadFile(url: String, conexion: Connection?): Result<List<Trabajador>, StorageErrors> {
+    fun loadFile(url: String): Result<List<Trabajador>, StorageErrors> {
         val csvFile = File(url)
         val trabajadores = mutableListOf<Trabajador>()
         csvFile.bufferedReader().use { reader ->

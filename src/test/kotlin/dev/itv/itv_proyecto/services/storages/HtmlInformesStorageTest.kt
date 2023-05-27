@@ -1,6 +1,5 @@
 package dev.itv.itv_proyecto.services.storages
 
-import com.github.michaelbull.result.Ok
 import dev.itv.itv_proyecto.config.AppConfig
 import dev.itv.itv_proyecto.di.moduloTest
 import dev.itv.itv_proyecto.errors.StorageErrors
@@ -9,8 +8,6 @@ import dev.itv.itv_proyecto.repositories.InformeRepositoryImpl
 import dev.itv.itv_proyecto.utils.UtilsForTest
 import mu.KotlinLogging
 import org.junit.jupiter.api.*
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.test.KoinTest
@@ -20,17 +17,18 @@ import java.io.FileInputStream
 import java.sql.Connection
 import java.sql.DriverManager
 import java.util.*
+import kotlin.test.assertTrue
 
-class JsonInformesStorageTest : KoinTest {
+class HtmlInformesStorageTest : KoinTest {
 
-    private val logger = KotlinLogging.logger {  }
+    private val logger = KotlinLogging.logger { }
 
-    lateinit var database : Connection
+    lateinit var database: Connection
     val utilsForTest = UtilsForTest()
-    val appConfig : AppConfig by inject()
+    val appConfig: AppConfig by inject()
 
-    lateinit var informesRepository : InformeRepositoryImpl
-    val jsonInformesStorage = JsonInformesStorage()
+    lateinit var informesRepository: InformeRepositoryImpl
+    val htmlInformesTest = HtmlInformesStorage()
 
     val informes = mutableListOf<Informe>()
 
@@ -43,7 +41,8 @@ class JsonInformesStorageTest : KoinTest {
         utilsForTest.dropAllTables(database, true)
         utilsForTest.createTables(database)
 
-        utilsForTest.initValoresBd(database
+        utilsForTest.initValoresBd(
+            database
         )
         informesRepository = InformeRepositoryImpl().apply {
             database = DriverManager.getConnection("jdbc:mariadb://127.0.0.1:3306/TestbbITV", "root", "")
@@ -54,7 +53,7 @@ class JsonInformesStorageTest : KoinTest {
     }
 
     @AfterEach
-    fun closeBaseDatos () {
+    fun closeBaseDatos() {
         database.close()
     }
 
@@ -74,49 +73,26 @@ class JsonInformesStorageTest : KoinTest {
 
         appConfig.initDataFolder()
 
-
     }
 
     @Test
-    fun jsonInformeTest() {
-        val fileName = System.getProperty("user.dir") + File.separator + appConfig.dataPath + File.separator + "FicheroTest.json"
+    fun saveFileTest() {
+        val fileName = System.getProperty("user.dir") + File.separator + appConfig.dataPath + File.separator + "FicheroTest.html"
         val listaGuardar = informesRepository.loadAll().component1()!!
 
-        jsonInformesStorage.saveFile(url = fileName, list = listaGuardar)
+        val res = htmlInformesTest.saveFile(url = fileName, list = listaGuardar)
 
-        val res = jsonInformesStorage.loadFile(fileName, database)
-
-        assertEquals(Ok(listaGuardar), res)
+        assertTrue { res.component1() is File }
     }
 
     @Test
-    fun jsonSaveNotUrlTest() {
-        val fileName = "" + File.separator + "agaghah"
-        val listaGuardar = informesRepository.loadAll().component1()!!.also {
-            println(it.size)
-        }
+    fun saveFileEmptyListTest() {
+        val fileName = System.getProperty("user.dir") + File.separator + appConfig.dataPath + File.separator + "FicheroTest.html"
+        val listaGuardar = mutableListOf<Informe>()
 
-        val res = jsonInformesStorage.saveFile(url = fileName, list = listaGuardar)
+        val res = htmlInformesTest.saveFile(url = fileName, list = listaGuardar)
 
-        assertTrue { res.component2() is StorageErrors.JsonStorageError }
-    }
-
-    @Test
-    fun jsonLoadNotUrlTest() {
-        val fileName = "" + File.separator + "agaghah"
-
-        val res = jsonInformesStorage.loadFile(url = fileName, database)
-
-        assertTrue { res.component2() is StorageErrors.JsonStorageError }
-    }
-
-    @Test
-    fun JsonConexionNullTest() {
-        val fileName = "" + File.separator + "agaghah"
-
-        val res = jsonInformesStorage.loadFile(url = fileName, null)
-
-        assertTrue { res.component2() is StorageErrors.JsonStorageError }
+        assertTrue { res.component2() is StorageErrors.HtmlStorageError }
     }
 
     companion object {
