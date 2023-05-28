@@ -11,8 +11,9 @@ data class Informe (
     val luces : Boolean?,
     val trabajador: Trabajador,
     val vehiculo: Vehiculo,
-    val propietario: Propietario = vehiculo.propietario,
+    var propietario: Propietario = vehiculo.propietario,
     val horaCita : String?,
     val fechaCita : LocalDate?
 ){
+
 }

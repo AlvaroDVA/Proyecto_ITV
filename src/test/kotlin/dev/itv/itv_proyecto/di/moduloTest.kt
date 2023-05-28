@@ -13,7 +13,7 @@ val moduloTest = module {
 
     factory { AppConfig() }
     factory { DatabaseManager() }
-    factory() { RoutesManager() }
+    factory() { RoutesManager }
     factory<TrabajadorRepositoryImpl>() { TrabajadorRepositoryImpl() }
     factory { JsonInformesStorage() }
     factory { InformeRepositoryImpl() }

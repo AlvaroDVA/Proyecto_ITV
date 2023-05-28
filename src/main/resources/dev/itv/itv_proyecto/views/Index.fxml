@@ -27,7 +27,7 @@
       <menus>
         <Menu mnemonicParsing="false" text="Archivo">
           <items>
-                  <MenuItem fx:id="menuExportarJSON" mnemonicParsing="false" text="Exportar JSON">
+                  <MenuItem fx:id="menuExportarJSON" mnemonicParsing="false" text="Exportar Informes JSON">
                      <graphic>
                         <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -35,12 +35,21 @@
                            </image></ImageView>
                      </graphic>
                   </MenuItem>
-                  <MenuItem fx:id="menuExportarHTML" mnemonicParsing="false" text="Exportar HTML">
+                  <MenuItem fx:id="menuExportarHTML" mnemonicParsing="false" text="Exportar Informes HTML">
                      <graphic>
                         <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../icons/file-export.png" />
                            </image></ImageView>
+                     </graphic>
+                  </MenuItem>
+                  <MenuItem fx:id="menuExportarCsv" mnemonicParsing="false" text="Exportar Trabajador CSV">
+                     <graphic>
+                        <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icons/file-export.png" />
+                           </image>
+                        </ImageView>
                      </graphic>
                   </MenuItem>
                   <SeparatorMenuItem mnemonicParsing="false" />
@@ -98,15 +107,16 @@
                               </HBox>
                               <TableView fx:id="tableInformes">
                                  <columns>
-                                    <TableColumn fx:id="tableColumnDNI" editable="false" prefWidth="128.0" text="DNI" />
-                                    <TableColumn fx:id="tableColumNombre" editable="false" prefWidth="97.0" text="Nombre" />
-                                    <TableColumn fx:id="tableColumnApellidos" editable="false" prefWidth="175.0" text="Apellidos" />
-                                    <TableColumn fx:id="tableColumnTelefono" editable="false" prefWidth="107.0" text="Telefono" />
-                                    <TableColumn fx:id="tableColumnMatricula" editable="false" prefWidth="107.0" text="Matricula" />
-                                    <TableColumn fx:id="tableColumnTipoVehiculo" editable="false" prefWidth="102.0" text="Tipo Vehiculo" />
-                                    <TableColumn fx:id="tableColumnTipoMotor" editable="false" prefWidth="93.0" text="Tipo Motor" />
-                                    <TableColumn fx:id="tableColumnIDTrabajador" editable="false" prefWidth="99.0" text="ID Trabajador" />
-                                    <TableColumn fx:id="tableColumnResultado" editable="false" prefWidth="91.0" text="Resultado" />
+                                    <TableColumn fx:id="tableColumniD" prefWidth="48.0" text="ID" />
+                                    <TableColumn fx:id="tableColumnDNI" editable="false" prefWidth="95.0" text="DNI" />
+                                    <TableColumn fx:id="tableColumNombre" editable="false" prefWidth="114.0" text="Nombre" />
+                                    <TableColumn fx:id="tableColumnApellidos" editable="false" prefWidth="154.0" text="Apellidos" />
+                                    <TableColumn fx:id="tableColumnTelefono" editable="false" prefWidth="108.0" text="Telefono" />
+                                    <TableColumn fx:id="tableColumnMatricula" editable="false" prefWidth="128.0" text="Matricula" />
+                                    <TableColumn fx:id="tableColumnTipoVehiculo" editable="false" prefWidth="105.0" text="Tipo Vehiculo" />
+                                    <TableColumn fx:id="tableColumnTipoMotor" editable="false" prefWidth="86.0" text="Tipo Motor" />
+                                    <TableColumn fx:id="tableColumnIDTrabajador" editable="false" prefWidth="98.0" text="ID Trabajador" />
+                                    <TableColumn fx:id="tableColumnResultado" editable="false" prefWidth="63.0" text="Resultado" />
                                  </columns>
                               </TableView>
                            </children>

@@ -10,14 +10,16 @@ import dev.itv.itv_proyecto.services.database.DatabaseManager
 import dev.itv.itv_proyecto.services.storages.CsvTrabajadoresStorage
 import dev.itv.itv_proyecto.services.storages.HtmlInformesStorage
 import dev.itv.itv_proyecto.services.storages.JsonInformesStorage
+import dev.itv.itv_proyecto.viewmodels.EditarViewModel
 import dev.itv.itv_proyecto.viewmodels.MainViewModel
+import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
 val Modulo = module {
     single { AppConfig() }
     single { DatabaseManager() }
-    single { RoutesManager() }
+    single { RoutesManager }
 
 
     // Repositorios
@@ -33,5 +35,8 @@ val Modulo = module {
 
     // ViewModel
     singleOf(::MainViewModel)
+    factoryOf(::EditarViewModel)
+
+
 }
 

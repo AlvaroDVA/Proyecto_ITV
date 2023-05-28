@@ -118,4 +118,43 @@ class VehiculoRepositoryImpl : ModelsRepository<Vehiculo, String, VehiculosError
         }
         return Ok(item)
     }
+
+    fun updateVehiculoById(id: String, vehiculo: Vehiculo): Result<Vehiculo, VehiculosErrors> {
+        logger.debug { "VehiculoRepositoryImpl -- updateVehiculoById ($id, $vehiculo)" }
+
+        findById(id).onFailure {
+            return Err(it)
+        }
+
+        
+
+        val sql = """
+        UPDATE tVehiculo 
+        SET cMatricula = ?,
+            cMarca = ?,
+            cModelo = ?,
+            dFecha_matriculacion = ?,
+            dFecha_ultima_revision = ?,
+            tipo_motor = ?,
+            tipo_vehiculo = ?,
+            cDNI_Propietario = ?
+        WHERE cMatricula = ?
+    """.trimIndent()
+
+        database.prepareStatement(sql).use { statement ->
+            statement.setString(1, vehiculo.matricula)
+            statement.setString(2, vehiculo.marca)
+            statement.setString(3, vehiculo.modelo)
+            statement.setDate(4, Date.valueOf(vehiculo.fechaMatricula))
+            statement.setDate(5, Date.valueOf(vehiculo.fechaUltimaRevision))
+            statement.setString(6, vehiculo.tipoMotor.toString())
+            statement.setString(7, vehiculo.tipoVehiculo.toString())
+            statement.setString(8, vehiculo.propietario.dni)
+            statement.setString(9, id)
+
+            statement.executeUpdate()
+        }
+
+        return Ok(vehiculo)
+    }
 }

@@ -12,5 +12,5 @@ data class Vehiculo (
     val fechaUltimaRevision : LocalDate,
     val tipoMotor : TipoMotor,
     val tipoVehiculo: TipoVehiculo,
-    val propietario: Propietario
+    var propietario: Propietario
 )
