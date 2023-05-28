@@ -20,8 +20,8 @@ private val logger = KotlinLogging.logger {  }
 class RoutesManager : KoinComponent {
 
     lateinit var mainApp : Application
-    private val mainWidht = 884.0
-    private val mainHeight = 636.0
+    private val mainWidht = 1000.0
+    private val mainHeight = 850.0
 
     private lateinit var _mainStage : Stage
     val mainStage : Stage get() = _mainStage
