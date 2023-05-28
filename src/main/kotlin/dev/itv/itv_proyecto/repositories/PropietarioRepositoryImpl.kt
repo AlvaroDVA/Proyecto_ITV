@@ -57,6 +57,9 @@ class PropietarioRepositoryImpl : ModelsRepository<Propietario, String, Propieta
         findById(propietario.dni).onSuccess {
             return Err(PropietarioErrors.PropietarioFoundError("Ya existe una persona con este dni : ${propietario.dni}"))
         }
+        findByEmail(propietario.emailPropietario).onSuccess {
+            return Err(PropietarioErrors.PropietarioFoundError("Ya existe una persona con este email : ${propietario.emailPropietario}"))
+        }
         val sql = """
             INSERT INTO tPropietario VALUES (?, ?, ?, ?, ?) 
         """.trimIndent()
@@ -77,4 +80,15 @@ class PropietarioRepositoryImpl : ModelsRepository<Propietario, String, Propieta
 
         return Ok(propietario)
     }
+
+    fun findByEmail(email: String): Result<Propietario, PropietarioErrors> {
+        logger.debug { " PropietarioRepositoryImpl -- FindByEmail ($email) " }
+        loadAll().onFailure {
+            return Err(it)
+        }.component1()!!.find { it.emailPropietario == email }?.let {
+            return Ok(it)
+        }
+        return Err(PropietarioErrors.PropietarioNotFoundError("No existe un propietario con el email $email"))
+    }
+
 }

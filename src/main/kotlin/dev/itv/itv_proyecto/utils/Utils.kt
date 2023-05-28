@@ -46,7 +46,7 @@ object Utils {
         return when (resultSet.getString(6)) {
             TipoMotor.DIESEL.toString() -> TipoMotor.DIESEL
             TipoMotor.ELECTRICO.toString() -> TipoMotor.ELECTRICO
-            TipoMotor.HIBRIDO.toString() -> TipoMotor.ELECTRICO
+            TipoMotor.HIBRIDO.toString() -> TipoMotor.HIBRIDO
             else -> TipoMotor.GASOLINA
         }
     }
@@ -55,7 +55,7 @@ object Utils {
         logger.debug { " Utils : GenerarTipoVehiculo() " }
         return when (resultSet.getString(7)) {
             TipoVehiculo.CAMION.toString() -> TipoVehiculo.CAMION
-            TipoVehiculo.FORGONETA.toString() -> TipoVehiculo.FORGONETA
+            TipoVehiculo.FURGONETA.toString() -> TipoVehiculo.FURGONETA
             TipoVehiculo.TURISMO.toString()-> TipoVehiculo.TURISMO
             else -> TipoVehiculo.MOTOCICLETA
         }

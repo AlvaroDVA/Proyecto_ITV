@@ -12,6 +12,8 @@ class DatabaseManager : KoinComponent{
     private val logger = KotlinLogging.logger {}
 
     val appConfig: AppConfig by inject()
+    // Se necesita una base de datos ya creada para poder conectarse. Las tablas se crean automáticamente si
+    // no existen
     var urlBd = "jdbc:mariadb://${appConfig.bdPath}:3306/${appConfig.bdName}"
     val bd: Connection by lazy  {
         try {

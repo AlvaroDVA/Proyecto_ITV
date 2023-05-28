@@ -1,9 +1,9 @@
 package dev.itv.itv_proyecto.mappers
 
-import com.github.michaelbull.result.onFailure
 import dev.itv.itv_proyecto.enums.TipoMotor
 import dev.itv.itv_proyecto.enums.TipoVehiculo
 import dev.itv.itv_proyecto.models.Informe
+import dev.itv.itv_proyecto.models.Propietario
 import dev.itv.itv_proyecto.models.Trabajador
 import dev.itv.itv_proyecto.models.Vehiculo
 import dev.itv.itv_proyecto.models.dto.InformeDto
@@ -19,11 +19,11 @@ class Mappers : KoinComponent{
         logger.info { " Mapeando Informe a Dto ---- $this " }
         return InformeDto(
             idInforme = informe.idInforme.toString(),
-            apto = if (informe.apto == true) "1" else "0",
+            apto = if (informe.apto == true) "true" else "false",
             frenado = informe.frenado.toString(),
             contaminacion = informe.contaminacion.toString(),
-            interior = if (informe.interior == true) "1" else "0",
-            luces = if (informe.luces == true) "1" else "0",
+            interior = if (informe.interior == true) "true" else "false",
+            luces = if (informe.luces == true) "true" else "false",
             idTrabajador = informe.trabajador.idTrabajador.toString(),
             nombreTrabajador = informe.trabajador.nombreTrabajador,
             email = informe.trabajador.email,
@@ -49,27 +49,38 @@ class Mappers : KoinComponent{
     fun informeDtoToInforme (conexion : Connection, informe : InformeDto) : Informe? {
         logger.info { " Mapeado DtoInforme a Informe " }
         return Informe(
-            idInforme = informe.idInforme.toLong(),
-            apto = informe.apto == "1",
-            frenado = informe.frenado.toDouble(),
-            contaminacion = informe.contaminacion.toDouble(),
-            interior = informe.interior == "1",
-            luces = informe.luces == "1",
+            idInforme = informe.idInforme.toLongOrNull() ?: -1L,
+            apto = informe.apto == "1" || informe.apto == "true",
+            frenado = informe.frenado.toDoubleOrNull(),
+            contaminacion = informe.contaminacion.toDoubleOrNull(),
+            interior = informe.interior == "1" || informe.interior == "true",
+            luces = informe.luces == "1" || informe.luces == "true",
             trabajador = trabajadorByEmail(conexion, informe.email)
                 ?:let {
                     return null
             },
             vehiculo = Vehiculo (
-                matricula = informe.matricula,
+                matricula = informe.matricula.uppercase(),
                 marca = informe.marca,
                 modelo = informe.modelo,
                 fechaMatricula = LocalDate.parse(informe.fechaMatricula),
                 fechaUltimaRevision = LocalDate.parse(informe.fechaUltimaRevision),
                 tipoMotor = sacaMotor(informe.tipoMotor),
                 tipoVehiculo = sacarTipoVehiculo(informe.tipoVehiculo),
-                propietario = Utils.findPropietarioByDni(conexion ,informe.dni).onFailure {
-                    return null
-                }.component1()!!
+                propietario = Propietario(
+                    dni = informe.dni,
+                    apellidos = informe.apellidos,
+                    emailPropietario = informe.emailPropietario,
+                    nombre = informe.nombre,
+                    telefono = informe.telefono.toInt()
+                )
+            ),
+            propietario = Propietario(
+                dni = informe.dni.uppercase(),
+                apellidos = informe.apellidos,
+                emailPropietario = informe.emailPropietario,
+                nombre = informe.nombre,
+                telefono = informe.telefono.toInt()
             ),
             fechaCita = LocalDate.parse(informe.fechaCita),
             horaCita = informe.horaCita
@@ -89,7 +100,7 @@ class Mappers : KoinComponent{
         return when (tipoVehiculo) {
             TipoVehiculo.TURISMO.toString() -> TipoVehiculo.TURISMO
             TipoVehiculo.MOTOCICLETA.toString() -> TipoVehiculo.MOTOCICLETA
-            TipoVehiculo.FORGONETA.toString() -> TipoVehiculo.FORGONETA
+            TipoVehiculo.FURGONETA.toString() -> TipoVehiculo.FURGONETA
             else -> TipoVehiculo.CAMION
         }
     }

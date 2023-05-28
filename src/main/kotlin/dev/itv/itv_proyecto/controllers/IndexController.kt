@@ -1,15 +1,20 @@
 package dev.itv.itv_proyecto.controllers
 
+import dev.itv.itv_proyecto.enums.ActionExportar
+import dev.itv.itv_proyecto.enums.ActionView
 import dev.itv.itv_proyecto.enums.TipoMotor
 import dev.itv.itv_proyecto.enums.TipoVehiculo
 import dev.itv.itv_proyecto.models.dto.InformeDto
+import dev.itv.itv_proyecto.routes.RoutesManager
 import dev.itv.itv_proyecto.viewmodels.MainViewModel
 import javafx.fxml.FXML
 import javafx.scene.control.*
 import javafx.scene.control.cell.PropertyValueFactory
+import javafx.stage.FileChooser
 import mu.KotlinLogging
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import java.io.File
 
 private val logger = KotlinLogging.logger {  }
 class IndexController : KoinComponent{
@@ -19,6 +24,10 @@ class IndexController : KoinComponent{
     private lateinit var menuExportarJSON : MenuItem
     @FXML
     private lateinit var menuExportarHTML : MenuItem
+    @FXML
+    private lateinit var menuExportarCsv : MenuItem
+    @FXML
+    private lateinit var menuSalir : MenuItem
     @FXML
     private lateinit var menuAcercaDe : MenuItem
     @FXML
@@ -30,6 +39,8 @@ class IndexController : KoinComponent{
 
     @FXML
     private lateinit var tableInformes : TableView<InformeDto>
+    @FXML
+    private lateinit var tableColumniD : TableColumn<InformeDto, String>
     @FXML
     private lateinit var tableColumnDNI : TableColumn<InformeDto, String>
     @FXML
@@ -115,6 +126,7 @@ class IndexController : KoinComponent{
     @FXML
     private lateinit var btnEliminar : Button
 
+
     @FXML
     fun initialize() {
 
@@ -153,10 +165,16 @@ class IndexController : KoinComponent{
         checkboxLuces.selectedProperty().bind(mainViewModel.state.lucesInforme)
         checkboxInterior.selectedProperty().bind(mainViewModel.state.interiorInforme)
 
+        selectorMotor.valueProperty().bind(mainViewModel.state.tipoMotor)
+        selectorTipoVehiculo.valueProperty().bind(mainViewModel.state.tipoVehiculo)
+        selectorTrabajador.valueProperty().bind(mainViewModel.state.trabajadorInforme)
+
+
     }
 
     private fun iniciarEventos() {
         tableInformes.items = mainViewModel.listaInformesDto
+        tableColumniD.cellValueFactory = PropertyValueFactory("idInforme")
         tableColumnDNI.cellValueFactory = PropertyValueFactory("dni")
         tableColumNombre.cellValueFactory = PropertyValueFactory("nombre")
         tableColumnApellidos.cellValueFactory = PropertyValueFactory("apellidos")
@@ -190,30 +208,48 @@ class IndexController : KoinComponent{
             newValues?.let { onSeleccionarTabla(it) }
             btnEditar.isDisable = false
             btnEliminar.isDisable = false
+            newValues?:let{
+                btnEditar.isDisable = true
+                btnEliminar.isDisable = true
+            }
         }
 
-        btnEliminar.setOnAction { eliminarInforme() }
+
+        btnEliminar.setOnAction { onEliminarInforme() }
+
+        btnEditar.setOnAction { onBotonEditar() }
+
+        btnNuevo.setOnAction { onBotonNuevo() }
+
+        menuSalir.setOnAction { onBotonSalir() }
+
+        menuExportarHTML.setOnAction { onBotonHtml() }
+        menuExportarCsv.setOnAction { onBotonCsv() }
+        menuExportarJSON.setOnAction { onBotonJson() }
 
     }
 
-    private fun eliminarInforme() {
-        val alerta = Alert(Alert.AlertType.CONFIRMATION).apply {
-            title = ""
+
+
+    private fun onEliminarInforme() {
+        val alert = Alert(Alert.AlertType.CONFIRMATION).apply {
+            title = "Confirmación"
+            headerText = ""
+            contentText = "Esta acción no se puede deshacer."
+            buttonTypes.setAll(ButtonType.OK, ButtonType.CANCEL)
+        }
+
+        val result = alert.showAndWait()
+        if (result.isPresent && result.get() == ButtonType.OK) {
+            // Acción a realizar al presionar "Aceptar"
+            mainViewModel.eliminarInforme()
         }
 
     }
-
 
     private fun onSeleccionarTabla(informe: InformeDto) {
         mainViewModel.seleccionarInforme(informe)
-        cambiarSelectores(informe)
         cambiarEstilos()
-    }
-
-    private fun cambiarSelectores(informe: InformeDto) {
-        selectorTrabajador.value = informe.idTrabajador + " -- " + informe.nombreTrabajador
-        selectorMotor.value = informe.tipoMotor
-        selectorTipoVehiculo.value = informe.tipoVehiculo
     }
 
     private fun cambiarEstilos() {
@@ -234,6 +270,66 @@ class IndexController : KoinComponent{
     private fun onFiltrar() {
         tableInformes.items = mainViewModel.listaFiltrada(buscadorNombre.text, buscadorMotor.value,
             buscadorTipoVehiculo.value)
+    }
+
+    private fun onBotonNuevo() {
+        mainViewModel.cambiarVentana(ActionView.NEW)
+
+    }
+
+    private fun onBotonEditar()  {
+        mainViewModel.cambiarVentana(ActionView.UPDATE)
+    }
+
+    private fun onBotonSalir() {
+        RoutesManager.cerrarApp()
+    }
+
+    private fun onBotonHtml() {
+        seleccionarLugar(ActionExportar.EXPORTAR_HTML)
+    }
+
+    private fun onBotonJson() {
+        seleccionarLugar(ActionExportar.EXPORTAR_JSON)
+    }
+
+    private fun onBotonCsv() {
+        seleccionarLugar(ActionExportar.EXPORTAR_CSV)
+    }
+
+    fun seleccionarLugar(accion: ActionExportar) {
+        when (accion) {
+            ActionExportar.EXPORTAR_HTML -> {
+                FileChooser().run {
+                    title = "Exportar HTML"
+                    initialDirectory = File("data/")
+                    extensionFilters.add(FileChooser.ExtensionFilter("HTML", ".html"))
+                    showSaveDialog(RoutesManager.mainStage)
+                }?.let {
+                    mainViewModel.guardarArchivo(it.absolutePath , accion)
+                }
+            }
+            ActionExportar.EXPORTAR_CSV -> {
+                FileChooser().run {
+                    title = "Exportar CSV"
+                    initialDirectory = File("data/")
+                    extensionFilters.add(FileChooser.ExtensionFilter("CSV", ".csv"))
+                    showSaveDialog(RoutesManager.mainStage)
+                }?.let {
+                    mainViewModel.guardarArchivo(it.absolutePath , accion)
+                }
+            }
+            ActionExportar.EXPORTAR_JSON -> {
+                FileChooser().run {
+                    title = "Exportar JSON"
+                    initialDirectory = File("data")
+                    extensionFilters.add(FileChooser.ExtensionFilter("JSON", ".json"))
+                    showSaveDialog(RoutesManager.mainStage)
+                }?.let {
+                    mainViewModel.guardarArchivo(it.absolutePath , accion)
+                }
+            }
+        }
     }
 
 }
