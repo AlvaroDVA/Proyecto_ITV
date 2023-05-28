@@ -10,8 +10,9 @@ module dev.itv.itv_proyecto {
     requires koin.test.jvm;
     requires com.google.gson;
     requires kotlin.test;
+    requires java.desktop;
 
-    opens dev.itv.itv_proyecto.models.dto to com.google.gson;
+    opens dev.itv.itv_proyecto.models.dto to com.google.gson, javafx.base;
 
     opens dev.itv.itv_proyecto.services.storages to javafx.fxml;
     exports dev.itv.itv_proyecto.services.storages;
@@ -24,6 +25,7 @@ module dev.itv.itv_proyecto {
 
     opens dev.itv.itv_proyecto.models to javafx.fxml;
     exports dev.itv.itv_proyecto.models;
+
 
 
 }

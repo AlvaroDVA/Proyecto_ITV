@@ -6,6 +6,7 @@ import dev.itv.itv_proyecto.models.Propietario
 import dev.itv.itv_proyecto.utils.UtilsForTest
 import mu.KotlinLogging
 import org.junit.jupiter.api.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.koin.core.component.KoinComponent
 import org.koin.core.context.startKoin
@@ -19,7 +20,7 @@ class PropietarioRepositoryImplTest : KoinComponent {
     lateinit var database : Connection
     val utilsForTest = UtilsForTest()
 
-    lateinit var repositorioProtetario : PropietarioRepositoryImpl
+    lateinit var repositorioPropetario : PropietarioRepositoryImpl
 
     val propietarios = mutableListOf<Propietario>()
 
@@ -32,11 +33,11 @@ class PropietarioRepositoryImplTest : KoinComponent {
 
         utilsForTest.initValoresBd(database
         )
-        repositorioProtetario = PropietarioRepositoryImpl().apply {
+        repositorioPropetario = PropietarioRepositoryImpl().apply {
             database = DriverManager.getConnection("jdbc:mariadb://127.0.0.1:3306/TestbbITV", "root", "")
         }
 
-        propietarios.addAll(repositorioProtetario.loadAll().component1()!!)
+        propietarios.addAll(repositorioPropetario.loadAll().component1()!!)
 
     }
 
@@ -47,7 +48,7 @@ class PropietarioRepositoryImplTest : KoinComponent {
 
     @Test
     fun loadAllTest() {
-        val res = repositorioProtetario.loadAll()
+        val res = repositorioPropetario.loadAll()
 
         assertTrue(propietarios[0] == res.component1()!![0])
         assertTrue(propietarios[1] == res.component1()!![1])
@@ -60,13 +61,35 @@ class PropietarioRepositoryImplTest : KoinComponent {
     @Test
     fun findByIdTest() {
 
-        val res1 = repositorioProtetario.findById(propietarios[0].dni)
-        val res2 = repositorioProtetario.findById(propietarios[4].dni)
-        val res3 = repositorioProtetario.findById("AAAA222")
+        val res1 = repositorioPropetario.findById(propietarios[0].dni)
+        val res2 = repositorioPropetario.findById(propietarios[4].dni)
+        val res3 = repositorioPropetario.findById("AAAA222")
 
         assertTrue(propietarios[0] == res1.component1())
         assertTrue(propietarios[4] == res2.component1())
         assertTrue(res3.component2() is PropietarioErrors.PropietarioNotFoundError )
+
+    }
+
+    @Test
+    fun savePropietarioTest() {
+
+        val propietario = Propietario(
+            dni = "12345678A",
+            nombre = "Juan",
+            apellidos = "Pérez",
+            telefono = 123456789,
+            emailPropietario = "juan.perez@example.com"
+        )
+
+        val res1 = repositorioPropetario.loadAll()
+
+        assertEquals(5, res1.component1()!!.size)
+
+        val res2 = repositorioPropetario.savePropietario(propietario)
+        val res3 = repositorioPropetario.loadAll()
+        assertEquals(6, res3.component1()!!.size)
+        assertEquals(res2.component1(), propietario)
 
     }
 
@@ -87,4 +110,6 @@ class PropietarioRepositoryImplTest : KoinComponent {
         }
 
     }
+
+
 }
