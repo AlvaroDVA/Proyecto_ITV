@@ -42,7 +42,6 @@ class CsvTrabajadoresStorage : Storage<Trabajador> {
         val trabajadores = mutableListOf<Trabajador>()
         csvFile.bufferedReader().use { reader ->
             val csvLines = reader.readLines()
-            val csvHeader = csvLines.first()
             val csvData = csvLines.drop(1)
             csvData.forEach { csvLine ->
                 val values = csvLine.split(",")

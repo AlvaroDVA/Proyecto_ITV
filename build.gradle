@@ -6,6 +6,9 @@ plugins {
   id 'org.openjfx.javafxplugin' version '0.0.13'
   id 'org.beryx.jlink' version '2.25.0'
   id 'org.jetbrains.kotlin.plugin.serialization' version '1.5.0'
+
+  id 'com.github.johnrengelman.shadow' version '7.0.0'
+
 }
 
 group 'dev.itv'
@@ -97,4 +100,23 @@ jlink {
 
 jlinkZip {
   group = 'distribution'
+}
+
+tasks.jar {
+  manifest {
+    attributes 'Main-Class': 'dev.itv.itv_proyecto.ITVApplication'
+  }
+
+  from {
+    configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+  }
+
+  duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
+
+shadowJar {
+  archiveBaseName.set('app-with-dependencies') // Nombre base del archivo JAR generado
+  archiveClassifier.set('all') // Clasificador del archivo JAR generado
+  configurations = [project.configurations.runtimeClasspath] // Incluir todas las dependencias
+  mergeServiceFiles() // Fusionar archivos de servicios si es necesario
 }

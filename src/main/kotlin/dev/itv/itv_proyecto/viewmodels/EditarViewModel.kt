@@ -8,7 +8,6 @@ import dev.itv.itv_proyecto.errors.ModelViewError
 import dev.itv.itv_proyecto.mappers.Mappers
 import dev.itv.itv_proyecto.models.Informe
 import dev.itv.itv_proyecto.models.Propietario
-import dev.itv.itv_proyecto.models.Vehiculo
 import dev.itv.itv_proyecto.models.dto.InformeDto
 import dev.itv.itv_proyecto.models.states.EditarState
 import dev.itv.itv_proyecto.repositories.InformeRepositoryImpl
@@ -122,7 +121,7 @@ class EditarViewModel (
         if (RoutesManager.action == ActionView.UPDATE) {
             return actualizarInforme()
         }
-        return Err(ModelViewError.accionError("No hay una eleccion error"))
+        return Err(ModelViewError.AccionError("No hay una eleccion error"))
     }
 
     private fun guardarInforme() : Result<Informe, ModelViewError> {
@@ -228,15 +227,6 @@ class EditarViewModel (
 
         return Err(ModelViewError.ActualizarError("No se ha podido actualizar el informe"))
     }
-
-    private fun comprobarDatosVehiculo(it: Vehiculo, informe: Informe) =
-        it.matricula == informe.vehiculo.matricula &&
-                it.fechaMatricula == informe.vehiculo.fechaMatricula &&
-                it.marca == informe.vehiculo.marca &&
-                it.tipoVehiculo == informe.vehiculo.tipoVehiculo &&
-                it.modelo == informe.vehiculo.modelo &&
-                it.tipoMotor == informe.vehiculo.tipoMotor &&
-                it.fechaUltimaRevision == informe.vehiculo.fechaUltimaRevision
 
     private fun comprobarDatosPropietario(
         it: Propietario,

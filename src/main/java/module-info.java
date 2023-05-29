@@ -11,6 +11,7 @@ module dev.itv.itv_proyecto {
     requires com.google.gson;
     requires kotlin.test;
     requires java.desktop;
+    requires open;
 
     opens dev.itv.itv_proyecto.models.dto to com.google.gson, javafx.base;
 
