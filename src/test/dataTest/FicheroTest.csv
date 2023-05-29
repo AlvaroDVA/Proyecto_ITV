@@ -1,0 +1,4 @@
+IdTrabajador,Nombre,Telefono,Email,Usuario,Contraseña,Fecha_Contratación,Especialidad,IsResponsable
+-1,Juan Pérez,123456789,juan@example.com,juancito,password123,2017-12-01,MOTOR,false
+-1,María López,987654321,maria@example.com,marialo,password456,2022-08-12,ADMINISTRACION,true
+-1,Pedro Rodríguez,555555555,pedro@example.com,pedror,password789,2021-05-10,ELECTRICIDAD,false

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dev.itv.itv_proyecto.controllers.AcercaController">
+   <children>
+      <SplitPane dividerPositions="0.35" orientation="VERTICAL" prefHeight="300.0" prefWidth="500.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+               <children>
+                  <ImageView fitHeight="100.0" fitWidth="100.0" layoutX="76.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/DAMller.png" />
+                     </image>
+                  </ImageView>
+                  <Label layoutX="203.0" layoutY="16.0" text="ITV DAMller">
+                     <font>
+                        <Font name="TSCu_Comic" size="48.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+               <children>
+                  <Hyperlink fx:id="marioBueno" layoutX="14.0" layoutY="28.0" prefWidth="159.0" text="Mario Bueno">
+                     <graphic>
+                        <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icons/github.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Hyperlink>
+                  <Hyperlink fx:id="alvaroDelVal" layoutX="16.0" layoutY="79.0" text="Álvaro del Val">
+                     <graphic>
+                        <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icons/github.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Hyperlink>
+                  <Hyperlink fx:id="mohamadElsayed" layoutX="16.0" layoutY="126.0" text="Mohammad Elsayed">
+                     <graphic>
+                        <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icons/github.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Hyperlink>
+                  <Label alignment="CENTER" layoutX="245.0" layoutY="15.0" prefHeight="159.0" prefWidth="234.0" text="Le DAMos el visto bueno a tu vehiculo" wrapText="true">
+                     <font>
+                        <Font name="TSCu_Comic" size="28.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+   </children>
+</AnchorPane>

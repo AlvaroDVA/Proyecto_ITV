@@ -1,5 +1,8 @@
 package dev.itv.itv_proyecto.enums
 
+/**
+ * Enum para declarar los Tipos de Vehiculos
+ */
 enum class TipoVehiculo {
-    TURISMO, FORGONETA, CAMION, MOTOCICLETA
+    TURISMO, FURGONETA, CAMION, MOTOCICLETA
 }

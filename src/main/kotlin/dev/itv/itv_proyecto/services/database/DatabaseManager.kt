@@ -12,11 +12,13 @@ class DatabaseManager : KoinComponent{
     private val logger = KotlinLogging.logger {}
 
     val appConfig: AppConfig by inject()
-
-    val bd: Connection by lazy {
+    // Se necesita una base de datos ya creada para poder conectarse. Las tablas se crean automáticamente si
+    // no existen
+    var urlBd = "jdbc:mariadb://${appConfig.bdPath}:3306/${appConfig.bdName}"
+    val bd: Connection by lazy  {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver")
-            DriverManager.getConnection("jdbc:mariadb://${appConfig.bdPath}:3306/${appConfig.bdName}", "root", "")
+            DriverManager.getConnection(urlBd, "root", "")
         } catch (e: Exception) {
             logger.error("Error al establecer la conexión con la base de datos", e)
             throw e
@@ -25,11 +27,12 @@ class DatabaseManager : KoinComponent{
 
     init {
         logger.debug { "Iniciando DataBaseManager()" }
-        //Si quisiésemos hacer un drop a las tablas
-        dropAllTables(false)
         createTables()
     }
-    
+
+    /**
+     * Funcion que crea las tablas al iniciarse el programa siempre que exista la Base de Datos
+     */
     fun createTables() {
         logger.debug { " Creando Tablas " }
         crearTablaEstacion()
@@ -37,8 +40,12 @@ class DatabaseManager : KoinComponent{
         crearTablaPropietario()
         crearTablaVehiculo()
         crearTablaInformes()
+        crearTablaInformesActualizaciones()
     }
 
+    /**
+     * Funcion que crea la tabla tPropietario
+     */
     private fun crearTablaPropietario() {
         logger.debug { "Creando tabla tPropietario" }
 
@@ -57,25 +64,28 @@ class DatabaseManager : KoinComponent{
         }
     }
 
+    /**
+     * Funcion que crea la tabla tVehiculo
+     */
     private fun crearTablaVehiculo() {
         logger.debug { "Creando tabla tVehiculos" }
 
         val sql = """
-            CREATE TABLE IF NOT EXISTS tVehiculo (
-                cMatricula VARCHAR(10) PRIMARY KEY ,
-                cMarca VARCHAR(50) NOT NULL ,
-                cModelo VARCHAR(50) NOT NULL ,
-                dFecha_matriculacion DATE NOT NULL ,
-                dFecha_ultima_revision DATE NOT NULL ,
-                tipo_motor ENUM('GASOLINA', 'DIESEL', 'ELECTRICO', 'HIBRIDO') NOT NULL ,
-                tipo_vehiculo ENUM('TURISMO', 'FURGONETA', 'CAMION', 'MOTOCICLETA') NOT NULL,
+           CREATE TABLE IF NOT EXISTS tVehiculo (
+            cMatricula VARCHAR(10) PRIMARY KEY,
+            cMarca VARCHAR(50) NOT NULL ,
+            cModelo VARCHAR(50) NOT NULL ,
+            dFecha_matriculacion DATE NOT NULL ,
+            dFecha_ultima_revision DATE NOT NULL ,
+            tipo_motor ENUM('GASOLINA', 'DIESEL', 'ELECTRICO', 'HIBRIDO') NOT NULL ,
+            tipo_vehiculo ENUM('TURISMO', 'FURGONETA', 'CAMION', 'MOTOCICLETA') NOT NULL,
+            cDNI_Propietario VARCHAR(20) NOT NULL,
+        
+            FOREIGN KEY  (cDNI_Propietario) REFERENCES tPropietario (cDNI)
+                               ON UPDATE NO ACTION
+                               ON DELETE  NO ACTION
 
-                cDNI_Propietario VARCHAR(20) NOT NULL,
-                FOREIGN KEY  (cDNI_Propietario) REFERENCES tPropietario (cDNI)
-                                   ON UPDATE NO ACTION
-                                   ON DELETE  NO ACTION
-
-            );
+);
         """.trimIndent()
 
         this.bd.createStatement().use {
@@ -83,22 +93,25 @@ class DatabaseManager : KoinComponent{
         }
     }
 
+    /**
+     * Funcion que crea la tabla tInformes
+     */
     private fun crearTablaInformes() {
         logger.debug { "Creando tabla tInformes" }
 
         val sql = """
-            CREATE TABLE IF NOT EXISTS tInforme (  
+            CREATE TABLE IF NOT EXISTS tInforme(
                 nId_informe INT AUTO_INCREMENT PRIMARY KEY ,
-                bFavorable BOOLEAN ,  # CAMPO CALCULADO SI CUMPLE TODOS LOS REQUISITOS
-                cFrenado DECIMAL (4,2) CHECK( cFrenado >=1.0 AND cFrenado <=10.0),
-                cContaminacion DECIMAL (4,2) CHECK( cContaminacion >=20.0 AND cContaminacion <=50.0),
+                bFavorable BOOLEAN ,
+                nFrenado DECIMAL (4,2) CHECK( nFrenado >=1.0 AND nFrenado <=10.0),
+                nContaminacion DECIMAL (4,2) CHECK( nContaminacion >=20.0 AND nContaminacion <=50.0),
                 bInterior BOOLEAN,
                 bLuces BOOLEAN,
                 nId_Trabajador INT NOT NULL ,
                 cMatricula VARCHAR(10) not null NOT NULL ,
                 cHora VARCHAR (5),
                 dFecha_Cita DATE,
-
+            
                 FOREIGN KEY (nId_Trabajador) REFERENCES tTrabajador(nId_Trabajador)
                     ON DELETE NO ACTION
                     ON UPDATE NO ACTION,
@@ -113,6 +126,9 @@ class DatabaseManager : KoinComponent{
         }
     }
 
+    /**
+     * Funcion que crea la tabla tTrabajador
+     */
     private fun crearTablaTrabajador() {
         logger.debug { "Creando Tabla tTrabajadores" }
 
@@ -140,6 +156,9 @@ class DatabaseManager : KoinComponent{
         }
     }
 
+    /**
+     * Funcion que crea la tabla tEstacion
+     */
     private fun crearTablaEstacion() {
         logger.debug { "Creando tabla tEstacion si existiese" }
 
@@ -157,47 +176,34 @@ class DatabaseManager : KoinComponent{
             it.executeUpdate(sql)
         }
     }
-
-    fun dropAllTables(confirmar: Boolean) {
-        logger.debug { " DropAllTables ($confirmar) " }
-        if (confirmar) {
-            dropTablaInforme()
-            dropTablaTrabajador()
-            dropTablaVehiculo()
-            dropTablePropietario()
-        }
-    }
-
-    private fun dropTablaInforme() {
-        logger.debug { " Eliminando datos tInforme " }
-        val sql = "DROP TABLE IF EXISTS tInforme;"
-        bd.createStatement().use {
+    /**
+     * Funcion que crea la tabla para el procedimiento de Base de Datos
+     */
+    private fun crearTablaInformesActualizaciones() {
+        logger.debug { "Creando tabla tInforme_actualizaciones" }
+        val sql = """
+            CREATE TABLE IF NOT EXISTS tInforme_actualizaciones (
+                nId_informe INT,
+                favorable_old BOOLEAN,
+                frenado_old DECIMAL (4,2),
+                contaminacion_old DECIMAL (4,2),
+                interior_old BOOLEAN,
+                luces_old BOOLEAN,
+                hora_old VARCHAR (5),
+                fecha_cita_old DATE,
+                favorable_new BOOLEAN,
+                frenado_new DECIMAL (4,2),
+                contaminacion_new DECIMAL (4,2),
+                interior_new BOOLEAN,
+                luces_new BOOLEAN,
+                hora_new VARCHAR (5),
+                fecha_cita_new DATE
+              );
+        """.trimIndent()
+        this.bd.createStatement().use {
             it.executeUpdate(sql)
         }
     }
 
-    private fun dropTablaTrabajador() {
-        logger.debug { " Eliminando datos tTrabajador " }
-        val sql = "DROP TABLE IF EXISTS tTrabajador;"
-        bd.createStatement().use {
-            it.executeUpdate(sql)
-        }
-    }
-
-    private fun dropTablaVehiculo() {
-        logger.debug { " Eliminando datos tVehiculo " }
-        val sql = "DROP TABLE IF EXISTS tVehiculo;"
-        bd.createStatement().use {
-            it.executeUpdate(sql)
-        }
-    }
-
-    private fun dropTablePropietario() {
-        logger.debug { " Eliminando datos tPropietario " }
-        val sql = "DROP TABLE IF EXISTS tPropietario;"
-        bd.createStatement().use {
-            it.executeUpdate(sql)
-        }
-    }
 
 }
