@@ -107,7 +107,7 @@
                               </HBox>
                               <TableView fx:id="tableInformes">
                                  <columns>
-                                    <TableColumn fx:id="tableColumniD" prefWidth="48.0" text="ID" />
+                                    <TableColumn fx:id="tableColumniD" prefWidth="48.0" sortable="false" text="ID" />
                                     <TableColumn fx:id="tableColumnDNI" editable="false" prefWidth="95.0" text="DNI" />
                                     <TableColumn fx:id="tableColumNombre" editable="false" prefWidth="114.0" text="Nombre" />
                                     <TableColumn fx:id="tableColumnApellidos" editable="false" prefWidth="154.0" text="Apellidos" />

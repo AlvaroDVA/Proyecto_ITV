@@ -8,6 +8,7 @@ import dev.itv.itv_proyecto.errors.ModelViewError
 import dev.itv.itv_proyecto.mappers.Mappers
 import dev.itv.itv_proyecto.models.Informe
 import dev.itv.itv_proyecto.models.Propietario
+import dev.itv.itv_proyecto.models.Vehiculo
 import dev.itv.itv_proyecto.models.dto.InformeDto
 import dev.itv.itv_proyecto.models.states.EditarState
 import dev.itv.itv_proyecto.repositories.InformeRepositoryImpl
@@ -21,7 +22,6 @@ import dev.itv.itv_proyecto.services.storages.JsonInformesStorage
 import dev.itv.itv_proyecto.validators.*
 import javafx.collections.FXCollections
 import mu.KotlinLogging
-import java.lang.Exception
 import java.time.LocalDate
 
 private val logger = KotlinLogging.logger {  }
@@ -169,11 +169,13 @@ class EditarViewModel (
             if (!comprobarDatosPropietario(it, informe)) {
                 return Err(ModelViewError.ActualizarError("Los datos de este propietario no coinciden con los reales"))
             }
-            if (it.dni != informe.vehiculo.propietario.dni) {
+        }
+
+        repositorioVehiculo.findById(informe.vehiculo.matricula).onSuccess {
+            if (it.propietario.dni != informe.vehiculo.propietario.dni) {
                 return Err(ModelViewError.ActualizarError("Este vehiculo ya esta asignado a otro propietario"))
             }
         }
-
 
         repositorioPropietario.savePropietario(informe.propietario).onSuccess {
             repositorioVehiculo.findById(informe.vehiculo.matricula).onFailure {
@@ -181,7 +183,7 @@ class EditarViewModel (
                     return Err(ModelViewError.ActualizarError(it.message!!))
                 }
             }.onSuccess {
-                if (it != informe.vehiculo) {
+                if (!comprobarDatosVehiculos(it, informe.vehiculo)) {
                     return Err(ModelViewError.ActualizarError(vehiculoDistintoMensaje))
                 }
             }
@@ -216,6 +218,10 @@ class EditarViewModel (
         return Err(ModelViewError.GuardarError("No se ha podido guardar el informe"))
     }
 
+
+    private fun comprobarDatosVehiculos(it: Vehiculo, vehiculo: Vehiculo): Boolean = it.matricula == vehiculo.matricula &&
+            it.marca == vehiculo.marca && it.modelo == vehiculo.modelo && it.fechaMatricula == vehiculo.fechaMatricula &&
+            it.tipoMotor == vehiculo.tipoMotor && it.tipoVehiculo == vehiculo.tipoVehiculo
 
     /**
      * Función que actualiza el informe tras comprobar validaciones y errores de los repositorios. No se le puede cambiar un propietario a un
@@ -256,7 +262,7 @@ class EditarViewModel (
                     return Err(ModelViewError.ActualizarError(it.message!!))
                 }
             }.onSuccess {
-                if (it != informe.vehiculo) {
+                if (!comprobarDatosVehiculos(it, informe.vehiculo)) {
                     return Err(ModelViewError.ActualizarError(vehiculoDistintoMensaje))
                 }
             }
@@ -266,7 +272,8 @@ class EditarViewModel (
                     return Err(ModelViewError.ActualizarError(it.message!!))
                 }
             }.onSuccess {
-                if (it != informe.vehiculo) {
+                if (!comprobarDatosVehiculos(it, informe.vehiculo)) {
+                    logger.warn { "$it != ${informe.vehiculo} "}
                     return Err(ModelViewError.ActualizarError(vehiculoDistintoMensaje))
                 }
             }
