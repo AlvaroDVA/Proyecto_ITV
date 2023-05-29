@@ -14,34 +14,10 @@ import dev.itv.itv_proyecto.models.Vehiculo
 import dev.itv.itv_proyecto.models.states.EditarState
 import java.time.LocalDate
 
-fun List<Informe>.validarInformes(informe : Informe) : Result<Informe, InformeErrors> {
+/**
+ * Válida los campos de informe y que estén dentro de los valores especificados, como la contaminacion o el frenado
+ */
 
-    this.filter {
-        it.horaCita == informe.horaCita && it.fechaCita == informe.fechaCita
-    }.takeIf { filtrado ->
-        filtrado.count() < 8
-    }?:let {
-        return Err(InformeErrors.InformesValidatorError("Ya existen 8 citas en este intervalo"))
-    }
-
-    this.filter {
-        it.horaCita == informe.horaCita && it.fechaCita == informe.fechaCita
-                && it.trabajador.idTrabajador == informe.trabajador.idTrabajador
-    }.takeIf { filtrado ->
-        filtrado.count() < 4
-    }?:let {
-        return Err(InformeErrors.InformesValidatorError("Este trabajador ya tiene 4 citas en este intervalo"))
-    }
-
-    this.filter {
-        it.horaCita == informe.horaCita && it.fechaCita == informe.fechaCita
-                && it.vehiculo.matricula == informe.vehiculo.matricula
-    }.takeIf {
-        it.isEmpty()
-    }?: return Err(InformeErrors.InformesValidatorError("Este vehiculo ya ha pasado "))
-
-    return Ok(informe)
-}
 
 fun Informe.validarInforme() : Result<Informe, InformeErrors> {
 
@@ -65,6 +41,9 @@ fun Informe.validarInforme() : Result<Informe, InformeErrors> {
     return Ok(this)
 }
 
+/**
+ * Informe que valida las fechas de las citas Nuevas. Entendemos que una cita nueva será apartir de mañana, ya que hoy no tendremos citas disponible
+ */
 fun Informe.validarInformeNuevo(): Result<Informe, InformeErrors.InformesValidatorError> {
     if (this.fechaCita == LocalDate.now()) {
         return Err(InformeErrors.InformesValidatorError("La fecha para las nuevas citas no pueden ser el mismo dia"))
@@ -75,6 +54,9 @@ fun Informe.validarInformeNuevo(): Result<Informe, InformeErrors.InformesValidat
     return Ok(this)
 }
 
+/**
+ * Función que valida el dni y el email del propietario con unos regex
+ */
 fun Propietario.validar() : Result<Propietario, PropietarioErrors>{
     val emailRegex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$".toRegex()
     val dniRegex = "[0-9]{8}[A-Za-z]".toRegex()
@@ -91,6 +73,9 @@ fun Vehiculo.validar() : Result<Vehiculo, VehiculosErrors> {
     return Ok(this)
 }
 
+/**
+ * Función que valida todos los campos del estado de la vista
+ */
 fun EditarState.validacionPrevia() : Result<EditarState, ModelViewError> {
 
     if (this.contaminacionInforme.value.contains(",")) contaminacionInforme.value.replace("," , ".")
@@ -106,6 +91,11 @@ fun EditarState.validacionPrevia() : Result<EditarState, ModelViewError> {
     return Ok(this)
 }
 
+/**
+ * Validá los campos que hacen referencia al state de la parte del informe
+ *
+ * @param editarState Estado de la Vista
+ */
 private fun validarInforme(editarState: EditarState): Result<EditarState,ModelViewError.AccionError> {
     if (editarState.frenadoInforme.value.isNullOrBlank()) return Err(ModelViewError.AccionError("No has introducido un valor al Frenado del informe"))
     if (editarState.contaminacionInforme.value.isNullOrBlank()) return Err(ModelViewError.AccionError("No has introducido un valor a la Contaminación del informe"))
@@ -117,6 +107,11 @@ private fun validarInforme(editarState: EditarState): Result<EditarState,ModelVi
     return Ok(editarState)
 }
 
+/**
+ * Validá los campos que hacen referencia al state de la parte del vehiculo
+ *
+ * @param editarState Estado de la Vista
+ */
 private fun validarVehiculo(editarState: EditarState): Result<EditarState,ModelViewError.AccionError> {
     if (editarState.marcaVehiculo.value.isNullOrBlank()) return Err(ModelViewError.AccionError("No has introducido una Marca en el Vehiculo"))
     if (editarState.modeloVehiculo.value.isNullOrBlank()) return Err(ModelViewError.AccionError("No has introducido un Modelo en el Vehiculo"))
@@ -125,4 +120,42 @@ private fun validarVehiculo(editarState: EditarState): Result<EditarState,ModelV
 
     return Ok(editarState)
 }
+
+/**
+ * Validá las restricciones de citas y si un vehiculo ya ha pasado esa cita
+ *
+ * @param informe Informe sobre el que vamos a comparar los datos
+ */
+fun List<Informe>.validarCitas (informe : Informe)  : Result<Informe, InformeErrors> {
+
+    val listaSinActual = this.filter { it.idInforme != informe.idInforme }
+
+    listaSinActual.filter {
+        it.horaCita == informe.horaCita && it.fechaCita == informe.fechaCita
+    }.takeIf { filtrado ->
+        filtrado.count() < 8
+    }?:let {
+        return Err(InformeErrors.InformesValidatorError("Ya existen 8 citas en este intervalo"))
+    }
+
+    listaSinActual.filter {
+        it.horaCita == informe.horaCita && it.fechaCita == informe.fechaCita
+                && it.trabajador.idTrabajador == informe.trabajador.idTrabajador
+    }.takeIf { filtrado ->
+        filtrado.count() < 4
+    }?:let {
+        return Err(InformeErrors.InformesValidatorError("Este trabajador ya tiene 4 citas en este intervalo"))
+    }
+
+    listaSinActual.filter {
+        it.horaCita == informe.horaCita && it.fechaCita == informe.fechaCita
+                && it.vehiculo.matricula == informe.vehiculo.matricula
+    }.takeIf {
+        it.isEmpty()
+    }?: return Err(InformeErrors.InformesValidatorError("Este vehiculo ya ha pasado "))
+
+    return Ok(informe)
+}
+
+
 

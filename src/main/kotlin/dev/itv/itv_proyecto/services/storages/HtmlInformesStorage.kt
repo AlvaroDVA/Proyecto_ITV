@@ -9,6 +9,14 @@ import dev.itv.itv_proyecto.models.Informe
 import java.io.File
 
 class HtmlInformesStorage : Storage<Informe> {
+    /**
+     * Función que guarda los Informes en un fichero Html
+     *
+     * @param list Lista de Informes que se guaradarán
+     * @param url Path donde se guardará el fichero Html
+     * @return Devolvera el archivo con los datos o los posibles errores con Result
+     * @see generarContenidoHTML
+     */
     override fun saveFile(list: List<Informe>, url: String): Result<File, StorageErrors> {
         if (list.isEmpty()) return Err(StorageErrors.HtmlStorageError("La lista de informes esta vacia"))
         val contenidoHTML = generarContenidoHTML(list)
@@ -17,6 +25,9 @@ class HtmlInformesStorage : Storage<Informe> {
         return Ok(archivoHTML)
     }
 
+    /**
+     * Función que transforma la lista de informes en contenido Html como un StringBuilder
+     */
     private fun generarContenidoHTML(informes: List<Informe>): String {
         val informesMap = informes.map { Mappers().toDto(it) }
         return buildString {

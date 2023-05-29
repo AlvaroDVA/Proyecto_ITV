@@ -5,6 +5,9 @@ import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.property.SimpleStringProperty
 import java.time.LocalDate
 
+/**
+ * Clase que guarda el Estado de la Interfaz Gráfica de la EditarNuevoView
+ */
 data class EditarState (
     val dniPropietario : SimpleStringProperty = SimpleStringProperty(),
     val nombrePropietario : SimpleStringProperty = SimpleStringProperty(),

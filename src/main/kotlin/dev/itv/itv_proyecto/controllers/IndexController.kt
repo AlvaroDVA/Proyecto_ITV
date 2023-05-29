@@ -138,6 +138,9 @@ class IndexController : KoinComponent{
 
     val estiloEnable = "-fx-opacity: 1"
 
+    /**
+     * Funcion que inicia los Binding. Son unidirectional porque los en esta vista no queremos que nunca modifiquen él State
+     */
     private fun iniciarBindings() {
         fieldDNIPropietario.textProperty().bind(mainViewModel.state.dniPropietario)
         fieldNombrePropietario.textProperty().bind(mainViewModel.state.nombrePropietario)
@@ -172,6 +175,9 @@ class IndexController : KoinComponent{
 
     }
 
+    /**
+     * Función que asigna las acciones de los elementos de la Interfaz Grafica
+     */
     private fun iniciarEventos() {
         tableInformes.items = mainViewModel.listaInformesDto
         tableColumniD.cellValueFactory = PropertyValueFactory("idInforme")
@@ -192,8 +198,6 @@ class IndexController : KoinComponent{
         buscadorNombre.setOnKeyReleased {
             it?.let { onFiltrar() }
         }
-
-
 
         buscadorMotor.selectionModel.selectedIndexProperty().addListener {_,_, newValues ->
             newValues?.let { onFiltrar() }
@@ -231,7 +235,11 @@ class IndexController : KoinComponent{
     }
 
 
-
+    /**
+     * Función que cree un Alert de Confirmación para eliminar un Informe. Si se pulsa el botón de confirmar se borrara el informe
+     *
+     * @see MainViewModel.eliminarInforme
+     */
     private fun onEliminarInforme() {
         val alert = Alert(Alert.AlertType.CONFIRMATION).apply {
             title = "Confirmación"
@@ -248,11 +256,21 @@ class IndexController : KoinComponent{
 
     }
 
+    /**
+     * Función que pasa los datos a la lógica para usarse. También aplica estilos a partes para hacerla mas visible
+     *
+     * @see MainViewModel.seleccionarInforme
+     * @see cambiarEstilos
+     */
+
     private fun onSeleccionarTabla(informe: InformeDto) {
         mainViewModel.seleccionarInforme(informe)
         cambiarEstilos()
     }
 
+    /**
+     * Funcion que cambia los estilos de partes deshabilitadas para mejorar su lectura
+     */
     private fun cambiarEstilos() {
         selectorMotor.style = estiloEnable
         selectorTipoVehiculo.style = estiloEnable
@@ -267,41 +285,85 @@ class IndexController : KoinComponent{
         checkboxLuces.style = estiloEnable
     }
 
-
+    /**
+     * Funcion que recoge los datos de filtrado de la tabla
+     *
+     * @see MainViewModel.listaFiltrada
+     */
     private fun onFiltrar() {
         tableInformes.items = mainViewModel.listaFiltrada(buscadorNombre.text, buscadorMotor.value,
             buscadorTipoVehiculo.value)
     }
 
+    /**
+     * Función que abre la pestaña de Editar / Nuevo con campos vacios
+     *
+     * @see MainViewModel.cambiarVentana
+     */
     private fun onBotonNuevo() {
         mainViewModel.cambiarVentana(ActionView.NEW)
 
     }
 
+    /**
+     * Función que abre la pestaña de Editar / Nuevo con campos del state
+     *
+     * @see MainViewModel.cambiarVentana
+     */
     private fun onBotonEditar()  {
         mainViewModel.cambiarVentana(ActionView.UPDATE)
     }
 
+    /**
+     * Función que cierra la Aplicación
+     *
+     * @see RoutesManager.cerrarApp
+     */
     private fun onBotonSalir() {
         RoutesManager.cerrarApp()
     }
 
+    /**
+     * Función que abre un File Chooser para exportar a HTML
+     *
+     * @seleccionarLugar
+     */
     private fun onBotonHtml() {
         seleccionarLugar(ActionExportar.EXPORTAR_HTML)
     }
 
+    /**
+     * Función que abre un File Chooser para exportar a JSON
+     *
+     * @see seleccionarLugar
+     */
     private fun onBotonJson() {
         seleccionarLugar(ActionExportar.EXPORTAR_JSON)
     }
 
+    /**
+     * Función que abre un File Chooser para exportar a CSV
+     *
+     * @see seleccionarLugar
+     */
     private fun onBotonCsv() {
         seleccionarLugar(ActionExportar.EXPORTAR_CSV)
     }
 
+    /**
+     * Función que abre la ventana de acerca de
+     *
+     * @see RoutesManager.iniciarAcerca
+     */
     private fun onBotonAcerca () {
         RoutesManager.iniciarAcerca()
     }
 
+    /**
+     * Funcion que abré un File Chooser para guardar él archivó dependiendo de la accion seleccionada
+     *
+     * @param accion Tipo de Exportación
+     */
     fun seleccionarLugar(accion: ActionExportar) {
         when (accion) {
             ActionExportar.EXPORTAR_HTML -> {

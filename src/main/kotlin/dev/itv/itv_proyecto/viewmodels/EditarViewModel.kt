@@ -21,6 +21,7 @@ import dev.itv.itv_proyecto.services.storages.JsonInformesStorage
 import dev.itv.itv_proyecto.validators.*
 import javafx.collections.FXCollections
 import mu.KotlinLogging
+import java.lang.Exception
 import java.time.LocalDate
 
 private val logger = KotlinLogging.logger {  }
@@ -49,18 +50,27 @@ class EditarViewModel (
         iniciarTipos()
     }
 
+    /**
+     * Función para iniciar el ComboBox de los tipos de Vehiculos mapeados a String
+     */
     private fun iniciarTipos() {
         tiposVehiculos.addAll(
             listOf("") + TipoVehiculo.values().map { it.toString() }
         )
     }
 
+    /**
+     * Función para iniciar el ComboBox de los tipos de motores mapeados a String
+     */
     private fun iniciarMotores() {
         tiposMotor.addAll(
             listOf("") + TipoMotor.values().map { it.toString() }
         )
     }
 
+    /**
+     * Función para iniciar la lista de todos los trabajadores
+     */
     private fun iniciarTrabajadores() {
         listaTrabajador.addAll(
             listOf("") +
@@ -68,6 +78,9 @@ class EditarViewModel (
 
     }
 
+    /**
+     * Función que carga el ComboBox del selector de Horas
+     */
     private fun iniciarHoras() {
         logger.debug { "Iniciando Lista de Horas" }
         listaHoras.apply {
@@ -83,6 +96,9 @@ class EditarViewModel (
         }
     }
 
+    /**
+     * Función que carga el State compartido de la Vista Principal al State de esta vista
+     */
     private fun cargarState() {
         state.apply {
             state.dniPropietario.value = RoutesManager.compartirState.dniPropietario.value
@@ -93,7 +109,7 @@ class EditarViewModel (
             state.idTrabajador.value = RoutesManager.compartirState.idTrabajador.value
             state.nombreTrabajador.value = RoutesManager.compartirState.nombreTrabajador.value
             state.emailTrabajador.value = RoutesManager.compartirState.emailTrabajador.value
-            state.idInforme.value = RoutesManager.compartirState.idInforme.value
+            state.idInforme.value = RoutesManager.compartirState.idInforme.value.toString()
             state.frenadoInforme.value = RoutesManager.compartirState.frenadoInforme.value
             state.contaminacionInforme.value = RoutesManager.compartirState.contaminacionInforme.value
             state.trabajadorInforme.value = RoutesManager.compartirState.trabajadorInforme.value
@@ -114,6 +130,9 @@ class EditarViewModel (
         }
     }
 
+    /**
+     * Función que dependiendo de la acción pulsada en la vista principal actualice o añada
+     */
     fun botonGuardar() : Result<Informe, ModelViewError> {
         if (RoutesManager.action == ActionView.NEW) {
             return guardarInforme()
@@ -124,6 +143,15 @@ class EditarViewModel (
         return Err(ModelViewError.AccionError("No hay una eleccion error"))
     }
 
+    val vehiculoDistintoMensaje = "Este vehículo no coincide con el que esta en la base de datos"
+
+    /**
+     * Función que guarda el informe tras comprobar validaciones y errores de los repositorios
+     *
+     * @see repositorioPropietario
+     * @see repositorioInforme
+     * @see repositorioPropietario
+     */
     private fun guardarInforme() : Result<Informe, ModelViewError> {
         val informe = generarInforme().onFailure {
             return Err(it)
@@ -141,11 +169,21 @@ class EditarViewModel (
             if (!comprobarDatosPropietario(it, informe)) {
                 return Err(ModelViewError.ActualizarError("Los datos de este propietario no coinciden con los reales"))
             }
+            if (it.dni != informe.vehiculo.propietario.dni) {
+                return Err(ModelViewError.ActualizarError("Este vehiculo ya esta asignado a otro propietario"))
+            }
         }
 
+
         repositorioPropietario.savePropietario(informe.propietario).onSuccess {
-            repositorioVehiculo.save(informe.vehiculo).onFailure {
-                return Err(ModelViewError.ActualizarError(it.message!!))
+            repositorioVehiculo.findById(informe.vehiculo.matricula).onFailure {
+                repositorioVehiculo.save(informe.vehiculo).onFailure {
+                    return Err(ModelViewError.ActualizarError(it.message!!))
+                }
+            }.onSuccess {
+                if (it != informe.vehiculo) {
+                    return Err(ModelViewError.ActualizarError(vehiculoDistintoMensaje))
+                }
             }
         }.onFailure { _, ->
             repositorioVehiculo.updateVehiculoById(informe.vehiculo.matricula, informe.vehiculo).onFailure {
@@ -155,11 +193,11 @@ class EditarViewModel (
             }
         }
 
-        repositorioInforme.loadAll().onFailure { listaInformes ->
-            return Err(ModelViewError.GuardarError(listaInformes.message!!))
-        }.component1()!!.validarInformes(informe).onFailure { errorInforme ->
-            return Err(ModelViewError.GuardarError(errorInforme.message!!))
-        }.onSuccess { _ ->
+        repositorioInforme.loadAll().onFailure {
+            return Err(ModelViewError.ActualizarError(it.message!!))
+        }.component1()!!.validarCitas(informe).onFailure {
+            return Err(ModelViewError.ActualizarError(it.message!!))
+        }.onSuccess { _, ->
             informe.validarInforme().onFailure { errorInforme ->
                 return Err(ModelViewError.GuardarError(errorInforme.message!!))
             }.onSuccess { _ ->
@@ -179,7 +217,14 @@ class EditarViewModel (
     }
 
 
-
+    /**
+     * Función que actualiza el informe tras comprobar validaciones y errores de los repositorios. No se le puede cambiar un propietario a un
+     * vehículo ya creado ni cambiar el vehiculo del propietario al actualizarse, se tendría que crear otro informe.
+     *
+     * @see repositorioPropietario
+     * @see repositorioInforme
+     * @see repositorioPropietario
+     */
     private fun actualizarInforme() : Result<Informe, ModelViewError> {
         val informe = generarInforme().onFailure {
             return Err(it)
@@ -199,16 +244,39 @@ class EditarViewModel (
             }
         }
 
-        repositorioPropietario.savePropietario(informe.propietario).onSuccess {
-            repositorioVehiculo.save(informe.vehiculo).onFailure {
-                return Err(ModelViewError.ActualizarError(it.message!!))
+        repositorioVehiculo.findById(informe.vehiculo.matricula).onSuccess {
+            if (it.propietario.dni != informe.vehiculo.propietario.dni) {
+                return Err(ModelViewError.ActualizarError("Este vehiculo ya esta asignado a otro propietario"))
             }
-        }.onFailure { _, ->
-            repositorioVehiculo.updateVehiculoById(informe.vehiculo.matricula, informe.vehiculo).onFailure {
+        }
+
+        repositorioPropietario.savePropietario(informe.propietario).onSuccess {
+            repositorioVehiculo.findById(informe.vehiculo.matricula).onFailure {
                 repositorioVehiculo.save(informe.vehiculo).onFailure {
                     return Err(ModelViewError.ActualizarError(it.message!!))
                 }
+            }.onSuccess {
+                if (it != informe.vehiculo) {
+                    return Err(ModelViewError.ActualizarError(vehiculoDistintoMensaje))
+                }
             }
+        }.onFailure { _, ->
+            repositorioVehiculo.findById(informe.vehiculo.matricula).onFailure {
+                repositorioVehiculo.save(informe.vehiculo).onFailure {
+                    return Err(ModelViewError.ActualizarError(it.message!!))
+                }
+            }.onSuccess {
+                if (it != informe.vehiculo) {
+                    return Err(ModelViewError.ActualizarError(vehiculoDistintoMensaje))
+                }
+            }
+        }
+
+        // Validar Citas disponibles
+        repositorioInforme.loadAll().onFailure {
+            return Err(ModelViewError.ActualizarError(it.message!!))
+        }.component1()!!.validarCitas(informe).onFailure {
+            return Err(ModelViewError.ActualizarError(it.message!!))
         }
 
         repositorioInforme.loadAll().onFailure { listaInformes ->
@@ -228,6 +296,9 @@ class EditarViewModel (
         return Err(ModelViewError.ActualizarError("No se ha podido actualizar el informe"))
     }
 
+    /**
+     * Función que comprueba que los datos del propietario sean exactamente igual al de un informe
+     */
     private fun comprobarDatosPropietario(
         it: Propietario,
         informe: Informe,
@@ -236,6 +307,13 @@ class EditarViewModel (
             it.nombre.equals(informe.propietario.nombre, ignoreCase = true) &&
             it.apellidos.equals(informe.propietario.apellidos, ignoreCase = true) &&
             it.telefono == informe.propietario.telefono
+
+    /**
+     * Función que genera el informe de con los datos del State. Primero se validan los datos del State y si estan todos se crea un InformeDto
+     * y se Mapea a un Informe Normal
+     *
+     * @see Mappers.toDto
+     */
 
     private fun generarInforme(): Result<Informe, ModelViewError > {
 
@@ -277,6 +355,11 @@ class EditarViewModel (
 
     }
 
+    /**
+     * Función que genera asigna los valores del trabajador a la interfaz y al informe
+     *
+     * @see TrabajadorRepositoryImpl.loadAll
+     */
     fun ponerTrabajador(trabajador: String) {
         val trabajadorSeleccionado = repositorioTrabajador.loadAll().component1()!!
             .find { it.idTrabajador.toString() == trabajador.split(" -- ")[0] }
@@ -286,6 +369,9 @@ class EditarViewModel (
         state.emailTrabajador.value = trabajadorSeleccionado?.email
     }
 
+    /**
+     * Función que limpia todos los campos de la interfaz
+     */
     fun limpiarCampos() {
         state.dniPropietario.value = ""
         state.nombrePropietario.value = ""

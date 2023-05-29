@@ -29,7 +29,10 @@ class DatabaseManager : KoinComponent{
         logger.debug { "Iniciando DataBaseManager()" }
         createTables()
     }
-    
+
+    /**
+     * Funcion que crea las tablas al iniciarse el programa siempre que exista la Base de Datos
+     */
     fun createTables() {
         logger.debug { " Creando Tablas " }
         crearTablaEstacion()
@@ -40,6 +43,9 @@ class DatabaseManager : KoinComponent{
         crearTablaInformesActualizaciones()
     }
 
+    /**
+     * Funcion que crea la tabla tPropietario
+     */
     private fun crearTablaPropietario() {
         logger.debug { "Creando tabla tPropietario" }
 
@@ -58,6 +64,9 @@ class DatabaseManager : KoinComponent{
         }
     }
 
+    /**
+     * Funcion que crea la tabla tVehiculo
+     */
     private fun crearTablaVehiculo() {
         logger.debug { "Creando tabla tVehiculos" }
 
@@ -84,6 +93,9 @@ class DatabaseManager : KoinComponent{
         }
     }
 
+    /**
+     * Funcion que crea la tabla tInformes
+     */
     private fun crearTablaInformes() {
         logger.debug { "Creando tabla tInformes" }
 
@@ -114,6 +126,9 @@ class DatabaseManager : KoinComponent{
         }
     }
 
+    /**
+     * Funcion que crea la tabla tTrabajador
+     */
     private fun crearTablaTrabajador() {
         logger.debug { "Creando Tabla tTrabajadores" }
 
@@ -141,6 +156,9 @@ class DatabaseManager : KoinComponent{
         }
     }
 
+    /**
+     * Funcion que crea la tabla tEstacion
+     */
     private fun crearTablaEstacion() {
         logger.debug { "Creando tabla tEstacion si existiese" }
 
@@ -158,7 +176,9 @@ class DatabaseManager : KoinComponent{
             it.executeUpdate(sql)
         }
     }
-
+    /**
+     * Funcion que crea la tabla para el procedimiento de Base de Datos
+     */
     private fun crearTablaInformesActualizaciones() {
         logger.debug { "Creando tabla tInforme_actualizaciones" }
         val sql = """

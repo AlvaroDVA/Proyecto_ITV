@@ -23,6 +23,13 @@ class JsonInformesStorage() : Storage<Informe> , KoinComponent {
 
     val manager : DatabaseManager by inject()
 
+    /**
+     * Función que guarda los trabajadores en un fichero json
+     *
+     * @param list Lista de Informes que se guaradarán
+     * @param url Path donde se guardará el fichero Json
+     * @return Devolvera el archivo con los datos o los posibles errores con Result
+     */
     override fun saveFile(list: List<Informe>, url: String): Result<File, StorageErrors> {
         val logger = KotlinLogging.logger {  }
         logger.warn { "StorageInformeJson ---- SaveFile()" }
@@ -42,6 +49,12 @@ class JsonInformesStorage() : Storage<Informe> , KoinComponent {
         }
     }
 
+    /**
+     * Función que carga los Informes de un fichero Json
+     *
+     * @param url Path donde se cargara el fichero Json
+     * @return Devolvera la lista de informes o los posibles errores con Result
+     */
     fun loadFile(url: String, conexion : Connection?): Result<List<Informe>, StorageErrors> {
         val logger = KotlinLogging.logger {  }
         val database = conexion ?: manager.bd

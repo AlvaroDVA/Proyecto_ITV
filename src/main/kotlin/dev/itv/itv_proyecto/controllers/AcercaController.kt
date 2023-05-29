@@ -19,14 +19,23 @@ class AcercaController {
         mohamadElsayed.setOnAction {onLinkMohamad()}
     }
 
+    /**
+     * Abrir GitHub Mario
+     */
     private fun onLinkMario() {
         Open.open("https://github.com/Maarioo25")
     }
 
+    /**
+     * Abrir GitHub Alvaro
+     */
     private fun onLinkAlvaro() {
         Open.open("https://github.com/AlvaroDVA")
     }
 
+    /**
+     * Abrir GitHub Mohamad
+     */
     private fun onLinkMohamad() {
         Open.open("https://github.com/Nose01")
     }

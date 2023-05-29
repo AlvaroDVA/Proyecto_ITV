@@ -89,6 +89,9 @@ class NuevoEditarController : KoinComponent{
 
     val estiloEnable = "-fx-opacity: 1"
 
+    /**
+     * Funcion que inicia los Binding. Son bidireccinales porque los datos que escribamos queremos que sé guarden en él State para su posterior guardado
+     */
     private fun iniciarBindings() {
         fieldDNIPropietario.textProperty().bindBidirectional(editarViewModel.state.dniPropietario)
         fieldNombrePropietario.textProperty().bindBidirectional(editarViewModel.state.nombrePropietario)
@@ -123,6 +126,9 @@ class NuevoEditarController : KoinComponent{
 
     }
 
+    /**
+     * Función que asigna las acciones de los elementos de la Interfaz Grafica
+     */
     private fun iniciarEventos() {
         btnGuardar.setOnAction { onGuardar() }
         btnVaciar.setOnAction { onLimpiar() }
@@ -135,9 +141,6 @@ class NuevoEditarController : KoinComponent{
             newValue?.let { onTrabajadorSeleccionar(it) }
         }
 
-
-
-
         fieldFechaUltimaRevision.style = estiloEnable
     }
 
@@ -145,6 +148,10 @@ class NuevoEditarController : KoinComponent{
         editarViewModel.ponerTrabajador(trabajador)
     }
 
+    /**
+     * Función que guardara los datos de la interfaz Gráfica. Si él informe sé guarda o actualiza sé abrir un Alert Confirmandolo. Si da error saltará
+     * un alert contando el error
+     */
     private fun onGuardar() {
         editarViewModel.botonGuardar().onFailure {
             Alert(Alert.AlertType.ERROR).apply {
@@ -166,6 +173,9 @@ class NuevoEditarController : KoinComponent{
         }
     }
 
+    /**
+     * Función que limpia los campos de la interfaz gráfica
+     */
     fun onLimpiar() {
         editarViewModel.limpiarCampos()
     }

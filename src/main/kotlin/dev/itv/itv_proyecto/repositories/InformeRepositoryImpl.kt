@@ -23,6 +23,10 @@ class InformeRepositoryImpl : InformeRepository, KoinComponent {
     val manager : DatabaseManager by inject()
     var database = manager.bd
 
+    /**
+     * @return Informe guardado o los Posibles errores al guardarlo en la base de datos con Result
+     * @param informe El informe que guardaremos en la base de datos
+     */
     override fun saveInforme(informe: Informe): Result<Informe, InformeErrors> {
 
         logger.debug { " InformeRepositoryImpl -- SaveInforme($informe) " }
@@ -53,7 +57,13 @@ class InformeRepositoryImpl : InformeRepository, KoinComponent {
         return Err(InformeErrors.InformeNotFoundError("No se ha guardado el nuevo informe"))
 
     }
-
+    /**
+     * Función que se encarga de borrar el informe de la base de datos según su Id
+     *
+     * @param id Id del Informe que buscaremos en la base de datos para borarlo
+     * @return El informe eliminado o los posibles errores al hacerlo con Result
+     * @see findById
+     */
     override fun deleteInformeById(id: Long): Result<Informe, InformeErrors> {
         logger.debug { " InformeRepositoryImpl -- DeleteInformeById ($id) " }
         val old = findById(id).onFailure {
@@ -73,6 +83,15 @@ class InformeRepositoryImpl : InformeRepository, KoinComponent {
         return Ok(old)
     }
 
+    /**
+     * Función que actualiza un informe con base a su id. Sí existe los datos serán cambiados en la base de datos
+     *
+     * @param id Id del Informe sobre el que se realizara la consulta a la base de datos para su actualización
+     * @param informe Los nuevos datos del informe que se guardaran en la base de datos
+     * @return El informe actualizado o los Posibles errores al actualizar con Result
+     * @see findById
+     *
+     */
     override fun updateInformeById(id: Long, informe: Informe): Result<Informe, InformeErrors> {
         logger.debug { " InformeRepositoryImpl -- updateInformeById ($id , $informe)" }
         findById(id).onFailure {
@@ -116,6 +135,13 @@ class InformeRepositoryImpl : InformeRepository, KoinComponent {
         }
     }
 
+    /**
+     * Función que filtra todos los informes de la base de datos y devuelve si existe uno con la Id
+     *
+     *  @param id Id del informe sobre el que filtraremos los resultados
+     *  @return El informe con la Id deseada o un Error al no encontrar ninguna
+     *  @see loadAll
+     */
     override fun findById(id: Long): Result<Informe, InformeErrors> {
         logger.debug { " InformeRepositoryImpl -- FindById ($id) " }
         loadAll().onFailure {
@@ -126,6 +152,15 @@ class InformeRepositoryImpl : InformeRepository, KoinComponent {
         return Err(InformeErrors.InformeNotFoundError("No existe un informe con la id $id"))
     }
 
+    /**
+     * Función que se encarga de buscar todos los trabajadores y todos los vehiculos de la base de datos y luego se le asignan
+     * a su informe asignado. Esta función llama a otras funciones para sacar los datos restantes
+     *
+     * @return Lista de los Informes o los posibles errores al buscarlos en la Base de Datos con Result
+     * @see selectAllTrabajadores
+     * @see selectAllVehiculos
+     *
+     */
     override fun loadAll(): Result<List<Informe>, InformeErrors> {
         logger.debug { " InformesRepositoryImpl -- LoadAll() " }
         val informes = mutableListOf<Informe>()
@@ -160,6 +195,14 @@ class InformeRepositoryImpl : InformeRepository, KoinComponent {
         return Ok(informes)
     }
 
+    /**
+     * Función que selecciona todos los trabajadores de la Base de datos utilizando funciones auxiliares para formarlos.
+     *
+     * @param database Conexion a la Base de datos sobre la que se seleccionaran los trabajadores
+     * @return Lista de todos los trabajadores de la base de datos o los posibles errores al hacerlo con Result
+     * @see Utils.selectAllFromTable
+     * @see Utils.sacarEspecialidad
+     */
     private fun selectAllTrabajadores(database: Connection): Result<List<Trabajador>, TrabajadorErrors> {
         Utils.logger.debug { " Utils : selectAllTrabajadores () " }
         val trabajadores = mutableListOf<Trabajador>()
@@ -187,6 +230,15 @@ class InformeRepositoryImpl : InformeRepository, KoinComponent {
         return Ok(trabajadores)
     }
 
+    /**
+     * Función que selecciona todos los Vehículos de la Base de datos utilizando funciones auxiliares para formarlos.
+     *
+     * @param database Conexion a la Base de datos sobre la que se seleccionaran los vehículos
+     * @return Lista de todos los Vehiculos de la base de datos o los posibles errores al hacerlo con Result
+     * @see Utils.selectAllFromTable
+     * @see Utils.findPropietarioByDni
+     * @see Utils.generarVehiculo
+     */
     private fun selectAllVehiculos(database: Connection): Result<List<Vehiculo>, VehiculosErrors> {
         Utils.logger.debug { " Utils : selectAllVehiculos () " }
         val vehiculos = mutableListOf<Vehiculo>()

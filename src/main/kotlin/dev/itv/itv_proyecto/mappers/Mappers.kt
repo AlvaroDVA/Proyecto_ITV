@@ -15,6 +15,11 @@ import java.time.LocalDate
 
 private val logger = KotlinLogging.logger {  }
 class Mappers : KoinComponent{
+    /**
+     * Funcion que mapea todos los datos a los que queremos del informe
+     * @param informe Informe a mappear
+     * @return InformeDto Mapeado
+     */
     fun toDto (informe : Informe) : InformeDto {
         logger.info { " Mapeando Informe a Dto ---- $this " }
         return InformeDto(
@@ -45,7 +50,12 @@ class Mappers : KoinComponent{
     }
 
 
-
+    /**
+     * Funcion que mapea todos los datos a los que queremos del informe
+     * @param conexion Conexion a una base de datos para sacar los datos del trabajador que no se guardan en el informe, como la contraseña
+     * @param informe InformeDto a mappear
+     * @return Informe Mapeado
+     */
     fun informeDtoToInforme (conexion : Connection, informe : InformeDto) : Informe? {
         logger.info { " Mapeado DtoInforme a Informe " }
         return Informe(
@@ -87,6 +97,13 @@ class Mappers : KoinComponent{
         )
     }
 
+    /**
+     * Función que nos generará un Enum de tipo TipoMotor según un String. En la base de datos no pueden entrar valores que no son motores,
+     * no llegará nada que no sea un Enum
+     *
+     * @param tipoMotor String sobre el que se seleccionara el TipoMotor
+     * @return Un Enum TipoMotor con el valor equivalente al parametro al pasarlo a String
+     */
     private fun sacaMotor(tipoMotor: String): TipoMotor {
         return when (tipoMotor) {
             TipoMotor.GASOLINA.toString() -> TipoMotor.GASOLINA
@@ -96,6 +113,13 @@ class Mappers : KoinComponent{
         }
     }
 
+    /**
+     * Función que nos generará un Enum de tipo TipoVehiculo según un String. En la base de datos no pueden entrar valores
+     * que no son tipos de vehiculos, no llegará nada que no sea un Enum
+     *
+     * @param tipoVehiculo String sobre el que se seleccionara el TipoVehiculo
+     * @return Un Enum TipoVehiculo con el valor equivalente al parametro al pasarlo a String
+     */
     private fun sacarTipoVehiculo(tipoVehiculo : String) : TipoVehiculo {
         return when (tipoVehiculo) {
             TipoVehiculo.TURISMO.toString() -> TipoVehiculo.TURISMO

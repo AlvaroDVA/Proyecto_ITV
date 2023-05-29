@@ -11,6 +11,13 @@ import java.time.LocalDate
 
 class CsvTrabajadoresStorage : Storage<Trabajador> {
 
+    /**
+     * Función que guarda los trabajadores en un fichero csv
+     *
+     * @param list Lista de trabajadores que se guaradarán
+     * @param url Path donde se guardará el fichero CSV
+     * @return Devolvera el archivo con los datos o los posibles errores con Result
+     */
     override fun saveFile(list: List<Trabajador>, url: String): Result<File, StorageErrors> {
         val csvFile = File(url)
         if (list.isEmpty()) return Err(StorageErrors.CsvStorageError("La lista ha guardar esta vacia"))
@@ -37,6 +44,12 @@ class CsvTrabajadoresStorage : Storage<Trabajador> {
         return Ok(csvFile)
     }
 
+    /**
+     * Función que carga los trabajadores de un fichero csv
+     *
+     * @param url Path donde se cargara el fichero CSV
+     * @return Devolvera la lista de trabajadores o los posibles errores con Result
+     */
     fun loadFile(url: String): Result<List<Trabajador>, StorageErrors> {
         val csvFile = File(url)
         val trabajadores = mutableListOf<Trabajador>()

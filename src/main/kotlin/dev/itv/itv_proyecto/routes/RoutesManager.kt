@@ -40,6 +40,9 @@ object RoutesManager : KoinComponent {
         databaseManager.bd
     }
 
+    /**
+     * Inciar Aplicación
+     */
     fun iniciarEscenario(stage : Stage) {
 
         logger.debug { " Iniciando Escenario " }
@@ -63,6 +66,9 @@ object RoutesManager : KoinComponent {
 
     }
 
+    /**
+     * Iniciar Editar Ventana
+     */
     fun editarVentana() {
         logger.debug { "Iniciando Segunda Vista " }
         val fxmlLoader = FXMLLoader(getResource(Views.NUEVO.url))
@@ -80,6 +86,9 @@ object RoutesManager : KoinComponent {
         stage.show()
     }
 
+    /**
+     * Iniciar Ventana Acerca
+     */
     fun iniciarAcerca() {
         logger.debug { "Iniciando Acerca de"}
         val fxmlLoader = FXMLLoader(getResource(Views.ACERCA.url))

@@ -5,6 +5,7 @@ import dev.itv.itv_proyecto.enums.ActionView
 import dev.itv.itv_proyecto.enums.TipoMotor
 import dev.itv.itv_proyecto.enums.TipoVehiculo
 import dev.itv.itv_proyecto.mappers.Mappers
+import dev.itv.itv_proyecto.models.Estacion
 import dev.itv.itv_proyecto.models.Informe
 import dev.itv.itv_proyecto.models.Trabajador
 import dev.itv.itv_proyecto.models.dto.InformeDto
@@ -44,6 +45,9 @@ class MainViewModel (
         iniciarInterfaz()
     }
 
+    /**
+     * Función que carga todos los datos de la interfaz
+     */
     fun iniciarInterfaz() {
         iniciarInformes()
         iniciarListaInformesDto()
@@ -53,6 +57,18 @@ class MainViewModel (
         iniciarHoras()
     }
 
+    val estacion = Estacion(
+        6,
+        "DAMLLER",
+        numeroTelefono = 676534534,
+        direccionEstacion = "Plaza Nuevo 9",
+        emailEstacion = "damller@email.com",
+        trabajadores = repositorioTrabajador.loadAll().component1()!!
+    )
+
+    /**
+     * Función que carga el ComboBox del selector de Horas
+     */
     private fun iniciarHoras() {
         logger.debug { "Iniciando Lista de Horas" }
         listaHoras.apply {
@@ -68,6 +84,11 @@ class MainViewModel (
         }
     }
 
+    /**
+     * Función que carga la tabla de informes mapeados a Dto (Todos los campos como String)
+     *
+     * @see Mappers.toDto
+     */
     private fun iniciarListaInformesDto() {
         logger.debug { "Iniciando Lista de Informes Dto" }
         listaInformesDto.apply {
@@ -77,7 +98,9 @@ class MainViewModel (
         }
     }
 
-
+    /**
+     * Función para cargar todos los informes de la base de datos
+     */
     private fun iniciarInformes() {
         logger.debug { "Iniciando Informes" }
         listaInformes.apply {
@@ -86,6 +109,9 @@ class MainViewModel (
         }
     }
 
+    /**
+     * Función para iniciar el ComboBox de los tipos de motores mapeados a String
+     */
     private fun iniciarMotores() {
         logger.debug { "Iniciando Motores" }
         tiposMotor.apply {
@@ -94,6 +120,9 @@ class MainViewModel (
         }
     }
 
+    /**
+     * Función para iniciar el ComboBox de los tipos de Vehiculos mapeados a String
+     */
     private fun iniciarVehiculos() {
         logger.debug { "Iniciando Vehículos" }
         tiposVehiculos.apply {
@@ -102,6 +131,9 @@ class MainViewModel (
         }
     }
 
+    /**
+     * Función para iniciar la lista de todos los trabajadores
+     */
     private fun iniciarTrabajadores() {
         logger.debug { "Iniciando Trabajadores" }
         listaTrabajadores.apply {
@@ -110,6 +142,14 @@ class MainViewModel (
         }
     }
 
+    /**
+     * Función para filtrar los datos según el motor, la matricula y el tipo de vehiculo de la Interfaz Gráfica
+     *
+     * @param nombre Matricula : Se filtrara los informes que tengán un vehículo con matricula que contenga el string
+     * @param motor Motor : Se filtrará los informes que tengán un vehículo con el tipo de motor seleccionado
+     * @param tipo Tipo Vehículo : Se filtrará los informes que tengán un vehículo que sean del tipo seleccionado
+     * @return Devuelve una ObservableList para cambiar los datos en tiempo real
+     */
     fun listaFiltrada(nombre: String?, motor: String?, tipo: String?): ObservableList<InformeDto>? {
         logger.debug { " Filtrando Lista - $nombre - $motor - $tipo " }
         return listaInformesDto.filtered {
@@ -129,6 +169,11 @@ class MainViewModel (
         }
     }
 
+    /**
+     * Función que cambia los datos del State de la vista por los seleccionados en la tabla
+     *
+     * @see MainState
+     */
     fun seleccionarInforme(informe: InformeDto) {
         state.apply {
             dniVehiculo.value = informe.dni
@@ -163,6 +208,11 @@ class MainViewModel (
         }
     }
 
+    /**
+     * Función que cambia los datos del State de la vista por campos vacios
+     *
+     * @see MainState
+     */
     private fun limpiarState() {
         state.apply {
             this.dniPropietario.value = ""
@@ -196,6 +246,13 @@ class MainViewModel (
         iniciarInterfaz()
     }
 
+    /**
+     * Función que manda los cambios a un State compartido dependiendo si es un Nuevo Informe o Actualzar informe.
+     * Si es nuevo aparte limpiara los datos de la vista IndexView
+     *
+     * @param action Un valor para seleccionar el tipo de Accion ha realizar
+     * @see MainState
+     */
     fun cambiarVentana(action : ActionView) {
         if (action == ActionView.NEW) {
             RoutesManager.compartirState.apply {
@@ -268,12 +325,27 @@ class MainViewModel (
         RoutesManager.editarVentana()
     }
 
+    /**
+     * Función que llamara al repositorio de informes para borrarlo de la Base de datos. Aparte cargara los datos de la interfaz de nuevo y limpiara el State
+     * de la vista
+     *
+     * @see InformeRepositoryImpl.deleteInformeById
+     * @see iniciarInterfaz
+     * @see limpiarState
+     */
     fun eliminarInforme() {
         repositorioInforme.deleteInformeById(state.idInforme.value.toLong())
         iniciarInterfaz()
         limpiarState()
     }
 
+
+    /**
+     * Función que guarda el archivo en un Storage dependiendo de la accion
+     *
+     * @param absolutePath Path del lugar en el que se guardara el archivo escogido por el File Chooser
+     * @param accion Acción para elegir el repositorio al que llamar
+     */
     fun guardarArchivo(absolutePath: String, accion: ActionExportar) {
         when (accion) {
             ActionExportar.EXPORTAR_HTML -> htmlStorage.saveFile(repositorioInforme.loadAll().component1()!! , absolutePath)

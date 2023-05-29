@@ -5,6 +5,9 @@ import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.property.SimpleStringProperty
 import java.time.LocalDate
 
+/**
+ * Clase que guarda el Estado de la Interfaz Gráfica de la IndexView
+ */
 data class MainState (
     val dniPropietario : SimpleStringProperty = SimpleStringProperty(),
     val nombrePropietario : SimpleStringProperty = SimpleStringProperty(),
@@ -37,6 +40,4 @@ data class MainState (
     val tipoVehiculo : SimpleStringProperty = SimpleStringProperty(),
 
     val dniVehiculo : SimpleStringProperty = SimpleStringProperty()
-) {
-
-}
+)

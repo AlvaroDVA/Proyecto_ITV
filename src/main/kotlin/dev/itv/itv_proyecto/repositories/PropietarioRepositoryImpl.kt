@@ -15,6 +15,13 @@ class PropietarioRepositoryImpl : ModelsRepository<Propietario, String, Propieta
     val manager : DatabaseManager by inject()
     var database = manager.bd
 
+    /**
+     *  Funcion que busca un Propietario en la base de datos en funcion del dni del propietario
+     *
+     *  @param id Dni del Propietario que buscar
+     *  @return Propietario con el dni deseado o los posibles errores con Result
+     *  @see loadAll
+     */
     override fun findById(id: String): Result<Propietario, PropietarioErrors> {
         logger.debug { " PropietarioRepositoryImpl -- FindByID ($id) " }
         loadAll().onFailure {
@@ -25,6 +32,12 @@ class PropietarioRepositoryImpl : ModelsRepository<Propietario, String, Propieta
         return Err(PropietarioErrors.PropietarioNotFoundError("No existe un propietario con la id $id"))
     }
 
+    /**
+     * Función que hace un Select a la Base de datos de toda la tabla Propietarios y los devuelve como lista
+     *
+     * @return Lista de Propietarios de la Tabla tPropietarios o los Posibles errores de la consulta con Result
+     * @see Utils.selectAllFromTable
+     */
     override fun loadAll(): Result<List<Propietario>, PropietarioErrors> {
         return selectAllPropietarios(database)
     }
@@ -52,6 +65,12 @@ class PropietarioRepositoryImpl : ModelsRepository<Propietario, String, Propieta
         return Ok(propietarios)
     }
 
+    /**
+     * Función que hace un insert en la Base de Datos siempre que no exista ya.
+     *
+     * @param propietario Propietario que vamos a guardar en la base de datos
+     * @return Propietario tras guardarse en la base de datos o los posibles errores con Result
+     */
     fun savePropietario(propietario: Propietario) : Result<Propietario, PropietarioErrors> {
         logger.debug { "PropietarioRepositoryImpl ----" }
         findById(propietario.dni).onSuccess {
@@ -81,7 +100,14 @@ class PropietarioRepositoryImpl : ModelsRepository<Propietario, String, Propieta
         return Ok(propietario)
     }
 
-    fun findByEmail(email: String): Result<Propietario, PropietarioErrors> {
+    /**
+     * Función que encuentra un propietario por su email, debido a que el campo email es unicode
+     *
+     * @param email Email sobre el que buscaremos el propietario
+     * @return Propietario encontrado o los posibles errores.
+     * @see loadAll
+     */
+    private fun findByEmail(email: String): Result<Propietario, PropietarioErrors> {
         logger.debug { " PropietarioRepositoryImpl -- FindByEmail ($email) " }
         loadAll().onFailure {
             return Err(it)
