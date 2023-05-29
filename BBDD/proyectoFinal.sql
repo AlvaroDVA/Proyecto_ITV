@@ -232,7 +232,7 @@ DELIMITER ;
 
 
 # Procedimiento para borrar todas las citas con fecha de mas de dos meses con respecto a la fecha actual
-
+DELIMITER $$
 CREATE PROCEDURE BorrarCitasBimestrales()
 BEGIN
     DELETE FROM tInforme
