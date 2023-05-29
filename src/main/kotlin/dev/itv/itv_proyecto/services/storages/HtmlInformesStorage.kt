@@ -7,7 +7,6 @@ import dev.itv.itv_proyecto.errors.StorageErrors
 import dev.itv.itv_proyecto.mappers.Mappers
 import dev.itv.itv_proyecto.models.Informe
 import java.io.File
-import java.sql.Connection
 
 class HtmlInformesStorage : Storage<Informe> {
     override fun saveFile(list: List<Informe>, url: String): Result<File, StorageErrors> {
@@ -24,7 +23,6 @@ class HtmlInformesStorage : Storage<Informe> {
             val contenido = StringBuilder()
             contenido.append("<!DOCTYPE html>\n")
             contenido.append("<html lang=\\\"es\\\">\n")
-            contenido.append("<html>\n")
             contenido.append("<head>\n")
             contenido.append("<title>Informes</title>\n")
             contenido.append("<meta charset=\"utf-8\">\n")

@@ -3,6 +3,7 @@ package dev.itv.itv_proyecto.validators
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.Result
+import com.github.michaelbull.result.onFailure
 import dev.itv.itv_proyecto.errors.InformeErrors
 import dev.itv.itv_proyecto.errors.ModelViewError
 import dev.itv.itv_proyecto.errors.PropietarioErrors
@@ -94,22 +95,34 @@ fun EditarState.validacionPrevia() : Result<EditarState, ModelViewError> {
 
     if (this.contaminacionInforme.value.contains(",")) contaminacionInforme.value.replace("," , ".")
     if (this.frenadoInforme.value.contains(",")) frenadoInforme.value.replace("," , ".")
-    if (this.dniPropietario.value.isNullOrBlank()) return Err(ModelViewError.accionError("No has introducido un valor al DNI del propietario"))
-    if (this.nombrePropietario.value.isNullOrBlank()) return Err(ModelViewError.accionError("No has introducido un valor al Nombre del propietario"))
-    if (this.apellidosPropietario.value.isNullOrBlank()) return Err(ModelViewError.accionError("No has introducido un valor al Apellido del propietario"))
-    if (this.telefonoPropietario.value.isNullOrBlank()) return Err(ModelViewError.accionError("No has introducido un valor al Telefono del propietario"))
-    if (this.emailPropietario.value.isNullOrBlank()) return Err(ModelViewError.accionError("No has introducido un valor al Email del propietario"))
-    if (this.frenadoInforme.value.isNullOrBlank()) return Err(ModelViewError.accionError("No has introducido un valor al Frenado del informe"))
-    if (this.contaminacionInforme.value.isNullOrBlank()) return Err(ModelViewError.accionError("No has introducido un valor a la Contaminación del informe"))
-    if (this.trabajadorInforme.value.isNullOrBlank()) return Err(ModelViewError.accionError("No has introducido un valor al Trabajador del informe"))
-    if (this.matriculaInforme.value.isNullOrBlank()) return Err(ModelViewError.accionError("No has introducido un valor a la Matrícula del informe"))
-    if (this.dniPropietario.value.isNullOrBlank()) return Err(ModelViewError.accionError("No has introducido un valor al DNI del informe"))
-    if (this.horaCita.value.isNullOrBlank()) return Err(ModelViewError.accionError("No has introducido una Hora en el informe"))
-    if (this.marcaVehiculo.value.isNullOrBlank()) return Err(ModelViewError.accionError("No has introducido una Marca en el Vehiculo"))
-    if (this.modeloVehiculo.value.isNullOrBlank()) return Err(ModelViewError.accionError("No has introducido un Modelo en el Vehiculo"))
-    if (this.tipoMotor.value.isNullOrBlank()) return Err(ModelViewError.accionError("No has seleccionado un Tipo de Motor en el Vehiculo"))
-    if (this.tipoVehiculo.value.isNullOrBlank()) return Err(ModelViewError.accionError("No has seleccionado un Tipo de Vehiculo en el Vehiculo"))
+    if (this.dniPropietario.value.isNullOrBlank()) return Err(ModelViewError.AccionError("No has introducido un valor al DNI del propietario"))
+    if (this.nombrePropietario.value.isNullOrBlank()) return Err(ModelViewError.AccionError("No has introducido un valor al Nombre del propietario"))
+    if (this.apellidosPropietario.value.isNullOrBlank()) return Err(ModelViewError.AccionError("No has introducido un valor al Apellido del propietario"))
+    if (this.telefonoPropietario.value.isNullOrBlank()) return Err(ModelViewError.AccionError("No has introducido un valor al Telefono del propietario"))
+    if (this.emailPropietario.value.isNullOrBlank()) return Err(ModelViewError.AccionError("No has introducido un valor al Email del propietario"))
+    validarInforme(this).onFailure { return Err(it) }
+    validarVehiculo(this).onFailure { return Err(it) }
 
     return Ok(this)
+}
+
+private fun validarInforme(editarState: EditarState): Result<EditarState,ModelViewError.AccionError> {
+    if (editarState.frenadoInforme.value.isNullOrBlank()) return Err(ModelViewError.AccionError("No has introducido un valor al Frenado del informe"))
+    if (editarState.contaminacionInforme.value.isNullOrBlank()) return Err(ModelViewError.AccionError("No has introducido un valor a la Contaminación del informe"))
+    if (editarState.trabajadorInforme.value.isNullOrBlank()) return Err(ModelViewError.AccionError("No has introducido un valor al Trabajador del informe"))
+    if (editarState.matriculaInforme.value.isNullOrBlank()) return Err(ModelViewError.AccionError("No has introducido un valor a la Matrícula del informe"))
+    if (editarState.dniPropietario.value.isNullOrBlank()) return Err(ModelViewError.AccionError("No has introducido un valor al DNI del informe"))
+    if (editarState.horaCita.value.isNullOrBlank()) return Err(ModelViewError.AccionError("No has introducido una Hora en el informe"))
+
+    return Ok(editarState)
+}
+
+private fun validarVehiculo(editarState: EditarState): Result<EditarState,ModelViewError.AccionError> {
+    if (editarState.marcaVehiculo.value.isNullOrBlank()) return Err(ModelViewError.AccionError("No has introducido una Marca en el Vehiculo"))
+    if (editarState.modeloVehiculo.value.isNullOrBlank()) return Err(ModelViewError.AccionError("No has introducido un Modelo en el Vehiculo"))
+    if (editarState.tipoMotor.value.isNullOrBlank()) return Err(ModelViewError.AccionError("No has seleccionado un Tipo de Motor en el Vehiculo"))
+    if (editarState.tipoVehiculo.value.isNullOrBlank()) return Err(ModelViewError.AccionError("No has seleccionado un Tipo de Vehiculo en el Vehiculo"))
+
+    return Ok(editarState)
 }
 

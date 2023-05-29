@@ -13,14 +13,12 @@ import javafx.scene.control.Alert
 import javafx.scene.control.ButtonType
 import javafx.scene.image.Image
 import javafx.scene.layout.Pane
-import javafx.stage.FileChooser
 import javafx.stage.Modality
 import javafx.stage.Stage
 import mu.KotlinLogging
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.io.InputStream
-import java.net.URI
 import java.net.URL
 
 private val logger = KotlinLogging.logger {  }
@@ -82,8 +80,25 @@ object RoutesManager : KoinComponent {
         stage.show()
     }
 
+    fun iniciarAcerca() {
+        logger.debug { "Iniciando Acerca de"}
+        val fxmlLoader = FXMLLoader(getResource(Views.ACERCA.url))
+        val loadParent = fxmlLoader.load<Pane>()
+
+        val escena = Scene(loadParent, 500.0, 300.0)
+        val stage = Stage()
+        stage.title = "Acerca De Damller"
+        stage.scene = escena
+        stage.initOwner(mainStage)
+        stage.initModality(Modality.WINDOW_MODAL)
+        stage.isResizable = false
+        stage.icons.add(Image(getResourceAsStream(Icons.LOGO.url)))
+        stage.show()
+    }
+
     var compartirState = MainState()
     var action = ActionView.NEW
+
 
     fun close() {
         Alert(Alert.AlertType.CONFIRMATION).apply {

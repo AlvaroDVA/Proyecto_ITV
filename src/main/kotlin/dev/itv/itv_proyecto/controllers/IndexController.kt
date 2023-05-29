@@ -227,6 +227,7 @@ class IndexController : KoinComponent{
         menuExportarCsv.setOnAction { onBotonCsv() }
         menuExportarJSON.setOnAction { onBotonJson() }
 
+        menuAcercaDe.setOnAction { onBotonAcerca() }
     }
 
 
@@ -295,6 +296,10 @@ class IndexController : KoinComponent{
 
     private fun onBotonCsv() {
         seleccionarLugar(ActionExportar.EXPORTAR_CSV)
+    }
+
+    private fun onBotonAcerca () {
+        RoutesManager.iniciarAcerca()
     }
 
     fun seleccionarLugar(accion: ActionExportar) {
