@@ -38,11 +38,23 @@ class VehiculoRepositoryImpl : ModelsRepository<Vehiculo, String, VehiculosError
         }
     }
 
+    /**
+     * Función para cargar todos los Vehiculos
+     *
+     * @return Lista de todos los Vehiculos de la Base de datos o los posibles errores con Result
+     * @see selectAllVehiculos
+     */
     override fun loadAll(): Result<List<Vehiculo>, VehiculosErrors> {
         logger.debug { " VehiculoRepositoryImpl -- LoadAll() " }
         return selectAllVehiculos()
     }
 
+    /**
+     * Función para hacer un select de toda la tabla tVehiculo
+     *
+     * @return Lista de todos los vehiculos de la base de datos o los posibles errores con Result
+     * @see Utils.selectAllFromTable
+     */
     private fun selectAllVehiculos(): Result<List<Vehiculo>, VehiculosErrors> {
         Utils.logger.debug { " Utils : selectAllVehiculos () " }
         val vehiculos = mutableListOf<Vehiculo>()
