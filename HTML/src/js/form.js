@@ -23,6 +23,9 @@ function validaciones() {
     if(validarMarca() == false) {
         return
     }
+    if(validarFechas() == false) {
+        return
+    }
     enviarCorreo()
 }
 
@@ -65,7 +68,7 @@ function validarApellido() {
 
 function validarEmail() {
     let email = document.getElementById("email") 
-    let regex = /^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/;
+    let regex = /^\w+([.-+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/;
     if (regex.test(email.value)) {
         return true
     }else {
@@ -117,6 +120,25 @@ function validarMatricula() {
     }
 }
 
+function validarFechas() {
+    let fecha1 = new Date(document.getElementById("año-matriculacion").value)
+    let fecha2 = new Date(document.getElementById("ultima-revision").value)
+    let fecha_actual = new Date()
+
+    if (fecha1 > fecha_actual) {
+        alert("La fecha del año de matriculación no puede ser mayor a la actual.")
+        return false
+    }else{
+        if (fecha2 > fecha_actual) {
+            alert("La fecha de la ultima revisión no puede ser mayor a la actual.")
+            return false
+        }
+        else {
+            return true
+        }
+    }
+}
+
 function enviarCorreo() {
     
     const nombre = document.getElementById("nombre").value;
@@ -145,6 +167,7 @@ function toggleServices() {
 }
 
 
+//Validación de todos los datos rellenos.
 
 const formulario = document.getElementById("miFormulario");
 const botonEnviar = document.getElementById("boton");
