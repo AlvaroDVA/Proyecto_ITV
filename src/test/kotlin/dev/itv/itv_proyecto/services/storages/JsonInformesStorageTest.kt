@@ -30,7 +30,7 @@ class JsonInformesStorageTest : KoinTest {
     val appConfig : AppConfig by inject()
 
     lateinit var informesRepository : InformeRepositoryImpl
-    val jsonInformesStorage = JsonInformesStorage()
+    val jsonInformesStorage = JsonInformeStorage()
 
     val informes = mutableListOf<Informe>()
 
@@ -82,11 +82,10 @@ class JsonInformesStorageTest : KoinTest {
         val fileName = System.getProperty("user.dir") + File.separator + appConfig.dataPath + File.separator + "FicheroTest.json"
         val listaGuardar = informesRepository.loadAll().component1()!!
 
-        jsonInformesStorage.saveFile(url = fileName, list = listaGuardar)
+        jsonInformesStorage.saveFile(url = fileName, informe = listaGuardar[1])
 
-        val res = jsonInformesStorage.loadFile(fileName, database)
 
-        assertEquals(Ok(listaGuardar), res)
+        assertTrue(File(fileName).exists())
     }
 
     @Test
@@ -96,25 +95,7 @@ class JsonInformesStorageTest : KoinTest {
             println(it.size)
         }
 
-        val res = jsonInformesStorage.saveFile(url = fileName, list = listaGuardar)
-
-        assertTrue { res.component2() is StorageErrors.JsonStorageError }
-    }
-
-    @Test
-    fun jsonLoadNotUrlTest() {
-        val fileName = "" + File.separator + "agaghah"
-
-        val res = jsonInformesStorage.loadFile(url = fileName, database)
-
-        assertTrue { res.component2() is StorageErrors.JsonStorageError }
-    }
-
-    @Test
-    fun JsonConexionNullTest() {
-        val fileName = "" + File.separator + "agaghah"
-
-        val res = jsonInformesStorage.loadFile(url = fileName, null)
+        val res = jsonInformesStorage.saveFile(url = fileName, informe = listaGuardar[1])
 
         assertTrue { res.component2() is StorageErrors.JsonStorageError }
     }

@@ -19,7 +19,7 @@ import java.io.File
 private val logger = KotlinLogging.logger {  }
 class IndexController : KoinComponent{
 
-    val mainViewModel : MainViewModel by inject()
+    private val mainViewModel : MainViewModel by inject()
     @FXML
     private lateinit var menuExportarJSON : MenuItem
     @FXML
@@ -120,11 +120,18 @@ class IndexController : KoinComponent{
     private lateinit var fieldDNIPropietarioVehiculo : TextField
 
     @FXML
-    private lateinit var  btnNuevo: Button
-    @FXML
     private lateinit var btnEditar : Button
     @FXML
     private lateinit var btnEliminar : Button
+
+    @FXML
+    private lateinit var menuNuevaCita : MenuItem
+    @FXML
+    private lateinit var btnInforme : Button
+    @FXML
+    private lateinit var btnImprimir : Button
+    @FXML
+    private lateinit var comboImprimir : ComboBox<String>
 
 
     @FXML
@@ -172,11 +179,10 @@ class IndexController : KoinComponent{
         selectorTipoVehiculo.valueProperty().bind(mainViewModel.state.tipoVehiculo)
         selectorTrabajador.valueProperty().bind(mainViewModel.state.trabajadorInforme)
 
-
     }
 
     /**
-     * Función que asigna las acciones de los elementos de la Interfaz Grafica
+     * Función que asigna las acciones de los elementos de la Interfaz Gráfica
      */
     private fun iniciarEventos() {
         tableInformes.items = mainViewModel.listaInformesDto
@@ -191,10 +197,14 @@ class IndexController : KoinComponent{
         tableColumnTipoVehiculo.cellValueFactory = PropertyValueFactory("tipoVehiculo")
         tableColumnResultado.cellValueFactory = PropertyValueFactory("apto")
 
+
+
+
         buscadorTipoVehiculo.items = mainViewModel.tiposVehiculos
         buscadorMotor.items = mainViewModel.tiposMotor
 
         selectorHora.items = mainViewModel.listaHoras
+        comboImprimir.items = mainViewModel.listaExportar
         buscadorNombre.setOnKeyReleased {
             it?.let { onFiltrar() }
         }
@@ -205,16 +215,22 @@ class IndexController : KoinComponent{
         }
         buscadorTipoVehiculo.selectionModel.selectedIndexProperty().addListener {_,_, newValues ->
             newValues?.let { onFiltrar() }
-
         }
 
         tableInformes.selectionModel.selectedItemProperty().addListener {_,_,newValues ->
             newValues?.let { onSeleccionarTabla(it) }
+            comboImprimir.value = "JSON"
             btnEditar.isDisable = false
             btnEliminar.isDisable = false
+            btnInforme.isDisable = false
+            comboImprimir.isDisable = false
+            btnImprimir.isDisable = false
             newValues?:let{
                 btnEditar.isDisable = true
                 btnEliminar.isDisable = true
+                btnInforme.isDisable = true
+                comboImprimir.isDisable = true
+                btnImprimir.isDisable = true
             }
         }
 
@@ -223,15 +239,32 @@ class IndexController : KoinComponent{
 
         btnEditar.setOnAction { onBotonEditar() }
 
-        btnNuevo.setOnAction { onBotonNuevo() }
-
         menuSalir.setOnAction { onBotonSalir() }
 
-        menuExportarHTML.setOnAction { onBotonHtml() }
+        menuNuevaCita.setOnAction { onBotonNuevo() }
+
         menuExportarCsv.setOnAction { onBotonCsv() }
+
         menuExportarJSON.setOnAction { onBotonJson() }
 
         menuAcercaDe.setOnAction { onBotonAcerca() }
+
+        btnImprimir.setOnAction { onBotonImprimir() }
+
+        btnInforme.setOnAction { onBotonInforme() }
+
+
+    }
+
+
+
+    private fun onBotonImprimir() {
+        if (comboImprimir.value == "JSON") {
+            seleccionarLugar(ActionExportar.EXPORTAR_INFORME_JSON)
+        }
+        if (comboImprimir.value == "HTML") {
+            seleccionarLugar(ActionExportar.EXPORTAR_INFORME_HTML)
+        }
     }
 
 
@@ -305,6 +338,10 @@ class IndexController : KoinComponent{
 
     }
 
+    private fun onBotonInforme() {
+        mainViewModel.cambiarVentanaInforme()
+    }
+
     /**
      * Función que abre la pestaña de Editar / Nuevo con campos del state
      *
@@ -323,14 +360,7 @@ class IndexController : KoinComponent{
         RoutesManager.cerrarApp()
     }
 
-    /**
-     * Función que abre un File Chooser para exportar a HTML
-     *
-     * @seleccionarLugar
-     */
-    private fun onBotonHtml() {
-        seleccionarLugar(ActionExportar.EXPORTAR_HTML)
-    }
+
 
     /**
      * Función que abre un File Chooser para exportar a JSON
@@ -338,7 +368,8 @@ class IndexController : KoinComponent{
      * @see seleccionarLugar
      */
     private fun onBotonJson() {
-        seleccionarLugar(ActionExportar.EXPORTAR_JSON)
+        logger.warn ("Exportando JSON CItas")
+        seleccionarLugar(ActionExportar.EXPORTAR_CITAS_JSON)
     }
 
     /**
@@ -347,7 +378,7 @@ class IndexController : KoinComponent{
      * @see seleccionarLugar
      */
     private fun onBotonCsv() {
-        seleccionarLugar(ActionExportar.EXPORTAR_CSV)
+        seleccionarLugar(ActionExportar.EXPORTAR_TRABAJADORES_CSV)
     }
 
     /**
@@ -364,9 +395,9 @@ class IndexController : KoinComponent{
      *
      * @param accion Tipo de Exportación
      */
-    fun seleccionarLugar(accion: ActionExportar) {
+    private fun seleccionarLugar(accion: ActionExportar) {
         when (accion) {
-            ActionExportar.EXPORTAR_HTML -> {
+            ActionExportar.EXPORTAR_INFORME_HTML -> {
                 FileChooser().run {
                     title = "Exportar HTML"
                     initialDirectory = File("data/")
@@ -376,7 +407,7 @@ class IndexController : KoinComponent{
                     mainViewModel.guardarArchivo(it.absolutePath , accion)
                 }
             }
-            ActionExportar.EXPORTAR_CSV -> {
+            ActionExportar.EXPORTAR_TRABAJADORES_CSV -> {
                 FileChooser().run {
                     title = "Exportar CSV"
                     initialDirectory = File("data/")
@@ -386,9 +417,20 @@ class IndexController : KoinComponent{
                     mainViewModel.guardarArchivo(it.absolutePath , accion)
                 }
             }
-            ActionExportar.EXPORTAR_JSON -> {
+            ActionExportar.EXPORTAR_INFORME_JSON -> {
                 FileChooser().run {
                     title = "Exportar JSON"
+                    initialDirectory = File("data")
+                    extensionFilters.add(FileChooser.ExtensionFilter("JSON", ".json"))
+                    showSaveDialog(RoutesManager.mainStage)
+                }?.let {
+                    mainViewModel.guardarArchivo(it.absolutePath , accion)
+                }
+            }
+            ActionExportar.EXPORTAR_CITAS_JSON -> {
+                logger.warn {"Exportando JSON Citas"}
+                FileChooser().run {
+                    title = "Exportar Citas Json"
                     initialDirectory = File("data")
                     extensionFilters.add(FileChooser.ExtensionFilter("JSON", ".json"))
                     showSaveDialog(RoutesManager.mainStage)

@@ -5,11 +5,9 @@ import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.Result
 import dev.itv.itv_proyecto.errors.StorageErrors
 import dev.itv.itv_proyecto.models.Trabajador
-import dev.itv.itv_proyecto.utils.Utils
 import java.io.File
-import java.time.LocalDate
 
-class CsvTrabajadoresStorage : Storage<Trabajador> {
+class CsvTrabajadoresStorage : Storage<List<Trabajador>> {
 
     /**
      * Función que guarda los trabajadores en un fichero csv
@@ -44,36 +42,5 @@ class CsvTrabajadoresStorage : Storage<Trabajador> {
         return Ok(csvFile)
     }
 
-    /**
-     * Función que carga los trabajadores de un fichero csv
-     *
-     * @param url Path donde se cargara el fichero CSV
-     * @return Devolvera la lista de trabajadores o los posibles errores con Result
-     */
-    fun loadFile(url: String): Result<List<Trabajador>, StorageErrors> {
-        val csvFile = File(url)
-        val trabajadores = mutableListOf<Trabajador>()
-        csvFile.bufferedReader().use { reader ->
-            val csvLines = reader.readLines()
-            val csvData = csvLines.drop(1)
-            csvData.forEach { csvLine ->
-                val values = csvLine.split(",")
-                trabajadores.add(
-                    Trabajador(
-                        idTrabajador = values[0].toLong(),
-                        nombreTrabajador = values[1],
-                        telefonoTrabajador = values[2].toInt(),
-                        email = values[3],
-                        username = values[4],
-                        password = values[5],
-                        fechaContratacion = LocalDate.parse(values[6]),
-                        especialidad = Utils.sacarEspecialidad(values[7]),
-                        isResponsable = values[8].toBooleanStrictOrNull()?: return Err(StorageErrors.CsvStorageError("IsResponsable mal leido, no es false o true"))
-                    )
-                )
-            }
-        }
-        if(trabajadores.isEmpty()) return (Err(StorageErrors.CsvStorageError("La lista leida del CSV esta vacia")))
-        return Ok(trabajadores)
-    }
+
 }

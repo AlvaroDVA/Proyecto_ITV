@@ -9,9 +9,11 @@ import dev.itv.itv_proyecto.routes.RoutesManager
 import dev.itv.itv_proyecto.services.database.DatabaseManager
 import dev.itv.itv_proyecto.services.storages.CsvTrabajadoresStorage
 import dev.itv.itv_proyecto.services.storages.HtmlInformesStorage
-import dev.itv.itv_proyecto.services.storages.JsonInformesStorage
-import dev.itv.itv_proyecto.viewmodels.EditarViewModel
+import dev.itv.itv_proyecto.services.storages.JsonCitasStorage
+import dev.itv.itv_proyecto.services.storages.JsonInformeStorage
+import dev.itv.itv_proyecto.viewmodels.CitaViewModel
 import dev.itv.itv_proyecto.viewmodels.MainViewModel
+import dev.itv.itv_proyecto.viewmodels.InformeViewModel
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
@@ -21,7 +23,6 @@ val Modulo = module {
     single { DatabaseManager() }
     single { RoutesManager }
 
-
     // Repositorios
     factory { InformeRepositoryImpl() }
     factory { PropietarioRepositoryImpl() }
@@ -29,14 +30,15 @@ val Modulo = module {
     factory { VehiculoRepositoryImpl() }
 
     // Storages
-    factory { JsonInformesStorage() }
+    factory { JsonInformeStorage() }
     factory { CsvTrabajadoresStorage() }
     factory { HtmlInformesStorage() }
+    factory { JsonCitasStorage() }
 
     // ViewModel
     singleOf(::MainViewModel)
-    factoryOf(::EditarViewModel)
-
+    factoryOf(::CitaViewModel)
+    factoryOf(::InformeViewModel)
 
 }
 

@@ -1,9 +1,12 @@
 package dev.itv.itv_proyecto.viewmodels
 
+import com.github.michaelbull.result.Ok
+import com.github.michaelbull.result.Result
 import dev.itv.itv_proyecto.enums.ActionExportar
 import dev.itv.itv_proyecto.enums.ActionView
 import dev.itv.itv_proyecto.enums.TipoMotor
 import dev.itv.itv_proyecto.enums.TipoVehiculo
+import dev.itv.itv_proyecto.errors.ModelViewError
 import dev.itv.itv_proyecto.mappers.Mappers
 import dev.itv.itv_proyecto.models.Estacion
 import dev.itv.itv_proyecto.models.Informe
@@ -15,7 +18,8 @@ import dev.itv.itv_proyecto.repositories.TrabajadorRepositoryImpl
 import dev.itv.itv_proyecto.routes.RoutesManager
 import dev.itv.itv_proyecto.services.storages.CsvTrabajadoresStorage
 import dev.itv.itv_proyecto.services.storages.HtmlInformesStorage
-import dev.itv.itv_proyecto.services.storages.JsonInformesStorage
+import dev.itv.itv_proyecto.services.storages.JsonCitasStorage
+import dev.itv.itv_proyecto.services.storages.JsonInformeStorage
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 import mu.KotlinLogging
@@ -27,9 +31,11 @@ class MainViewModel (
     val repositorioInforme : InformeRepositoryImpl,
     val csvStorage : CsvTrabajadoresStorage,
     val htmlStorage : HtmlInformesStorage,
-    val jsonStorage : JsonInformesStorage
+    val jsonInformeStorage : JsonInformeStorage,
+    val jsonCitasStorage: JsonCitasStorage
 ) {
 
+    val listaExportar = FXCollections.observableArrayList<String>()
     val listaInformes = FXCollections.observableArrayList<Informe>()
     val listaInformesDto = FXCollections.observableArrayList<InformeDto>()
     val tiposMotor = FXCollections.observableArrayList<String>()
@@ -55,6 +61,18 @@ class MainViewModel (
         iniciarVehiculos()
         iniciarTrabajadores()
         iniciarHoras()
+        iniciarExportar()
+
+    }
+
+    private fun iniciarExportar() {
+        logger.debug { " Iniciando Lista Imprimir " }
+        listaExportar.apply {
+            clear()
+            addAll(
+                listOf("JSON", "HTML")
+            )
+        }
     }
 
     val estacion = Estacion(
@@ -147,7 +165,7 @@ class MainViewModel (
      *
      * @param nombre Matricula : Se filtrara los informes que tengán un vehículo con matricula que contenga el string
      * @param motor Motor : Se filtrará los informes que tengán un vehículo con el tipo de motor seleccionado
-     * @param tipo Tipo Vehículo : Se filtrará los informes que tengán un vehículo que sean del tipo seleccionado
+     * @param tipo Tipo Vehículo: Se filtrará los informes que tengán un vehículo que sean del tipo seleccionado
      * @return Devuelve una ObservableList para cambiar los datos en tiempo real
      */
     fun listaFiltrada(nombre: String?, motor: String?, tipo: String?): ObservableList<InformeDto>? {
@@ -213,7 +231,7 @@ class MainViewModel (
      *
      * @see MainState
      */
-    private fun limpiarState() {
+    fun limpiarState() {
         state.apply {
             this.dniPropietario.value = ""
             this.nombrePropietario.value = ""
@@ -320,7 +338,6 @@ class MainViewModel (
                 RoutesManager.action = ActionView.UPDATE
                 logger.warn {  RoutesManager.action.toString() }
             }
-            limpiarState()
         }
         RoutesManager.editarVentana()
     }
@@ -348,9 +365,87 @@ class MainViewModel (
      */
     fun guardarArchivo(absolutePath: String, accion: ActionExportar) {
         when (accion) {
-            ActionExportar.EXPORTAR_HTML -> htmlStorage.saveFile(repositorioInforme.loadAll().component1()!! , absolutePath)
-            ActionExportar.EXPORTAR_CSV -> csvStorage.saveFile(repositorioTrabajador.loadAll().component1()!!, absolutePath)
-            ActionExportar.EXPORTAR_JSON -> jsonStorage.saveFile(repositorioInforme.loadAll().component1()!!, absolutePath)
+            ActionExportar.EXPORTAR_INFORME_HTML -> htmlStorage.saveFile(generarInforme(state).component1()!!, absolutePath)
+            ActionExportar.EXPORTAR_TRABAJADORES_CSV -> csvStorage.saveFile(repositorioTrabajador.loadAll().component1()!!, absolutePath)
+            ActionExportar.EXPORTAR_INFORME_JSON -> jsonInformeStorage.saveFile(generarInforme(state).component1()!!, absolutePath)
+            ActionExportar.EXPORTAR_CITAS_JSON ->jsonCitasStorage.saveFile(repositorioInforme.loadAll().component1()!!, absolutePath)
+        }
+    }
+
+    private fun generarInforme(state : MainState): Result<Informe, ModelViewError> {
+
+        logger.error { "Fecha Matriculacion : ${state.fechaMatriculacion} " }
+
+        return Ok(
+            Mappers().informeDtoToInforme(conexion = repositorioInforme.database,
+                InformeDto(
+                    idInforme = state.idInforme.value,
+                    apto = if (state.apto.value) "true" else "false" ,
+                    frenado = state.frenadoInforme.value.toString(),
+                    contaminacion = state.contaminacionInforme.value.toString(),
+                    interior = if (state.interiorInforme.value) "true" else "false",
+                    luces = if (state.lucesInforme.value) "true" else "false",
+                    idTrabajador = state.idTrabajador.value.toString(),
+                    nombreTrabajador = state.nombreTrabajador.value.toString(),
+                    email = state.emailTrabajador.value.toString(),
+                    matricula = state.matriculaInforme.value.toString(),
+                    marca = state.marcaVehiculo.value.toString(),
+                    modelo = state.modeloVehiculo.value.toString(),
+                    fechaMatricula = state.fechaMatriculacion.value.toString(),
+                    fechaUltimaRevision = LocalDate.now().toString(),
+                    tipoMotor = state.tipoMotor.value.toString(),
+                    tipoVehiculo = state.tipoVehiculo.value.toString(),
+                    dni = state.dniPropietario.value.toString(),
+                    nombre = state.nombrePropietario.value.toString(),
+                    apellidos = state.apellidosPropietario.value.toString(),
+                    telefono = state.telefonoPropietario.value.toString(),
+                    emailPropietario = state.emailPropietario.value.toString(),
+                    horaCita = state.horaCita.value.toString(),
+                    fechaCita = state.fechaCita.value.toString()
+                )
+            )!!).also {
+            logger.warn { it }
+        }
+
+    }
+
+    fun cambiarVentanaInforme() {
+        logger.warn {"Iniciando Ventana Informe"}
+        pasarState()
+        RoutesManager.iniciarInformeView()
+    }
+
+    private fun pasarState() {
+        RoutesManager.compartirState.apply {
+            dniPropietario.value = state.dniPropietario.value
+            nombrePropietario.value = state.nombrePropietario.value
+            apellidosPropietario.value = state.apellidosPropietario.value
+            telefonoPropietario.value = state.telefonoPropietario.value
+            emailPropietario.value = state.emailPropietario.value
+            idTrabajador.value = state.idTrabajador.value
+            nombreTrabajador.value = state.nombreTrabajador.value
+            emailTrabajador.value = state.emailTrabajador.value
+            idInforme.value = state.idInforme.value
+            frenadoInforme.value = state.frenadoInforme.value
+            contaminacionInforme.value = state.contaminacionInforme.value
+            trabajadorInforme.value = state.trabajadorInforme.value
+            matriculaInforme.value = state.matriculaInforme.value
+            dniInforme.value = state.dniInforme.value
+            horaCita.value = state.horaCita.value
+            fechaCita.value = state.fechaCita.value
+            interiorInforme.value = state.interiorInforme.value
+            lucesInforme.value = state.lucesInforme.value
+            apto.value = state.apto.value
+            matriculaVehiculo.value = state.matriculaVehiculo.value
+            marcaVehiculo.value = state.marcaVehiculo.value
+            modeloVehiculo.value = state.modeloVehiculo.value
+            fechaMatriculacion.value = state.fechaMatriculacion.value
+            ultimaRevision.value = state.ultimaRevision.value
+            tipoMotor.value = state.tipoMotor.value
+            tipoVehiculo.value = state.tipoVehiculo.value
+            dniVehiculo.value = state.dniVehiculo.value
+            RoutesManager.action = ActionView.UPDATE
+            logger.warn {  RoutesManager.action.toString() }
         }
     }
 

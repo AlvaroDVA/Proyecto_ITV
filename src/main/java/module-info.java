@@ -27,6 +27,4 @@ module dev.itv.itv_proyecto {
     opens dev.itv.itv_proyecto.models to javafx.fxml;
     exports dev.itv.itv_proyecto.models;
 
-
-
 }

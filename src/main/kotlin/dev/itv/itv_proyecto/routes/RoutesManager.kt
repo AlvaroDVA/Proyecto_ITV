@@ -26,7 +26,7 @@ object RoutesManager : KoinComponent {
 
     lateinit var mainApp : Application
     private val mainWidht = 1000.0
-    private val mainHeight = 850.0
+    private val mainHeight = 875.0
 
     private lateinit var _mainStage : Stage
     val mainStage : Stage get() = _mainStage
@@ -74,9 +74,9 @@ object RoutesManager : KoinComponent {
         val fxmlLoader = FXMLLoader(getResource(Views.NUEVO.url))
         val loadParent = fxmlLoader.load<Pane>()
 
-        val escena = Scene(loadParent,1000.0, 540.0 )
+        val escena = Scene(loadParent,1121.0, 627.0 )
         val stage = Stage()
-        stage.title = "Nuevo / Editar Informe"
+        stage.title = "Nueva Cita / Editar Cita"
         stage.scene = escena
         stage.initOwner(mainStage)
         stage.initModality(Modality.WINDOW_MODAL)
@@ -150,7 +150,22 @@ object RoutesManager : KoinComponent {
         _actualStage = _mainStage
     }
 
+    fun iniciarInformeView() {
+        logger.debug { "Iniciando Segunda Vista " }
+        val fxmlLoader = FXMLLoader(getResource(Views.INFORME.url))
+        val loadParent = fxmlLoader.load<Pane>()
 
+        val escena = Scene(loadParent,1000.0, 540.0 )
+        val stage = Stage()
+        stage.title = "Informe"
+        stage.scene = escena
+        stage.initOwner(mainStage)
+        stage.initModality(Modality.WINDOW_MODAL)
+        stage.isResizable = false
+        _actualStage = stage
+        stage.icons.add(Image(getResourceAsStream(Icons.LOGO.url)))
+        stage.show()
+    }
 
 
 }
