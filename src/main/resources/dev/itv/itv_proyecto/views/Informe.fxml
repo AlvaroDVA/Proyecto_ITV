@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="540.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dev.itv.itv_proyecto.controllers.NuevoEditarController">
+<VBox prefHeight="540.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dev.itv.itv_proyecto.controllers.InformeController">
   <children>
       <AnchorPane minHeight="0.0" minWidth="0.0">
          <children>
@@ -32,31 +32,31 @@
                               <HBox alignment="CENTER" fillHeight="false" layoutX="13.0" layoutY="75.0" prefHeight="30.0" prefWidth="300.0">
                                  <children>
                                     <Label alignment="CENTER" prefHeight="39.0" prefWidth="103.0" text="DNI" textAlignment="CENTER" />
-                                    <TextField fx:id="fieldDNIPropietario" prefWidth="235.0" />
+                                    <TextField fx:id="fieldDNIPropietario" editable="false" prefWidth="235.0" />
                                  </children>
                               </HBox>
                               <HBox alignment="CENTER" fillHeight="false" layoutX="13.0" layoutY="115.0" prefHeight="30.0" prefWidth="300.0">
                                  <children>
                                     <Label alignment="CENTER" prefHeight="39.0" prefWidth="103.0" text="Nombre" textAlignment="CENTER" />
-                                    <TextField fx:id="fieldNombrePropietario" prefWidth="235.0" />
+                                    <TextField fx:id="fieldNombrePropietario" editable="false" prefWidth="235.0" />
                                  </children>
                               </HBox>
                               <HBox alignment="CENTER" fillHeight="false" layoutX="13.0" layoutY="156.0" prefHeight="30.0" prefWidth="300.0">
                                  <children>
                                     <Label alignment="CENTER" prefHeight="39.0" prefWidth="103.0" text="Apellidos" textAlignment="CENTER" />
-                                    <TextField fx:id="fieldApellidosPropietario" prefWidth="235.0" />
+                                    <TextField fx:id="fieldApellidosPropietario" editable="false" prefWidth="235.0" />
                                  </children>
                               </HBox>
                               <HBox alignment="CENTER" fillHeight="false" layoutX="13.0" layoutY="196.0" prefHeight="30.0" prefWidth="300.0">
                                  <children>
                                     <Label alignment="CENTER" prefHeight="39.0" prefWidth="103.0" text="Telefono" textAlignment="CENTER" />
-                                    <TextField fx:id="fieldTelefonoPropietario" prefWidth="235.0" />
+                                    <TextField fx:id="fieldTelefonoPropietario" editable="false" prefWidth="235.0" />
                                  </children>
                               </HBox>
                               <HBox alignment="CENTER" fillHeight="false" layoutX="13.0" layoutY="239.0" prefHeight="30.0" prefWidth="300.0">
                                  <children>
                                     <Label alignment="CENTER" prefHeight="39.0" prefWidth="103.0" text="Email" textAlignment="CENTER" />
-                                    <TextField fx:id="fieldEmailPropietario" prefWidth="235.0" />
+                                    <TextField fx:id="fieldEmailPropietario" editable="false" prefWidth="235.0" />
                                  </children>
                               </HBox>
                            </children>
@@ -122,31 +122,31 @@
                                     <HBox alignment="CENTER" fillHeight="false" layoutX="14.0" layoutY="192.0" prefHeight="30.0" prefWidth="300.0">
                                        <children>
                                           <Label fx:id="fieldIDTrabajador" alignment="CENTER" prefHeight="39.0" prefWidth="103.0" text="Trabajador" textAlignment="CENTER" />
-                                          <ComboBox fx:id="selectorTrabajador" prefHeight="26.0" prefWidth="204.0" />
+                                          <ComboBox fx:id="selectorTrabajador" disable="true" prefHeight="26.0" prefWidth="204.0" />
                                        </children>
                                     </HBox>
                                     <HBox alignment="CENTER" fillHeight="false" layoutX="14.0" layoutY="235.0" prefHeight="30.0" prefWidth="300.0">
                                        <children>
                                           <Label alignment="CENTER" prefHeight="39.0" prefWidth="103.0" text="Matricula" textAlignment="CENTER" />
-                                          <TextField fx:id="fieldMatriculaInforme" prefWidth="200.0" />
+                                          <TextField fx:id="fieldMatriculaInforme" editable="false" prefWidth="200.0" />
                                        </children>
                                     </HBox>
                                     <HBox alignment="CENTER" fillHeight="false" layoutX="14.0" layoutY="275.0" prefHeight="30.0" prefWidth="300.0">
                                        <children>
                                           <Label alignment="CENTER" prefHeight="39.0" prefWidth="103.0" text="DNI" textAlignment="CENTER" />
-                                          <TextField fx:id="fieldDNIInforme" prefWidth="200.0" />
+                                          <TextField fx:id="fieldDNIInforme" editable="false" prefWidth="200.0" />
                                        </children>
                                     </HBox>
                                     <HBox alignment="CENTER" fillHeight="false" layoutX="14.0" layoutY="316.0" prefHeight="30.0" prefWidth="300.0">
                                        <children>
                                           <Label alignment="CENTER" prefHeight="39.0" prefWidth="103.0" text="Hora Cita" textAlignment="CENTER" />
-                                          <ComboBox fx:id="selectorHora" prefHeight="26.0" prefWidth="199.0" />
+                                          <ComboBox fx:id="selectorHora" disable="true" prefHeight="26.0" prefWidth="199.0" />
                                        </children>
                                     </HBox>
                                     <HBox alignment="CENTER" fillHeight="false" layoutX="14.0" layoutY="356.0" prefHeight="30.0" prefWidth="300.0">
                                        <children>
                                           <Label alignment="CENTER" prefHeight="39.0" prefWidth="103.0" text="Fecha Cita" textAlignment="CENTER" />
-                                          <DatePicker fx:id="fieldFechaCita" editable="false" prefHeight="28.0" prefWidth="198.0" />
+                                          <DatePicker fx:id="fieldFechaCita" disable="true" editable="false" prefHeight="28.0" prefWidth="198.0" />
                                        </children>
                                     </HBox>
                                     <HBox alignment="CENTER" fillHeight="false" layoutX="14.0" layoutY="396.0" prefHeight="30.0" prefWidth="300.0">
@@ -181,25 +181,25 @@
                                           <HBox alignment="CENTER" fillHeight="false" layoutX="14.0" layoutY="70.0" prefHeight="30.0" prefWidth="300.0">
                                              <children>
                                                 <Label alignment="CENTER" prefHeight="39.0" prefWidth="103.0" text="Matricula" textAlignment="CENTER" />
-                                                <TextField fx:id="fieldMatriculaVehiculo" prefWidth="200.0" />
+                                                <TextField fx:id="fieldMatriculaVehiculo" editable="false" prefWidth="200.0" />
                                              </children>
                                           </HBox>
                                           <HBox alignment="CENTER" fillHeight="false" layoutX="14.0" layoutY="110.0" prefHeight="30.0" prefWidth="300.0">
                                              <children>
                                                 <Label alignment="CENTER" prefHeight="39.0" prefWidth="103.0" text="Marca" textAlignment="CENTER" />
-                                                <TextField fx:id="fieldMarca" prefWidth="200.0" />
+                                                <TextField fx:id="fieldMarca" editable="false" prefWidth="200.0" />
                                              </children>
                                           </HBox>
                                           <HBox alignment="CENTER" fillHeight="false" layoutX="14.0" layoutY="151.0" prefHeight="30.0" prefWidth="300.0">
                                              <children>
                                                 <Label alignment="CENTER" prefHeight="39.0" prefWidth="103.0" text="Modelo" textAlignment="CENTER" />
-                                                <TextField fx:id="fieldModelo" prefWidth="200.0" />
+                                                <TextField fx:id="fieldModelo" editable="false" prefWidth="200.0" />
                                              </children>
                                           </HBox>
                                           <HBox alignment="CENTER" fillHeight="false" layoutX="14.0" layoutY="191.0" prefHeight="30.0" prefWidth="300.0">
                                              <children>
                                                 <Label alignment="CENTER" prefHeight="30.0" prefWidth="147.0" text="Fecha Matriculacion" textAlignment="CENTER" />
-                                                <DatePicker fx:id="dateFieldFechaMatriculacion" editable="false" prefHeight="28.0" prefWidth="130.0" />
+                                                <DatePicker fx:id="dateFieldFechaMatriculacion" disable="true" editable="false" prefHeight="28.0" prefWidth="130.0" />
                                              </children>
                                           </HBox>
                                           <HBox alignment="CENTER" fillHeight="false" layoutX="14.0" layoutY="234.0" prefHeight="30.0" prefWidth="300.0">
@@ -211,19 +211,19 @@
                                           <HBox alignment="CENTER" fillHeight="false" layoutX="14.0" layoutY="274.0" prefHeight="30.0" prefWidth="300.0">
                                              <children>
                                                 <Label alignment="CENTER" prefHeight="39.0" prefWidth="103.0" text="Tipo Motor" textAlignment="CENTER" />
-                                                <ComboBox fx:id="selectorMotor" prefHeight="26.0" prefWidth="198.0" />
+                                                <ComboBox fx:id="selectorMotor" disable="true" prefHeight="26.0" prefWidth="198.0" />
                                              </children>
                                           </HBox>
                                           <HBox alignment="CENTER" fillHeight="false" layoutX="14.0" layoutY="315.0" prefHeight="30.0" prefWidth="300.0">
                                              <children>
                                                 <Label alignment="CENTER" prefHeight="39.0" prefWidth="103.0" text="Tipo Vehiculo" textAlignment="CENTER" />
-                                                <ComboBox fx:id="selectorTipoVehiculo" prefHeight="26.0" prefWidth="198.0" />
+                                                <ComboBox fx:id="selectorTipoVehiculo" disable="true" prefHeight="26.0" prefWidth="198.0" />
                                              </children>
                                           </HBox>
                                           <HBox alignment="CENTER" fillHeight="false" layoutX="14.0" layoutY="355.0" prefHeight="30.0" prefWidth="300.0">
                                              <children>
                                                 <Label alignment="CENTER" prefHeight="39.0" prefWidth="103.0" text="Propietario DNI" textAlignment="CENTER" />
-                                                <TextField fx:id="fieldDNIVehiculo" prefWidth="200.0" />
+                                                <TextField fx:id="fieldDNIVehiculo" editable="false" prefWidth="200.0" />
                                              </children>
                                           </HBox>
                                        </children>

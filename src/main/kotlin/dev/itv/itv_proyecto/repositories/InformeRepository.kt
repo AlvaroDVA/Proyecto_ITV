@@ -12,5 +12,4 @@ interface InformeRepository : ModelsRepository<Informe, Long, InformeErrors> {
 
     fun updateInformeById(id : Long, informe: Informe) : Result<Informe,InformeErrors>
 
-    override fun loadAll(): Result<List<Informe>, InformeErrors>
 }

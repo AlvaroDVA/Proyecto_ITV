@@ -5,6 +5,7 @@ package dev.itv.itv_proyecto.enums
  */
 enum class Views (val url : String) {
     MAIN("views/Index.fxml"),
-    NUEVO("views/NuevoEditar.fxml"),
-    ACERCA("views/acercaDe.fxml")
+    NUEVO("views/CitaView.fxml"),
+    ACERCA("views/acercaDe.fxml"),
+    INFORME("views/Informe.fxml")
 }

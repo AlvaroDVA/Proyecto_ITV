@@ -80,19 +80,9 @@ class HtmlInformesStorageTest : KoinTest {
         val fileName = System.getProperty("user.dir") + File.separator + appConfig.dataPath + File.separator + "FicheroTest.html"
         val listaGuardar = informesRepository.loadAll().component1()!!
 
-        val res = htmlInformesTest.saveFile(url = fileName, list = listaGuardar)
+        val res = htmlInformesTest.saveFile(url = fileName, item = listaGuardar[0])
 
         assertTrue { res.component1() is File }
-    }
-
-    @Test
-    fun saveFileEmptyListTest() {
-        val fileName = System.getProperty("user.dir") + File.separator + appConfig.dataPath + File.separator + "FicheroTest.html"
-        val listaGuardar = mutableListOf<Informe>()
-
-        val res = htmlInformesTest.saveFile(url = fileName, list = listaGuardar)
-
-        assertTrue { res.component2() is StorageErrors.HtmlStorageError }
     }
 
     companion object {

@@ -6,6 +6,6 @@ import java.io.File
 
 fun interface Storage <T> {
 
-    fun saveFile(list: List<T>, url: String): Result<File, StorageErrors>
+    fun saveFile(item: T, url: String): Result<File, StorageErrors>
 
 }
