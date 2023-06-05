@@ -1,4 +1,0 @@
-IdTrabajador,Nombre,Telefono,Email,Usuario,Contraseña,Fecha_Contratación,Especialidad,IsResponsable
-1,John Doe,123456789,johndoe@example.com,johndoe,contrasena,2022-05-28,ADMINISTRACION,false
-2,Pedro Reverte,69988882,pedroreverte@trabaajador.com,pedroReverte,13124354fw,2022-03-01,MOTOR,false
-3,Ruben San Fran,854938458,rubensanfran@trabaajador.com,rubensanfran,13141414,2018-03-21,ADMINISTRACION,false

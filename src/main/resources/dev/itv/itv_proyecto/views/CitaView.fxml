@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="627.0" prefWidth="1121.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dev.itv.itv_proyecto.controllers.CitaController">
+   <children>
+      <SplitPane dividerPositions="0.3780160857908847" prefHeight="742.0" prefWidth="1071.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="625.0" prefWidth="414.0">
+               <children>
+                  <Text layoutX="14.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Matricula" />
+                  <TableView fx:id="tablaVehiculos" layoutX="-2.0" layoutY="55.0" prefHeight="570.0" prefWidth="425.0">
+                    <columns>
+                        <TableColumn fx:id="columnaMatricula" prefWidth="100.0" text="Matricula" />
+                        <TableColumn fx:id="columnaMarca" prefWidth="97.0" text="Marca" />
+                        <TableColumn fx:id="columnaModelo" prefWidth="114.0" text="Modelo" />
+                      <TableColumn fx:id="columnaDni" prefWidth="116.0" text="DNI" />
+                    </columns>
+                  </TableView>
+                  <TextField fx:id="matriculaBuscar" layoutX="80.0" layoutY="15.0" prefHeight="25.0" prefWidth="130.0" />
+                  <Text layoutX="222.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" text="DNI" />
+                  <TextField fx:id="dniBuscar" layoutX="264.0" layoutY="15.0" prefHeight="25.0" prefWidth="130.0" />
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="625.0" prefWidth="693.0">
+               <children>
+                  <AnchorPane layoutX="352.0" layoutY="14.0" prefHeight="270.0" prefWidth="337.0">
+                     <children>
+                        <Label alignment="CENTER" layoutX="19.0" prefHeight="50.0" prefWidth="300.0" text="Datos del Propietario" textAlignment="CENTER">
+                           <font>
+                              <Font name="TSCu_Comic" size="21.0" />
+                           </font>
+                        </Label>
+                        <HBox alignment="CENTER" fillHeight="false" layoutX="-9.0" layoutY="50.0" prefHeight="30.0" prefWidth="308.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="39.0" prefWidth="103.0" text="DNI" textAlignment="CENTER" />
+                              <TextField fx:id="fieldDNIPropietario" disable="true" editable="false" prefHeight="25.0" prefWidth="227.0" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" fillHeight="false" layoutY="90.0" prefHeight="30.0" prefWidth="300.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="39.0" prefWidth="103.0" text="Nombre" textAlignment="CENTER" />
+                              <TextField fx:id="fieldNombrePropietario" disable="true" editable="false" prefWidth="235.0" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" fillHeight="false" layoutY="135.0" prefHeight="30.0" prefWidth="300.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="39.0" prefWidth="103.0" text="Apellidos" textAlignment="CENTER" />
+                              <TextField fx:id="fieldApellidosPropietario" disable="true" editable="false" prefWidth="235.0" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" fillHeight="false" layoutY="179.0" prefHeight="30.0" prefWidth="300.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="39.0" prefWidth="103.0" text="Telefono" textAlignment="CENTER" />
+                              <TextField fx:id="fieldTelefonoPropietario" disable="true" editable="false" prefWidth="235.0" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" fillHeight="false" layoutY="220.0" prefHeight="30.0" prefWidth="300.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="39.0" prefWidth="103.0" text="Email" textAlignment="CENTER" />
+                              <TextField fx:id="fieldEmailPropietario" disable="true" editable="false" prefHeight="25.0" prefWidth="238.0" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane layoutX="14.0" layoutY="409.0" minHeight="0.0" minWidth="0.0" prefHeight="211.0" prefWidth="355.0">
+                     <children>
+                        <Label alignment="CENTER" layoutX="16.0" layoutY="14.0" prefHeight="50.0" prefWidth="293.0" text="Datos del Trabajador" textAlignment="CENTER">
+                           <font>
+                              <Font name="TSCu_Comic" size="21.0" />
+                           </font>
+                        </Label>
+                        <HBox alignment="CENTER" fillHeight="false" layoutX="-1.0" layoutY="80.0" prefHeight="30.0" prefWidth="317.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="30.0" prefWidth="111.0" text="ID Trabajador" textAlignment="CENTER" />
+                              <TextField fx:id="textfieldIdTrabajador" editable="false" prefHeight="28.0" prefWidth="224.0" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" fillHeight="false" layoutX="16.0" layoutY="120.0" prefHeight="30.0" prefWidth="300.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="39.0" prefWidth="103.0" text="Nombre" textAlignment="CENTER" />
+                              <TextField fx:id="fieldNombreTrabajador" editable="false" prefWidth="235.0" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" fillHeight="false" layoutX="16.0" layoutY="161.0" prefHeight="30.0" prefWidth="300.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="39.0" prefWidth="103.0" text="Email" textAlignment="CENTER" />
+                              <TextField fx:id="fieldEmailTrabajador" editable="false" prefWidth="235.0" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane layoutX="4.0" layoutY="14.0" minHeight="0.0" minWidth="0.0" prefHeight="395.0" prefWidth="330.0">
+                     <children>
+                        <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" prefHeight="50.0" prefWidth="300.0" text="Datos del Vehiculo" textAlignment="CENTER">
+                           <font>
+                              <Font name="TSCu_Comic" size="21.0" />
+                           </font>
+                        </Label>
+                        <HBox alignment="CENTER" fillHeight="false" layoutX="14.0" layoutY="70.0" prefHeight="30.0" prefWidth="300.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="39.0" prefWidth="103.0" text="Matricula" textAlignment="CENTER" />
+                              <TextField fx:id="fieldMatriculaVehiculo" disable="true" editable="false" prefWidth="200.0" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" fillHeight="false" layoutX="14.0" layoutY="110.0" prefHeight="30.0" prefWidth="300.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="39.0" prefWidth="103.0" text="Marca" textAlignment="CENTER" />
+                              <TextField fx:id="fieldMarca" disable="true" editable="false" prefWidth="200.0" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" fillHeight="false" layoutX="14.0" layoutY="151.0" prefHeight="30.0" prefWidth="300.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="39.0" prefWidth="103.0" text="Modelo" textAlignment="CENTER" />
+                              <TextField fx:id="fieldModelo" disable="true" editable="false" prefWidth="200.0" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" fillHeight="false" layoutX="14.0" layoutY="191.0" prefHeight="30.0" prefWidth="300.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="30.0" prefWidth="147.0" text="Fecha Matriculacion" textAlignment="CENTER" />
+                              <DatePicker fx:id="dateFieldFechaMatriculacion" disable="true" editable="false" prefHeight="28.0" prefWidth="130.0" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" fillHeight="false" layoutX="14.0" layoutY="234.0" prefHeight="30.0" prefWidth="300.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="30.0" prefWidth="147.0" text="Fecha Ultima Revision" textAlignment="CENTER" />
+                              <DatePicker fx:id="fieldFechaUltimaRevision" disable="true" editable="false" prefHeight="28.0" prefWidth="131.0" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" fillHeight="false" layoutX="14.0" layoutY="274.0" prefHeight="30.0" prefWidth="300.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="39.0" prefWidth="103.0" text="Tipo Motor" textAlignment="CENTER" />
+                              <ComboBox fx:id="selectorMotor" disable="true" prefHeight="26.0" prefWidth="198.0" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" fillHeight="false" layoutX="14.0" layoutY="315.0" prefHeight="30.0" prefWidth="300.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="39.0" prefWidth="103.0" text="Tipo Vehiculo" textAlignment="CENTER" />
+                              <ComboBox fx:id="selectorTipoVehiculo" disable="true" prefHeight="26.0" prefWidth="198.0" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" fillHeight="false" layoutX="14.0" layoutY="355.0" prefHeight="30.0" prefWidth="300.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="39.0" prefWidth="103.0" text="Propietario DNI" textAlignment="CENTER" />
+                              <TextField fx:id="fieldDNIVehiculo" disable="true" editable="false" prefWidth="200.0" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </AnchorPane>
+                  <HBox alignment="CENTER" fillHeight="false" layoutX="347.0" layoutY="345.0" prefHeight="30.0" prefWidth="300.0">
+                     <children>
+                        <Label fx:id="fieldIDTrabajador" alignment="CENTER" prefHeight="39.0" prefWidth="103.0" text="Trabajador" textAlignment="CENTER" />
+                        <ComboBox fx:id="selectorTrabajador" disable="true" prefHeight="26.0" prefWidth="204.0" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" fillHeight="false" layoutX="347.0" layoutY="394.0" prefHeight="30.0" prefWidth="300.0">
+                     <children>
+                        <Label alignment="CENTER" prefHeight="39.0" prefWidth="103.0" text="Hora Cita" textAlignment="CENTER" />
+                        <ComboBox fx:id="selectorHora" disable="true" prefHeight="26.0" prefWidth="199.0" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" fillHeight="false" layoutX="347.0" layoutY="449.0" prefHeight="30.0" prefWidth="300.0">
+                     <children>
+                        <Label alignment="CENTER" prefHeight="39.0" prefWidth="103.0" text="Fecha Cita" textAlignment="CENTER" />
+                        <DatePicker fx:id="fieldFechaCita" disable="true" editable="false" prefHeight="28.0" prefWidth="198.0" />
+                     </children>
+                  </HBox>
+                  <Label alignment="CENTER" layoutX="370.0" layoutY="284.0" prefHeight="40.0" prefWidth="300.0" text="Cita" textAlignment="CENTER">
+                     <font>
+                        <Font name="TSCu_Comic" size="21.0" />
+                     </font>
+                  </Label>
+                  <AnchorPane layoutX="370.0" layoutY="498.0" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="300.0">
+                     <children>
+                        <Label alignment="CENTER" layoutX="20.0" prefHeight="50.0" prefWidth="273.0" text="Opciones" textAlignment="CENTER">
+                           <font>
+                              <Font name="TSCu_Comic" size="21.0" />
+                           </font>
+                        </Label>
+                        <Button fx:id="btnGuardar" layoutX="68.0" layoutY="60.0" mnemonicParsing="false" text="Guardar">
+                           <graphic>
+                              <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icons/new.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="btnVaciar" layoutX="186.0" layoutY="60.0" mnemonicParsing="false" text="Vaciar">
+                           <graphic>
+                              <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icons/edit.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                     </children>
+                  </AnchorPane>
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+   </children>
+</VBox>

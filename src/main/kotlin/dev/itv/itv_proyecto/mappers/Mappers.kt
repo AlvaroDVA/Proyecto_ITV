@@ -6,7 +6,9 @@ import dev.itv.itv_proyecto.models.Informe
 import dev.itv.itv_proyecto.models.Propietario
 import dev.itv.itv_proyecto.models.Trabajador
 import dev.itv.itv_proyecto.models.Vehiculo
+import dev.itv.itv_proyecto.models.dto.CitaDto
 import dev.itv.itv_proyecto.models.dto.InformeDto
+import dev.itv.itv_proyecto.models.dto.VehiculoDto
 import dev.itv.itv_proyecto.utils.Utils
 import mu.KotlinLogging
 import org.koin.core.component.KoinComponent
@@ -156,6 +158,81 @@ class Mappers : KoinComponent{
             }
         }
         return null
+    }
+
+    fun toCita(informe: Informe) : CitaDto {
+        return CitaDto(
+            idCita = informe.idInforme.toString(),
+            idTrabajador = informe.trabajador.idTrabajador.toString(),
+            nombreTrabajador = informe.trabajador.nombreTrabajador,
+            email = informe.trabajador.email,
+            matricula = informe.vehiculo.matricula,
+            marca = informe.vehiculo.marca,
+            modelo = informe.vehiculo.modelo,
+            fechaMatricula = informe.vehiculo.fechaMatricula.toString(),
+            fechaUltimaRevision = informe.vehiculo.fechaUltimaRevision.toString(),
+            tipoMotor = informe.vehiculo.tipoMotor.toString(),
+            tipoVehiculo = informe.vehiculo.tipoVehiculo.toString(),
+            dni = informe.propietario.dni,
+            nombre = informe.propietario.nombre,
+            apellidos = informe.propietario.apellidos,
+            telefono = informe.propietario.telefono.toString(),
+            emailPropietario = informe.propietario.emailPropietario,
+            horaCita = informe.horaCita,
+            fechaCita = informe.fechaCita.toString()
+        )
+    }
+
+    fun toVehiculoDto (vehiculo : Vehiculo) : VehiculoDto {
+        logger.debug { "Mapendo Vehiculo a VehiculoDto" }
+        return VehiculoDto(
+            matricula = vehiculo.matricula,
+            marca = vehiculo.marca,
+            modelo = vehiculo.modelo,
+            fechaMatricula = vehiculo.fechaMatricula.toString(),
+            fechaUltimaRevision = vehiculo.fechaUltimaRevision.toString(),
+            tipoMotor = vehiculo.tipoMotor.toString(),
+            tipoVehiculo = vehiculo.tipoVehiculo.toString(),
+            dni = vehiculo.propietario.dni
+        )
+    }
+
+    fun toInformeCita(conexion: Connection, citaDto: CitaDto): Informe {
+        logger.info { " Mapeado DtoInforme a Informe " }
+        return Informe(
+            idInforme = citaDto.idCita.toLongOrNull() ?: -1L,
+            apto = null,
+            frenado = null,
+            contaminacion = null,
+            interior = null,
+            luces = null,
+            trabajador = trabajadorByEmail(conexion, citaDto.email)!!,
+            vehiculo = Vehiculo (
+                matricula = citaDto.matricula.uppercase(),
+                marca = citaDto.marca,
+                modelo = citaDto.modelo,
+                fechaMatricula = LocalDate.parse(citaDto.fechaMatricula),
+                fechaUltimaRevision = LocalDate.parse(citaDto.fechaUltimaRevision),
+                tipoMotor = sacaMotor(citaDto.tipoMotor),
+                tipoVehiculo = sacarTipoVehiculo(citaDto.tipoVehiculo),
+                propietario = Propietario(
+                    dni = citaDto.dni,
+                    apellidos = citaDto.apellidos,
+                    emailPropietario = citaDto.emailPropietario,
+                    nombre = citaDto.nombre,
+                    telefono = citaDto.telefono.toInt()
+                )
+            ),
+            propietario = Propietario(
+                dni = citaDto.dni.uppercase(),
+                apellidos = citaDto.apellidos,
+                emailPropietario = citaDto.emailPropietario,
+                nombre = citaDto.nombre,
+                telefono = citaDto.telefono.toInt()
+            ),
+            fechaCita = LocalDate.parse(citaDto.fechaCita),
+            horaCita = citaDto.horaCita
+        )
     }
 
 

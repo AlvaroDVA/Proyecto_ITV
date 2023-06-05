@@ -260,5 +260,81 @@ class InformeRepositoryImpl : InformeRepository, KoinComponent {
         return Ok(vehiculos)
     }
 
+    fun saveCita(informe: Informe): Result<Informe, InformeErrors> {
+
+        logger.debug { " InformeRepositoryImpl -- SaveInforme($informe) " }
+
+        val sql = """
+            INSERT INTO tInforme VALUES (null,?,?,?,?,?,?,?,?,?)
+        """.trimIndent()
+        var respuesta = 0
+        database.prepareStatement(sql).use { preparedStatement ->
+            preparedStatement.setNull(1 ,java.sql.Types.VARCHAR)
+            preparedStatement.setNull(2, java.sql.Types.VARCHAR)
+            preparedStatement.setNull(3, java.sql.Types.VARCHAR)
+            preparedStatement.setNull(4 ,java.sql.Types.VARCHAR)
+            preparedStatement.setNull(5 ,java.sql.Types.VARCHAR)
+            preparedStatement.setLong(6, (informe.trabajador.idTrabajador))
+            preparedStatement.setString(7, informe.vehiculo.matricula)
+            preparedStatement.setString(8, informe.horaCita)
+            preparedStatement.setDate(9, Date.valueOf(informe.fechaCita))
+
+            respuesta = preparedStatement.executeUpdate()
+
+            preparedStatement.close()
+        }
+
+        if (respuesta != 0) {
+            return Ok(informe)
+        }
+        return Err(InformeErrors.InformeNotFoundError("No se ha guardado el nuevo informe"))
+
+    }
+
+    fun updatCitaById(id: Long, informe: Informe): Result<Informe, InformeErrors> {
+        logger.debug { " InformeRepositoryImpl -- updateInformeById ($id , $informe)" }
+        findById(id).onFailure {
+            return Err(it)
+        }.component1()
+
+        val sql = """
+            UPDATE tInforme 
+             SET bFavorable = ?,
+             nFrenado = ?,
+             nContaminacion = ?,
+             bInterior = ?,
+             bLuces = ?,
+             nId_Trabajador = ?,
+             cMatricula = ?,
+             cHora = ?,
+             dFecha_Cita = ?
+             WHERE nId_informe = ?
+        """.trimIndent()
+        database.prepareStatement(sql).use { preparedStatement ->
+
+            preparedStatement.setNull(1 ,java.sql.Types.VARCHAR)
+            preparedStatement.setNull(2, java.sql.Types.VARCHAR)
+            preparedStatement.setNull(3, java.sql.Types.VARCHAR)
+            preparedStatement.setNull(4 ,java.sql.Types.VARCHAR)
+            preparedStatement.setNull(5 ,java.sql.Types.VARCHAR)
+            preparedStatement.setLong(6, (informe.trabajador.idTrabajador))
+            preparedStatement.setString(7, informe.vehiculo.matricula)
+            preparedStatement.setString(8, informe.horaCita)
+            preparedStatement.setDate(9, Date.valueOf(informe.fechaCita))
+            preparedStatement.setLong(10, informe.idInforme)
+
+            preparedStatement.executeUpdate()
+
+            preparedStatement.close()
+
+        }
+
+        findById(id).onFailure {
+            return Err(it)
+        }.run {
+            return Ok(this.component1()!!)
+        }
+    }
+
 
 }

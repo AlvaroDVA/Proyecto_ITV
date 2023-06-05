@@ -3,16 +3,15 @@ package dev.itv.itv_proyecto.controllers
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.onSuccess
 import dev.itv.itv_proyecto.routes.RoutesManager
-import dev.itv.itv_proyecto.viewmodels.EditarViewModel
+import dev.itv.itv_proyecto.viewmodels.InformeViewModel
 import dev.itv.itv_proyecto.viewmodels.MainViewModel
 import javafx.fxml.FXML
 import javafx.scene.control.*
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class NuevoEditarController : KoinComponent{
-
-    val editarViewModel : EditarViewModel by inject()
+class InformeController : KoinComponent {
+    val informeViewModel : InformeViewModel by inject()
 
     @FXML
     private lateinit var fieldDNIPropietario : TextField
@@ -93,36 +92,36 @@ class NuevoEditarController : KoinComponent{
      * Funcion que inicia los Binding. Son bidireccinales porque los datos que escribamos queremos que sé guarden en él State para su posterior guardado
      */
     private fun iniciarBindings() {
-        fieldDNIPropietario.textProperty().bindBidirectional(editarViewModel.state.dniPropietario)
-        fieldNombrePropietario.textProperty().bindBidirectional(editarViewModel.state.nombrePropietario)
-        fieldApellidosPropietario.textProperty().bindBidirectional(editarViewModel.state.apellidosPropietario)
-        fieldTelefonoPropietario.textProperty().bindBidirectional(editarViewModel.state.telefonoPropietario)
-        fieldEmailPropietario.textProperty().bindBidirectional(editarViewModel.state.emailPropietario)
-        textfieldIdTrabajador.textProperty().bindBidirectional(editarViewModel.state.idTrabajador)
-        fieldNombreTrabajador.textProperty().bindBidirectional(editarViewModel.state.nombreTrabajador)
-        fieldEmailTrabajador.textProperty().bindBidirectional(editarViewModel.state.emailTrabajador)
-        fieldIDInforme.textProperty().bindBidirectional(editarViewModel.state.idInforme)
-        fieldDNIInforme.textProperty().bindBidirectional(editarViewModel.state.dniPropietario)
-        fieldFranado.textProperty().bindBidirectional(editarViewModel.state.frenadoInforme)
-        fieldContaminacion.textProperty().bindBidirectional(editarViewModel.state.contaminacionInforme)
-        fieldMatriculaInforme.textProperty().bindBidirectional(editarViewModel.state.matriculaInforme)
-        fieldDNIInforme.textProperty().bindBidirectional(editarViewModel.state.dniPropietario)
-        fieldDNIPropietario.textProperty().bindBidirectional(editarViewModel.state.dniPropietario)
-        fieldDNIVehiculo.textProperty().bindBidirectional(editarViewModel.state.dniPropietario)
-        fieldMatriculaVehiculo.textProperty().bindBidirectional(editarViewModel.state.matriculaInforme)
-        fieldMarca.textProperty().bindBidirectional(editarViewModel.state.marcaVehiculo)
-        fieldModelo.textProperty().bindBidirectional(editarViewModel.state.modeloVehiculo)
-        selectorHora.valueProperty().bindBidirectional(editarViewModel.state.horaCita)
-        fieldFechaCita.valueProperty().bindBidirectional(editarViewModel.state.fechaCita)
-        dateFieldFechaMatriculacion.valueProperty().bindBidirectional(editarViewModel.state.fechaMatriculacion)
-        fieldFechaUltimaRevision.valueProperty().bindBidirectional(editarViewModel.state.ultimaRevision)
-        checkboxApto.selectedProperty().bindBidirectional(editarViewModel.state.apto)
-        checkboxLuces.selectedProperty().bindBidirectional(editarViewModel.state.lucesInforme)
-        checkboxInterior.selectedProperty().bindBidirectional(editarViewModel.state.interiorInforme)
-        fieldDNIInforme.textProperty().bindBidirectional(editarViewModel.state.dniPropietario)
-        selectorMotor.valueProperty().bindBidirectional(editarViewModel.state.tipoMotor)
-        selectorTipoVehiculo.valueProperty().bindBidirectional(editarViewModel.state.tipoVehiculo)
-        selectorTrabajador.valueProperty().bindBidirectional(editarViewModel.state.trabajadorInforme)
+        fieldDNIPropietario.textProperty().bind(informeViewModel.state.dniPropietario)
+        fieldNombrePropietario.textProperty().bind(informeViewModel.state.nombrePropietario)
+        fieldApellidosPropietario.textProperty().bind(informeViewModel.state.apellidosPropietario)
+        fieldTelefonoPropietario.textProperty().bind(informeViewModel.state.telefonoPropietario)
+        fieldEmailPropietario.textProperty().bind(informeViewModel.state.emailPropietario)
+        textfieldIdTrabajador.textProperty().bind(informeViewModel.state.idTrabajador)
+        fieldNombreTrabajador.textProperty().bind(informeViewModel.state.nombreTrabajador)
+        fieldEmailTrabajador.textProperty().bind(informeViewModel.state.emailTrabajador)
+        fieldIDInforme.textProperty().bind(informeViewModel.state.idInforme)
+        fieldDNIInforme.textProperty().bind(informeViewModel.state.dniPropietario)
+        fieldFranado.textProperty().bindBidirectional(informeViewModel.state.frenadoInforme)
+        fieldContaminacion.textProperty().bindBidirectional(informeViewModel.state.contaminacionInforme)
+        fieldMatriculaInforme.textProperty().bind(informeViewModel.state.matriculaInforme)
+        fieldDNIInforme.textProperty().bind(informeViewModel.state.dniPropietario)
+        fieldDNIPropietario.textProperty().bind(informeViewModel.state.dniPropietario)
+        fieldDNIVehiculo.textProperty().bind(informeViewModel.state.dniPropietario)
+        fieldMatriculaVehiculo.textProperty().bind(informeViewModel.state.matriculaInforme)
+        fieldMarca.textProperty().bind(informeViewModel.state.marcaVehiculo)
+        fieldModelo.textProperty().bind(informeViewModel.state.modeloVehiculo)
+        selectorHora.valueProperty().bind(informeViewModel.state.horaCita)
+        fieldFechaCita.valueProperty().bind(informeViewModel.state.fechaCita)
+        dateFieldFechaMatriculacion.valueProperty().bind(informeViewModel.state.fechaMatriculacion)
+        fieldFechaUltimaRevision.valueProperty().bind(informeViewModel.state.ultimaRevision)
+        checkboxApto.selectedProperty().bindBidirectional(informeViewModel.state.apto)
+        checkboxLuces.selectedProperty().bindBidirectional(informeViewModel.state.lucesInforme)
+        checkboxInterior.selectedProperty().bindBidirectional(informeViewModel.state.interiorInforme)
+        fieldDNIInforme.textProperty().bind(informeViewModel.state.dniPropietario)
+        selectorMotor.valueProperty().bind(informeViewModel.state.tipoMotor)
+        selectorTipoVehiculo.valueProperty().bind(informeViewModel.state.tipoVehiculo)
+        selectorTrabajador.valueProperty().bind(informeViewModel.state.trabajadorInforme)
 
     }
 
@@ -132,20 +131,16 @@ class NuevoEditarController : KoinComponent{
     private fun iniciarEventos() {
         btnGuardar.setOnAction { onGuardar() }
         btnVaciar.setOnAction { onLimpiar() }
-
-        selectorHora.items = editarViewModel.listaHoras
-        selectorTrabajador.items = editarViewModel.listaTrabajador
-        selectorTipoVehiculo.items = editarViewModel.tiposVehiculos
-        selectorMotor.items = editarViewModel.tiposMotor
-        selectorTrabajador.selectionModel.selectedItemProperty().addListener { _, _, newValue ->
-            newValue?.let { onTrabajadorSeleccionar(it) }
-        }
-
-        fieldFechaUltimaRevision.style = estiloEnable
+        ponerEstilos()
     }
 
-    private fun onTrabajadorSeleccionar(trabajador: String) {
-        editarViewModel.ponerTrabajador(trabajador)
+    private fun ponerEstilos() {
+        selectorHora.style = estiloEnable
+        fieldFechaCita.style = estiloEnable
+        dateFieldFechaMatriculacion.style = estiloEnable
+        fieldFechaUltimaRevision.style = estiloEnable
+        fieldModelo.style = estiloEnable
+        fieldMarca.style = estiloEnable
     }
 
     /**
@@ -153,7 +148,7 @@ class NuevoEditarController : KoinComponent{
      * un alert contando el error
      */
     private fun onGuardar() {
-        editarViewModel.botonGuardar().onFailure {
+        informeViewModel.botonGuardar().onFailure {
             Alert(Alert.AlertType.ERROR).apply {
                 title = "Error al guardar"
                 headerText = ""
@@ -168,7 +163,7 @@ class NuevoEditarController : KoinComponent{
                 contentText = "Se ha guardado con exito"
                 show()
             }
-            mainView.iniciarInterfaz()
+            mainView.limpiarState()
             RoutesManager.cerrarEditar()
         }
     }
@@ -177,7 +172,6 @@ class NuevoEditarController : KoinComponent{
      * Función que limpia los campos de la interfaz gráfica
      */
     fun onLimpiar() {
-        editarViewModel.limpiarCampos()
+        informeViewModel.limpiarCampos()
     }
-
 }
